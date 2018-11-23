@@ -3,6 +3,7 @@ package com.example.android.pawstwo;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,7 +12,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.login.Login;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -29,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView userRegistration;
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
+  //  private Button fbLogin;
+   // private CallbackManager fbLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,26 +46,40 @@ public class MainActivity extends AppCompatActivity {
         userName = findViewById ( R.id.et_Username );
         passWord = findViewById ( R.id.et_Password );
         signIn = findViewById ( R.id.btn_SignIn );
+       // fbLogin=findViewById ( R.id.fb_login_button );
+
         // signUp =findViewById ( R.id.btn_SignUp );
 
         firebaseAuth = FirebaseAuth.getInstance ();
         progressDialog = new ProgressDialog ( this );
+      /*  fbLogin.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                Intent k = new Intent ( MainActivity.this, HomeActivity.class );
+                startActivity(k);
+            }
+        } );*/
 
         FirebaseUser user = firebaseAuth.getCurrentUser ();
 
         if (user != null) {
             finish ();
-            startActivity ( new Intent ( MainActivity.this, HomeActivity.class ) );
+           startActivity ( new Intent ( MainActivity.this, HomeActivity.class ) );
         }
+        
+
         Button signIn = ( Button ) findViewById ( R.id.btn_SignIn );
 
         signIn.setOnClickListener ( new View.OnClickListener () {
             @Override
             public void onClick(View view) {
                 validate ( userName.getText ().toString (), passWord.getText ().toString () );
-                startActivity ( new Intent ( MainActivity.this, HomeActivity.class ) );
+               // startActivity ( new Intent ( MainActivity.this, HomeActivity.class ) );
+
             }
         } );
+
+
 
 
         Button signUp = ( Button ) findViewById ( R.id.btn_SignUp );
@@ -83,18 +105,32 @@ public class MainActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
                     progressDialog.dismiss();
                    Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                   // checkEmailVerification();
-                }else{
+                    startActivity ( new Intent ( MainActivity.this, HomeActivity.class ) );
+                }else {
+                    progressDialog.dismiss ();
                     Toast.makeText(MainActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
 
                     }
                 }
 
+
+
+
         });
+
+
 
 
 
     }
 
 
+
+
+
 }
+
+/*if (user==null){
+
+        Toast.makeText(MainActivity.this, "Fields are blank", Toast.LENGTH_SHORT).show();
+        }*/
