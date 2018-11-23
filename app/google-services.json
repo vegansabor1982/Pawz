@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "61492834686",
+    "firebase_url": "https://paws-611e3.firebaseio.com",
+    "project_id": "paws-611e3",
+    "storage_bucket": "paws-611e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:61492834686:android:e769f93e0aae75bb",
+        "android_client_info": {
+          "package_name": "com.example.android.pawstwo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "61492834686-batijbi93pdj6v58qme7cvjgk7chuie5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbYJtPQJ2T6oxd22kpThpYzkiW2e3zzms"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

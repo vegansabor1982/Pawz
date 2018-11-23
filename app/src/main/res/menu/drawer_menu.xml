@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group>
+
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home"
+            android:title="Home"
+            />
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_profile"
+            android:title="Profile" />
+        <item
+            android:id="@+id/nav_lost"
+            android:icon="@drawable/ic_lost"
+            android:title="Lost" />
+        <item
+            android:id="@+id/nav_found"
+            android:icon="@drawable/ic_found"
+            android:title="Found" />
+        <item
+        android:id="@+id/nav_sponsor"
+        android:icon="@drawable/ic_sponsor"
+        android:title="Sponsor a Pet" />
+
+    </group>
+
+    <group>
+
+
+        <item
+            android:id="@+id/nav_new"
+            android:icon="@drawable/ic_new"
+            android:title="New Entry" />
+        <item
+            android:id="@+id/nav_adopt"
+            android:icon="@drawable/ic_adoption"
+            android:title="Adopt a Pet" />
+        <item
+            android:id="@+id/nav_gift"
+            android:icon="@drawable/ic_gift"
+            android:title="Gift a Pet" />
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/ic_signout"
+            android:title="Logout" />
+        <item
+            android:id="@+id/nav_petsforadoption"
+            android:icon="@drawable/ic_foradoption"
+            android:title="pets for adoption" />
+    </group>
+
+</menu>
