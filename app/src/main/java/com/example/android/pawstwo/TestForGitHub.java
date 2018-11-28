@@ -10,7 +10,7 @@ public class TestForGitHub extends AppCompatActivity {
         super.onCreate ( savedInstanceState );
         setContentView ( R.layout.activity_test_for_git_hub );
 
-        
+
       //  does this fucking update???
     }
 }
