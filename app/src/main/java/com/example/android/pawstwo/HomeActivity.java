@@ -3,6 +3,7 @@ package com.example.android.pawstwo;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -17,19 +18,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toolbar;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
     private Button button;
     private FirebaseAuth firebaseAuth;
+    private FirebaseDatabase firebaseDatabase;
+    private FirebaseStorage firebaseStorage2;
     private ProgressDialog progressDialogtwo;
     private ClipData.Item openProfile;
     private Menu drawer_menu;
     Toolbar toolbar;
+    private ImageView smallProfilePic;
 
 
 
@@ -45,6 +55,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener ( this );
 
 
+        // Test for update 28/11
+
+
+
+
+
 
 
         android.support.v7.widget.Toolbar toolbar = findViewById ( R.id.toolbar );
@@ -56,9 +72,19 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+
+
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle ( this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close );
         drawer.addDrawerListener ( toggle );
         toggle.syncState ();
+
+
+
+
+
+
+
 
 
 
@@ -116,6 +142,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
+
+
     }
 
 
@@ -143,6 +171,28 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
     }
+
+   /*public Boolean  onMenuPressed(Menu menu){
+        firebaseStorage2=FirebaseStorage.getInstance ();
+        StorageReference storageReference2 = firebaseStorage2.getReference ();
+
+        smallProfilePic=(ImageView ) findViewById ( R.id.smallImage ) ;
+
+
+        storageReference2.child(firebaseAuth.getUid ()).child ( "Images/Profile Pic" ).getDownloadUrl ().addOnSuccessListener ( new OnSuccessListener<Uri> () {
+            @Override
+            public void onSuccess(Uri uri) {
+
+                Picasso.get ().load ( uri ).fit().centerCrop().into (smallProfilePic  );
+
+            }
+
+        } ); return true;
+
+
+    }*/
+
+
 
 
 

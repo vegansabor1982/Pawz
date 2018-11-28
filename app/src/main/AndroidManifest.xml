@@ -46,7 +46,6 @@
         <activity android:name=".SignUpActivity" />
         <activity android:name=".PasswordActivity" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".TestForGitHub"></activity>
     </application>
 
 </manifest>

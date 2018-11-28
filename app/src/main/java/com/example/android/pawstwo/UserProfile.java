@@ -1,18 +1,24 @@
 package com.example.android.pawstwo;
 
+import android.graphics.Bitmap;
+import android.media.Image;
+import android.widget.ImageView;
+
 public class UserProfile {
 
     public String userName;
     public String userEmail;
+
 
     public UserProfile(){
 
 
     }
 
-    public UserProfile(String userName, String userEmail) {
+    public UserProfile(String userName, String userEmail, ImageView profilePic) {
         this.userName = userName;
         this.userEmail = userEmail;
+
     }
 
     public String getUserName() {
@@ -30,4 +36,10 @@ public class UserProfile {
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
     }
+
+
+
+
+
+
 }
