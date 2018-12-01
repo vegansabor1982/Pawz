@@ -17,13 +17,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -34,12 +42,19 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private Button button;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
-    private FirebaseStorage firebaseStorage2;
+    private FirebaseStorage firebaseStorage;
     private ProgressDialog progressDialogtwo;
     private ClipData.Item openProfile;
     private Menu drawer_menu;
     Toolbar toolbar;
     private ImageView smallProfilePic;
+    private TextView profileEmail;
+    private TextView profileName;
+    private ListView listView;
+   // private MenuItem menuItem2;
+    //private MenuItem menuItem;
+
+
 
 
 
@@ -53,10 +68,22 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById ( R.id.nav_view );
         drawer = findViewById ( R.id.drawer_layout );
         navigationView.setNavigationItemSelectedListener ( this );
+       // menuItem2=findViewById ( R.id.nav_new_entry );
+       // menuItem=findViewById ( R.id.nav_profile );
 
 
-        // Test for update 28/11
-        //Test for another update
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -103,9 +130,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                 startActivity ( new Intent ( HomeActivity.this, ProfileActivity.class ) );
                 break;
+
+            case R.id.nav_new_entry:
+
+                startActivity ( new Intent ( HomeActivity.this, NewEntryActivity.class ) );
+                break;
         }
         return true;
     }
+
+
     /* @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId ()){

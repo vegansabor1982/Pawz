@@ -10,5 +10,18 @@
     <string name="facebook_app_id">506852643147292</string>
     <string name="fb_login_protocol_scheme">fb506852643147292</string>
     <string name="title_activity_drawer_activiy">DrawerActiviy</string>
+    <string name="Strings">Strings</string>
+    <string name="strings">Choose Category</string>
+    <string name="google_maps_API_key">
+AIzaSyCCn-sXDIZxPbvD9TiexCJ7R8Tw4KyGrz4
+</string>
 
+    <string-array name="types">
+        <item>"null"</item>
+        <item>Found</item>
+        <item>Lost</item>
+        <item>Gift</item>
+        <item>Adopt</item>
+    </string-array>
+    <string name="title_activity_maps">Map</string>
 </resources>

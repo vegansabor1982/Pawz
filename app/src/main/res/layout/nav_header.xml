@@ -17,6 +17,7 @@
 
 
     <TextView
+        android:id="@+id/tvNameHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
@@ -26,6 +27,7 @@
         />
 
     <TextView
+        android:id="@+id/tvEmailHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="email" />
