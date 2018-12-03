@@ -50,6 +50,7 @@ public class NewEntryActivity extends AppCompatActivity {
     private ListView listView;
     private Spinner spinner;
     private Spinner spinner2;
+    private Button maps;
 
 
 
@@ -60,6 +61,19 @@ public class NewEntryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate ( savedInstanceState );
         setContentView ( R.layout.activity_new_entry );
+
+        maps= findViewById ( R.id.btn_maps );
+
+        maps.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+
+                startActivity ( new Intent ( NewEntryActivity.this, MapsActivity.class ) );
+
+            }
+        } );
+
+
 
 
 
