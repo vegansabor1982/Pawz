@@ -2,42 +2,42 @@ package com.example.android.pawstwo;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Button;
 import android.widget.Toast;
+import android.widget.ZoomControls;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.io.IOException;
-import java.util.List;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
+
 
     private GoogleMap mMap;
     private GoogleApiClient googleApiClient;
@@ -46,13 +46,48 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Marker currentUserLocationMarker;
     private static final int Request_User_Location_Code =99;
     private Geocoder geocoder;
+    private GoogleApiClient mGoogleApiClient;
+    private static final LatLngBounds LAT_LNG_BOUNDS= new LatLngBounds (new LatLng ( -40,-168 ),new LatLng (71,136  )  );
+    Place locationAddress;
+    private String latLng;
+    Marker marker;
+    private PlaceAutocompleteFragment placeAutocompleteFragment;
+    ZoomControls zoomControls;
+    private FirebaseAuth firebaseAuth;
+    private Button locButton;
+    private Button saveButton;
+    private PlaceAutocompleteFragment locationMap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate ( savedInstanceState );
         setContentView ( R.layout.activity_maps );
+        placeAutocompleteFragment = ( PlaceAutocompleteFragment ) getFragmentManager ().findFragmentById (R.id.place_autocomplete_fragment );
 
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+        placeAutocompleteFragment.setOnPlaceSelectedListener ( new PlaceSelectionListener () {
+            @Override
+            public void onPlaceSelected(Place place) {
+                final LatLng latLngloc=place.getLatLng ();
+
+                if (marker!=null){
+                    marker.remove ();
+                }
+
+
+                marker=mMap.addMarker ( new MarkerOptions ().position(latLngloc).title ( place.getName ().toString () ) );
+                mMap.moveCamera ( CameraUpdateFactory.newLatLng ( latLngloc ) );
+                mMap.animateCamera ( CameraUpdateFactory.zoomBy ( 3 ) );
+
+            }
+
+            @Override
+            public void onError(Status status) {
+
+            }
+        } );
+
+       if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
             checkedUserLocationPermission ();
         }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -60,13 +95,68 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById ( R.id.map );
         mapFragment.getMapAsync ( this );
 
+        zoomControls=(ZoomControls ) findViewById ( R.id.zcZoom );
+        zoomControls.setOnZoomOutClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+
+                mMap.animateCamera ( CameraUpdateFactory.zoomOut () );
+
+            }
+        } );
+        zoomControls.setOnZoomInClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                mMap.animateCamera ( CameraUpdateFactory.zoomIn () );
+
+            }
+        } );
+
+
+
+
+
+        
+
+
+
+
+
 
     }
-   public void onSearch (View view){
+  /* public void onSearch (View view){
 
-        EditText location_tf = (EditText ) findViewById ( R.id.tv_Search );
-        String location = location_tf.getText ().toString ();
+
+
+     //  mSearchText= findViewById ( R.id.tv_Search );
+       PlaceAutocompleteFragment edtAdress = (PlaceAutocompleteFragment )getFragmentManager ().findFragmentById ( R.id.place_autocomplete_fragment ) ;
+      // edtAdress.getView ().findViewById ( R.id. btn_search ).setVisibility ( View.GONE );
+       edtAdress.setOnPlaceSelectedListener ( new PlaceSelectionListener () {
+           @Override
+           public void onPlaceSelected(Place place) {
+               locationAddress=place;
+
+           }
+
+           @Override
+           public void onError(Status status) {
+               Log.e("ERROR", status.getStatusMessage ());
+
+           }
+       } );
+
+
+
+
+       // AutoCompleteTextView location_tf = (AutoCompleteTextView ) findViewById ( R.id.tv_Search );
+        String location = locationAddress.getId().toString();
+
+        String.format ( String.valueOf ( locationAddress.getLatLng ().latitude ),locationAddress.getLatLng ().longitude);
         List<Address> addressList=null;
+
+
+
+
 
         if (location!=null || !location.equals ("")){
 
@@ -76,15 +166,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             } catch (IOException e) {
                 e.printStackTrace ();
             }
-        }Address address = addressList.get ( 0 );
-        LatLng latLng2=new LatLng ( address.getLatitude (), address.getLongitude () );
-        mMap.addMarker ( new MarkerOptions ().position ( latLng2 ).title ( "Marker" ) );
-        mMap.animateCamera ( CameraUpdateFactory.newLatLng ( latLng2 ) );
+        }Address locationAddress = addressList.get ( 0 );
+        LatLng latLng=new LatLng ( locationAddress.getLatitude (), locationAddress.getLongitude () );
+        mMap.addMarker ( new MarkerOptions ().position ( latLng ).title ( "Marker" ) );
+        mMap.animateCamera ( CameraUpdateFactory.newLatLng ( latLng ) );
 
 
 
 
     }
+    public void onError(Status status){
+
+        Toast.makeText ( MapsActivity.this, " "+status.toString (),Toast.LENGTH_SHORT ).show ();
+
+    }*/
 
 
 
@@ -157,16 +252,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        lastLocation=location;
+    /*@Override
+    public void onLocationChanged(Location locationAdress) {
+        lastLocation=  locationAddress;
 
         if (currentUserLocationMarker!=null){
 
             currentUserLocationMarker.remove ();
         }
 
-        LatLng latLng = new LatLng ( location.getLatitude (),location.getLongitude () );
+        LatLng latLng = new LatLng ( locationAddress.getLatitude (),locationAddress.getLongitude () );
 
         MarkerOptions markerOptions = new MarkerOptions ();
         markerOptions.position ( latLng );
@@ -181,7 +276,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (googleApiClient!=null){
             LocationServices.FusedLocationApi.removeLocationUpdates ( googleApiClient, this );
 
-        }
+        }*/
 
 
 
@@ -190,7 +285,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
-    }
+
 
 
 
@@ -249,4 +344,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+
+
 }
