@@ -15,9 +15,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -47,6 +49,9 @@ public class NewEntryActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private EditText description;
     private Button saveButton;
+    String Type;
+    String Family;
+    String Description;
 
 
 
@@ -62,6 +67,19 @@ public class NewEntryActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 startActivity ( new Intent ( NewEntryActivity.this, MapsActivity.class ) );
+
+            }
+        } );
+
+        saveButton=findViewById ( R.id.btnSave );
+
+        saveButton.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+
+                sendPetData ();
+                Toast.makeText (NewEntryActivity.this, "Stored Successfully", Toast.LENGTH_SHORT).show ();
+                startActivity ( new Intent ( NewEntryActivity.this, HomeActivity.class ) );
 
             }
         } );
@@ -124,6 +142,42 @@ public class NewEntryActivity extends AppCompatActivity {
 //------------------------------------------------------------------------------------------------------------------
 
 
+    }
+
+    private void setupUIViews(){
+
+        spinner= findViewById ( R.id.spinner_type );
+        spinner2=findViewById ( R.id.spinner_animal );
+        description=findViewById ( R.id.tv_description );
+        petPic=findViewById ( R.id.petImage );
+        saveButton=findViewById ( R.id.btnSave );
+    }
+
+    private Boolean validate() {
+
+        Boolean result = false;
+
+        Type = spinner.getAdapter ().toString ();
+        Family = spinner2.getAdapter ().toString ();
+        Description =description.getText().toString();
+        if (Type.isEmpty () || Family.isEmpty () || Description.isEmpty ()) {
+
+            Toast.makeText ( this, "Details Missing", Toast.LENGTH_SHORT ).show ();
+        } else {
+            result = true;
+        }
+        return result;
+
+    }
+
+
+
+    private void sendPetData(){
+
+        FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance ();
+       // firebaseAuth = FirebaseAuth.getInstance ();
+        DatabaseReference myRefTwo=firebaseDatabase.getReference ();
+        PetProfile petProfile= new PetProfile ( Type, Family,Description );myRefTwo.setValue ( petProfile );
     }
 }
 

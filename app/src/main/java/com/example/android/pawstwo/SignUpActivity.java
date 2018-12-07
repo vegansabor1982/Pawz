@@ -1,22 +1,17 @@
 package com.example.android.pawstwo;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.preference.RingtonePreference;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,8 +28,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -43,7 +36,7 @@ public class SignUpActivity extends AppCompatActivity {
     private Button regButton;
     private FirebaseAuth firebaseAuth;
     private ImageView userProfilePic;
-    String email, name, password;
+    String name,email, password;
     private FirebaseStorage firebaseStorage;
     private static int PICK_IMAGE=123;
     Uri imagePath;
