@@ -1,7 +1,5 @@
 package com.example.android.pawstwo;
 
-import android.graphics.Bitmap;
-import android.media.Image;
 import android.widget.ImageView;
 
 public class UserProfile {

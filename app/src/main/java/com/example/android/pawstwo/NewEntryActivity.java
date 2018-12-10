@@ -3,7 +3,11 @@ package com.example.android.pawstwo;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -23,17 +27,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class NewEntryActivity extends AppCompatActivity {
+
+
 
 
     private DrawerLayout drawer;
     private Button button;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
-    private FirebaseStorage firebaseStorage;
     private ProgressDialog progressDialogtwo;
     private ClipData.Item openProfile;
     private Menu drawer_menu;
@@ -46,12 +53,34 @@ public class NewEntryActivity extends AppCompatActivity {
     private Spinner spinner2;
     private Button maps;
     private ImageView petPic;
-    private StorageReference storageReference;
     private EditText description;
     private Button saveButton;
     String Type;
     String Family;
     String Description;
+    private DatabaseReference mDatabase;
+    private FirebaseStorage firebaseStorage;
+    private static int PICK_IMAGE=123;
+    Uri imagePath2;
+    private StorageReference storageReference;
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        if (requestCode == PICK_IMAGE && resultCode==RESULT_OK && data.getData ()!=null){
+
+            imagePath2=data.getData ();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver () ,imagePath2 );
+                petPic.setImageBitmap ( bitmap );
+            } catch (IOException e) {
+                e.printStackTrace ();
+            }
+
+        }
+        super.onActivityResult ( requestCode, resultCode, data );
+    }
 
 
 
@@ -71,13 +100,46 @@ public class NewEntryActivity extends AppCompatActivity {
             }
         } );
 
+
+        setupUIViews ();
+
+        firebaseAuth = FirebaseAuth.getInstance ();
+        firebaseStorage= FirebaseStorage.getInstance ();
+
+        storageReference= firebaseStorage.getReference ();
+        petPic.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                Intent glry = new Intent();
+                glry.setType ( "image/*" );
+                glry.setAction (Intent.ACTION_GET_CONTENT  );
+                startActivityForResult ( Intent.createChooser ( glry, "Select Image" ), PICK_IMAGE );
+
+            }
+        } );
+
+
         saveButton=findViewById ( R.id.btnSave );
 
         saveButton.setOnClickListener ( new View.OnClickListener () {
             @Override
             public void onClick(View view) {
 
+                spinner= findViewById ( R.id.spinner_type );
+                spinner2=findViewById ( R.id.spinner_animal );
+                description= findViewById ( R.id. tv_description );
+
+
+                if (validate ()){
+
+                    String Description = description.getText ().toString ().trim ();
+                    String Family= spinner.getSelectedItem ().toString ().trim ();
+                    String Type= spinner2.getSelectedItem ().toString ().trim ();
+                }
+
                 sendPetData ();
+
+
                 Toast.makeText (NewEntryActivity.this, "Stored Successfully", Toast.LENGTH_SHORT).show ();
                 startActivity ( new Intent ( NewEntryActivity.this, HomeActivity.class ) );
 
@@ -95,13 +157,8 @@ public class NewEntryActivity extends AppCompatActivity {
 
 
         /*Spinner spinnerOne =(Spinner)findViewById ( R.id.spinner_type );
-
         ArrayAdapter<String> myAdapter=new ArrayAdapter<String> (NewEntryActivity.this, android.R.layout.simple_list_item_1,getResources ().getStringArray ( R.array.types )  );
         myAdapter.add ( "Choose Category" );
-
-
-
-
         myAdapter.setDropDownViewResource ( android.R.layout.simple_spinner_dropdown_item );
         spinnerOne.setAdapter ( myAdapter );*/
 
@@ -157,10 +214,10 @@ public class NewEntryActivity extends AppCompatActivity {
 
         Boolean result = false;
 
-        Type = spinner.getAdapter ().toString ();
-        Family = spinner2.getAdapter ().toString ();
+        Type = spinner.getSelectedItem ().toString ();
+        Family = spinner2.getSelectedItem ().toString ();
         Description =description.getText().toString();
-        if (Type.isEmpty () || Family.isEmpty () || Description.isEmpty ()) {
+        if (Type.isEmpty () || Family.isEmpty () || Description.isEmpty ()|| imagePath2==null) {
 
             Toast.makeText ( this, "Details Missing", Toast.LENGTH_SHORT ).show ();
         } else {
@@ -172,24 +229,28 @@ public class NewEntryActivity extends AppCompatActivity {
 
 
 
-    private void sendPetData(){
 
-        FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance ();
-       // firebaseAuth = FirebaseAuth.getInstance ();
-        DatabaseReference myRefTwo=firebaseDatabase.getReference ();
-        PetProfile petProfile= new PetProfile ( Type, Family,Description );myRefTwo.setValue ( petProfile );
+    private void sendPetData() {
+
+        StorageReference imageReference = storageReference.child ( firebaseAuth.getUid () ).child ( "Pet Images").child ( "Pet Pic" );
+        UploadTask uploadTask = imageReference.putFile ( imagePath2 );
+
+        mDatabase = FirebaseDatabase.getInstance ().getReference ();
+        //PetProfile petProfile = null;
+
+
+
+       PetProfile petProfile = new PetProfile ( Description, Family, Type,petPic );
+       // mDatabase.child ( "Pets" ).child ( "Pet2" ).setValue ( petProfile );
+
+        mDatabase.push ().setValue ( petProfile );
+
+
+        // FirebaseDatabase firebaseDatabase1=FirebaseDatabase.getInstance ();
+        // firebaseDatabase1.child
+        // firebaseAuth = FirebaseAuth.getInstance ();
+        // DatabaseReference myRefTwo=firebaseDatabase1.getReference ();
+
+        //myRefTwo.setValue ( petProfile );
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
