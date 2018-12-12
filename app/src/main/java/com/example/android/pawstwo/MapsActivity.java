@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.Toast;
 import android.widget.ZoomControls;
 
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
@@ -34,6 +36,9 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
@@ -43,11 +48,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
     private Location lastLocation;
+    // private double lastLocation;
+    private Place lastPlace;
     private Marker currentUserLocationMarker;
-    private static final int Request_User_Location_Code =99;
+    private static final int Request_User_Location_Code = 99;
     private Geocoder geocoder;
     private GoogleApiClient mGoogleApiClient;
-    private static final LatLngBounds LAT_LNG_BOUNDS= new LatLngBounds (new LatLng ( -40,-168 ),new LatLng (71,136  )  );
+    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds ( new LatLng ( -40, -168 ), new LatLng ( 71, 136 ) );
     Place locationAddress;
     private String latLng;
     Marker marker;
@@ -59,25 +66,45 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private PlaceAutocompleteFragment locationMap;
 
 
+
+
+    DatabaseReference ref;
+    private GeoFire geoFire;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate ( savedInstanceState );
         setContentView ( R.layout.activity_maps );
-        placeAutocompleteFragment = ( PlaceAutocompleteFragment ) getFragmentManager ().findFragmentById (R.id.place_autocomplete_fragment );
+
+
+
+
+
+        placeAutocompleteFragment = ( PlaceAutocompleteFragment ) getFragmentManager ().findFragmentById ( R.id.place_autocomplete_fragment );
 
         placeAutocompleteFragment.setOnPlaceSelectedListener ( new PlaceSelectionListener () {
             @Override
-            public void onPlaceSelected(Place place) {
-                final LatLng latLngloc=place.getLatLng ();
+            public void onPlaceSelected(final Place place) {
+                final LatLng latLngloc = place.getLatLng ();
 
-                if (marker!=null){
+                if (marker != null) {
                     marker.remove ();
                 }
 
 
-                marker=mMap.addMarker ( new MarkerOptions ().position(latLngloc).title ( place.getName ().toString () ) );
+                marker = mMap.addMarker ( new MarkerOptions ().position ( latLngloc ).title ( place.getName ().toString () ) );
                 mMap.moveCamera ( CameraUpdateFactory.newLatLng ( latLngloc ) );
-                mMap.animateCamera ( CameraUpdateFactory.zoomBy ( 3 ) );
+                mMap.animateCamera ( CameraUpdateFactory.zoomTo ( 6 ) );
+
+                placeAutocompleteFragment.getView ().findViewById ( R.id.place_autocomplete_clear_button ).setOnClickListener ( new View.OnClickListener () {
+                    @Override
+                    public void onClick(View view) {
+
+                        mMap.clear ();
+                    }
+                } );
+
 
             }
 
@@ -87,7 +114,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         } );
 
-       if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkedUserLocationPermission ();
         }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -95,7 +122,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById ( R.id.map );
         mapFragment.getMapAsync ( this );
 
-        zoomControls=(ZoomControls ) findViewById ( R.id.zcZoom );
+        zoomControls = ( ZoomControls ) findViewById ( R.id.zcZoom );
         zoomControls.setOnZoomOutClickListener ( new View.OnClickListener () {
             @Override
             public void onClick(View view) {
@@ -111,15 +138,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         } );
-
-
-
-
-
-        
-
-
-
 
 
 
@@ -182,8 +200,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }*/
 
 
-
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -197,7 +213,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        if (ContextCompat.checkSelfPermission ( this, Manifest.permission.ACCESS_FINE_LOCATION )==PackageManager.PERMISSION_GRANTED)  {
+        if (ContextCompat.checkSelfPermission ( this, Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -208,46 +224,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             buildGoogleApiClient ();
 
 
-
-            mMap.setMyLocationEnabled ( true );
-
-
-
-
         }
-
 
 
     }
 
-    public boolean checkedUserLocationPermission(){
+    public boolean checkedUserLocationPermission() {
 
-        if (ContextCompat.checkSelfPermission ( this, Manifest.permission.ACCESS_FINE_LOCATION )!=PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission ( this, Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED) {
 
             if (ActivityCompat.shouldShowRequestPermissionRationale ( this, Manifest.permission.ACCESS_FINE_LOCATION )) {
 
-                ActivityCompat.requestPermissions ( this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Request_User_Location_Code);
-            }else{
-                ActivityCompat.requestPermissions ( this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Request_User_Location_Code);
+                ActivityCompat.requestPermissions ( this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Request_User_Location_Code );
+            } else {
+                ActivityCompat.requestPermissions ( this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Request_User_Location_Code );
             }
             return false;
-        }else {
+        } else {
             return true;
         }
 
 
-
     }
 
 
+    protected synchronized void buildGoogleApiClient() {
 
-
-    protected synchronized void buildGoogleApiClient(){
-
-        googleApiClient = new GoogleApiClient.Builder ( this).addConnectionCallbacks ( this ).addOnConnectionFailedListener ( this ).addApi ( LocationServices.API ).build ();
+        googleApiClient = new GoogleApiClient.Builder ( this ).addConnectionCallbacks ( this ).addOnConnectionFailedListener ( this ).addApi ( LocationServices.API ).build ();
 
         googleApiClient.connect ();
-
 
 
     }
@@ -279,18 +284,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }*/
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
@@ -299,12 +292,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationRequest.setFastestInterval ( 1100 );
         locationRequest.setPriority ( LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY );
 
-        if (ContextCompat.checkSelfPermission ( this, Manifest.permission.ACCESS_FINE_LOCATION )==PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission ( this, Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED) {
 
-        LocationServices.FusedLocationApi.requestLocationUpdates ( googleApiClient, locationRequest, this );
+            LocationServices.FusedLocationApi.requestLocationUpdates ( googleApiClient, locationRequest, this );
 
 
-    }
+        }
+
+
 
    /* @Override
     public void onConnectionSuspended(int i) {
@@ -315,7 +310,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }*/
-}
+    }
 
     @Override
     public void onConnectionSuspended(int i) {
@@ -324,21 +319,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
+        switch (requestCode) {
             case Request_User_Location_Code:
-                if (grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
-                    if (ContextCompat.checkSelfPermission ( this, Manifest.permission.ACCESS_FINE_LOCATION )==PackageManager.PERMISSION_GRANTED){
-                        if (googleApiClient==null){
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission ( this, Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED) {
+                        if (googleApiClient == null) {
                             buildGoogleApiClient ();
                         }
                         mMap.setMyLocationEnabled ( true );
 
-                        }
-                    }else{
+                    }
+                } else {
                     Toast.makeText ( this, "Permission Denied...", Toast.LENGTH_SHORT ).show ();
-                }return;
                 }
+                return;
         }
+    }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -348,8 +344,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onLocationChanged(Location location) {
 
+
+
+        lastLocation=location;
+        LatLng latLng=new LatLng(location.getLatitude(),location.getLongitude());
+        String petId=FirebaseAuth.getInstance ().getCurrentUser ().getUid ();
+        ref=FirebaseDatabase.getInstance ().getReference ("Pet Location");
+
+       GeoFire geoFire =new GeoFire ( ref );
+        geoFire.setLocation ( petId, new GeoLocation ( lastLocation.getLatitude (), lastLocation.getLongitude () ), new GeoFire.CompletionListener () {
+            @Override
+            public void onComplete(String key, DatabaseError error) {
+
+            }
+        } );
+
+
     }
 
 
 
+
+
+
 }
+
+//to check upedatesdead
