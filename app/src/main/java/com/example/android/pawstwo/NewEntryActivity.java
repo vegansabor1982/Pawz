@@ -34,6 +34,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class NewEntryActivity extends AppCompatActivity {
 
@@ -234,7 +235,7 @@ public class NewEntryActivity extends AppCompatActivity {
 
     private void sendPetData() {
 
-        StorageReference imageReference = storageReference.child ( firebaseAuth.getUid () ).child ( "Pet Images").child ( "Pet Pic" );
+        StorageReference imageReference = storageReference.child ( firebaseAuth.getUid ()).child ( "Pet Images/"+UUID.randomUUID () );
         UploadTask uploadTask = imageReference.putFile ( imagePath2 );
 
         uploadTask.addOnFailureListener ( new OnFailureListener () {
