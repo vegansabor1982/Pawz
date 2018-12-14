@@ -71,6 +71,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     DatabaseReference ref;
     private GeoFire geoFire;
 
+    private Location placeLocation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +83,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
+
+
+
+
+
         placeAutocompleteFragment = ( PlaceAutocompleteFragment ) getFragmentManager ().findFragmentById ( R.id.place_autocomplete_fragment );
+
+        locButton=findViewById ( R.id.btn_save_location );
 
         placeAutocompleteFragment.setOnPlaceSelectedListener ( new PlaceSelectionListener () {
             @Override
@@ -92,10 +101,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     marker.remove ();
                 }
 
+                locButton=findViewById ( R.id.btn_save_location );
+
+
+
+
+
+
+
 
                 marker = mMap.addMarker ( new MarkerOptions ().position ( latLngloc ).title ( place.getName ().toString () ) );
+
                 mMap.moveCamera ( CameraUpdateFactory.newLatLng ( latLngloc ) );
                 mMap.animateCamera ( CameraUpdateFactory.zoomTo ( 6 ) );
+
+
+
 
                 placeAutocompleteFragment.getView ().findViewById ( R.id.place_autocomplete_clear_button ).setOnClickListener ( new View.OnClickListener () {
                     @Override
@@ -138,6 +159,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         } );
+
+
 
 
 
@@ -348,32 +371,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    @Override
+   @Override
     public void onLocationChanged(Location location) {
 
 
 
-        lastLocation=location;
+       lastLocation=location;
         LatLng latLng=new LatLng(location.getLatitude(),location.getLongitude());
         String petId=FirebaseAuth.getInstance ().getCurrentUser ().getUid ();
         ref=FirebaseDatabase.getInstance ().getReference ("Pet Location");
 
         GeoFire geoFire =new GeoFire ( ref );
-        geoFire.setLocation ( petId, new GeoLocation ( lastLocation.getLatitude (), lastLocation.getLongitude () ), new GeoFire.CompletionListener () {
+        geoFire.setLocation ( petId, new GeoLocation ( lastLocation.getLatitude (), lastLocation.getLongitude () ), new GeoFire.CompletionListener ()
+
+        {
             @Override
             public void onComplete(String key, DatabaseError error) {
 
             }
         } );
 
-
-    }
-
-
-
-
+   }
 
 
 }
 
-//to check upedatesdead
+
+//to check again 15/12
