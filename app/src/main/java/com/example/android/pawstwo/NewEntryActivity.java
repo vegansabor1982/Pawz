@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -124,7 +127,6 @@ public class NewEntryActivity extends AppCompatActivity {
         saveButton.setOnClickListener ( new View.OnClickListener () {
             @Override
             public void onClick(View view) {
-
                 spinner= findViewById ( R.id.spinner_type );
                 spinner2=findViewById ( R.id.spinner_animal );
                 description= findViewById ( R.id. tv_description );
@@ -235,13 +237,28 @@ public class NewEntryActivity extends AppCompatActivity {
         StorageReference imageReference = storageReference.child ( firebaseAuth.getUid () ).child ( "Pet Images").child ( "Pet Pic" );
         UploadTask uploadTask = imageReference.putFile ( imagePath2 );
 
-        mDatabase = FirebaseDatabase.getInstance ().getReference ();
+        uploadTask.addOnFailureListener ( new OnFailureListener () {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText ( NewEntryActivity.this, "Upload failed", Toast.LENGTH_LONG ).show ();
+
+            }
+        } );
+        uploadTask.addOnSuccessListener ( new OnSuccessListener<UploadTask.TaskSnapshot> () {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText ( NewEntryActivity.this, "Upload Successful", Toast.LENGTH_LONG ).show ();
+
+            }
+        } );
+
+        mDatabase = FirebaseDatabase.getInstance ().getReference ("Pets");
         //PetProfile petProfile = null;
 
 
 
-       PetProfile petProfile = new PetProfile ( Description, Family, Type,petPic );
-       // mDatabase.child ( "Pets" ).child ( "Pet2" ).setValue ( petProfile );
+       PetProfile petProfile = new PetProfile ( Description, Family, Type );
+      // mDatabase.child ( "Pets" ).child ( "Pet2" ).setValue ( petProfile );
 
         mDatabase.push ().setValue ( petProfile );
 

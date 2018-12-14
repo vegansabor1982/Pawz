@@ -1,7 +1,5 @@
 package com.example.android.pawstwo;
 
-import android.widget.ImageView;
-
 public class UserProfile {
 
     public String userName;
@@ -13,7 +11,7 @@ public class UserProfile {
 
     }
 
-    public UserProfile(String userName, String userEmail, ImageView profilePic) {
+    public UserProfile(String userName, String userEmail) {
         this.userName = userName;
         this.userEmail = userEmail;
 

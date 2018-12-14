@@ -198,7 +198,7 @@ public class SignUpActivity extends AppCompatActivity {
     private void sendUserData(){
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance ();
-        DatabaseReference myRef = firebaseDatabase.getReference (firebaseAuth.getUid ());
+        DatabaseReference myRef = firebaseDatabase.getReference().child ("Users").child (firebaseAuth.getUid ());
 
         StorageReference imageReference = storageReference.child ( firebaseAuth.getUid () ).child ( "Images").child ( "Profile Pic" );
         UploadTask uploadTask = imageReference.putFile ( imagePath );
@@ -216,7 +216,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             }
         } );
-        UserProfile userProfile = new UserProfile ( name, email,userProfilePic );
+        UserProfile userProfile = new UserProfile ( name, email );
         myRef.setValue (userProfile  );
     }
 

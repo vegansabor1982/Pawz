@@ -341,6 +341,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
     @Override
     public void onLocationChanged(Location location) {
 
@@ -351,7 +358,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String petId=FirebaseAuth.getInstance ().getCurrentUser ().getUid ();
         ref=FirebaseDatabase.getInstance ().getReference ("Pet Location");
 
-       GeoFire geoFire =new GeoFire ( ref );
+        GeoFire geoFire =new GeoFire ( ref );
         geoFire.setLocation ( petId, new GeoLocation ( lastLocation.getLatitude (), lastLocation.getLongitude () ), new GeoFire.CompletionListener () {
             @Override
             public void onComplete(String key, DatabaseError error) {
