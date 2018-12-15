@@ -17,7 +17,6 @@ import android.widget.Toast;
 import android.widget.ZoomControls;
 
 import com.firebase.geofire.GeoFire;
-import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
@@ -36,12 +35,11 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener, GoogleMap.OnMapLongClickListener {
 
 
     private GoogleMap mMap;
@@ -63,15 +61,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FirebaseAuth firebaseAuth;
     private Button locButton;
     private Button saveButton;
-    private PlaceAutocompleteFragment locationMap;
+    private Location locationMap;
+    String Latitude;
+    String Longtitude;
+    private double latitude;
+    private double longtitude;
 
 
 
 
     DatabaseReference ref;
+    DatabaseReference ref2;
     private GeoFire geoFire;
 
     private Location placeLocation;
+   private LatLng petLocation;
 
 
     @Override
@@ -84,13 +88,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
+         placeAutocompleteFragment = ( PlaceAutocompleteFragment ) getFragmentManager ().findFragmentById ( R.id.place_autocomplete_fragment );
 
 
-
-
-        placeAutocompleteFragment = ( PlaceAutocompleteFragment ) getFragmentManager ().findFragmentById ( R.id.place_autocomplete_fragment );
-
-        locButton=findViewById ( R.id.btn_save_location );
 
         placeAutocompleteFragment.setOnPlaceSelectedListener ( new PlaceSelectionListener () {
             @Override
@@ -101,7 +101,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     marker.remove ();
                 }
 
-                locButton=findViewById ( R.id.btn_save_location );
 
 
 
@@ -110,10 +109,87 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
-                marker = mMap.addMarker ( new MarkerOptions ().position ( latLngloc ).title ( place.getName ().toString () ) );
+
+
+
+
+
+
+
+
+
+
+
+               marker = mMap.addMarker ( new MarkerOptions ().position ( latLngloc ).title ( "Save Pet Location").draggable ( true ) );
+
+
+
+
+
+
+
+
 
                 mMap.moveCamera ( CameraUpdateFactory.newLatLng ( latLngloc ) );
                 mMap.animateCamera ( CameraUpdateFactory.zoomTo ( 6 ) );
+
+
+                locButton=findViewById ( R.id.btn_save_location );
+
+                locButton.setOnClickListener ( new View.OnClickListener () {
+                    @Override
+                    public void onClick(View view) {
+
+                      // String Latitude=Double.toString ( latitude );
+                      // String Longtitude=Double.toString ( longtitude );
+
+
+                        DatabaseReference petProfile = FirebaseDatabase.getInstance ().getReference ("Pet Position");
+                        FirebaseMarker marker1 = new FirebaseMarker (  );
+                        petProfile.push ().setValue ( marker.getPosition () );
+
+                        mMap.setOnMarkerDragListener ( new GoogleMap.OnMarkerDragListener () {
+                            @Override
+                            public void onMarkerDragStart(Marker marker) {
+
+
+                            }
+
+                            @Override
+                            public void onMarkerDrag(Marker marker) {
+
+                            }
+
+                            @Override
+                            public void onMarkerDragEnd(final Marker marker) {
+                                locButton.setOnClickListener ( new View.OnClickListener () {
+                                    @Override
+                                    public void onClick(View view) {
+                                        DatabaseReference petProfile = FirebaseDatabase.getInstance ().getReference ("Pet Position");
+                                        FirebaseMarker marker1 = new FirebaseMarker (  );
+                                        petProfile.push ().setValue ( marker.getPosition () );
+
+                                    }
+                                } );
+
+
+                            }
+                        } );
+                    }
+                } );
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -125,6 +201,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         mMap.clear ();
                     }
                 } );
+
+
 
 
             }
@@ -159,6 +237,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         } );
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -356,6 +444,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Toast.makeText ( this, "Permission Denied...", Toast.LENGTH_SHORT ).show ();
                 }
                 return;
+
+
         }
     }
 
@@ -371,30 +461,51 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-   @Override
+
+
+    @Override
     public void onLocationChanged(Location location) {
 
 
 
-       lastLocation=location;
+     /* lastLocation=location;
         LatLng latLng=new LatLng(location.getLatitude(),location.getLongitude());
         String petId=FirebaseAuth.getInstance ().getCurrentUser ().getUid ();
         ref=FirebaseDatabase.getInstance ().getReference ("Pet Location");
 
-        GeoFire geoFire =new GeoFire ( ref );
+       GeoFire geoFire =new GeoFire ( ref );
         geoFire.setLocation ( petId, new GeoLocation ( lastLocation.getLatitude (), lastLocation.getLongitude () ), new GeoFire.CompletionListener ()
 
         {
             @Override
             public void onComplete(String key, DatabaseError error) {
 
+
             }
-        } );
+        } );*/
+
+
+
+
+
+
+
 
    }
+
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+
+
+
+    }
+
+
+
 
 
 }
 
 
-//to check again 15/12
+//finally working!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
