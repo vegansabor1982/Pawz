@@ -198,7 +198,7 @@ public class SignUpActivity extends AppCompatActivity {
     private void sendUserData(){
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance ();
-        DatabaseReference myRef = firebaseDatabase.getReference().child ("Users").child (firebaseAuth.getUid ());
+        DatabaseReference myRef = firebaseDatabase.getReference().child ("Users");
 
         StorageReference imageReference = storageReference.child ( firebaseAuth.getUid () ).child ( "Images").child ( "Profile Pic" );
         UploadTask uploadTask = imageReference.putFile ( imagePath );

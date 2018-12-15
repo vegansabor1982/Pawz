@@ -1,6 +1,7 @@
 package com.example.android.pawstwo;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
@@ -144,9 +145,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                       // String Longtitude=Double.toString ( longtitude );
 
 
-                        DatabaseReference petProfile = FirebaseDatabase.getInstance ().getReference ("Pet Position");
+                        DatabaseReference petProfile = FirebaseDatabase.getInstance ().getReference("Pet Position" );
                         FirebaseMarker marker1 = new FirebaseMarker (  );
                         petProfile.push ().setValue ( marker.getPosition () );
+
+                        Toast.makeText ( MapsActivity.this,"Thank you for your Submission", Toast.LENGTH_SHORT ).show ();
+
+                        Intent i = new Intent ( MapsActivity.this, HomeActivity.class );
+                        startActivity ( i );
 
                         mMap.setOnMarkerDragListener ( new GoogleMap.OnMarkerDragListener () {
                             @Override
@@ -168,6 +174,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                         DatabaseReference petProfile = FirebaseDatabase.getInstance ().getReference ("Pet Position");
                                         FirebaseMarker marker1 = new FirebaseMarker (  );
                                         petProfile.push ().setValue ( marker.getPosition () );
+
+                                        Toast.makeText ( MapsActivity.this,"Thank you for your Submission", Toast.LENGTH_SHORT ).show ();
+
+                                        Intent k = new Intent ( MapsActivity.this, HomeActivity.class );
+                                        startActivity ( k );
 
                                     }
                                 } );

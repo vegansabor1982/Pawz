@@ -143,8 +143,8 @@ public class NewEntryActivity extends AppCompatActivity {
                 sendPetData ();
 
 
-                Toast.makeText (NewEntryActivity.this, "Stored Successfully", Toast.LENGTH_SHORT).show ();
-                startActivity ( new Intent ( NewEntryActivity.this, HomeActivity.class ) );
+                Toast.makeText (NewEntryActivity.this, "Stored Successfully! Now save the Pet Location Below.", Toast.LENGTH_SHORT).show ();
+                //startActivity ( new Intent ( NewEntryActivity.this, HomeActivity.class ) );
 
             }
         } );
@@ -248,7 +248,7 @@ public class NewEntryActivity extends AppCompatActivity {
         uploadTask.addOnSuccessListener ( new OnSuccessListener<UploadTask.TaskSnapshot> () {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText ( NewEntryActivity.this, "Upload Successful", Toast.LENGTH_LONG ).show ();
+                Toast.makeText ( NewEntryActivity.this, "Upload Successful!", Toast.LENGTH_LONG ).show ();
 
             }
         } );
