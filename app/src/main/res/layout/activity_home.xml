@@ -26,6 +26,14 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="Latest additions"
+            android:textSize="20sp"
+            android:textAlignment="center"/>
+
+
         <ListView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/list"
@@ -55,6 +63,8 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/drawer_menu" >
+
+
 
     </android.support.design.widget.NavigationView>
 
