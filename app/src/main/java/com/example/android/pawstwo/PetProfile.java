@@ -7,10 +7,19 @@ public class PetProfile {
     public String spinner2;
 
 
+
+
     /*public PetProfile(String description, String family, String type, ImageView petPic) {
 
 
     }*/
+
+    public PetProfile(){
+
+    }
+
+
+
     public PetProfile(String type, String family, String description) {
         this.description = description;
         this.spinner = type;
@@ -18,7 +27,12 @@ public class PetProfile {
 
 
 
+
+
+
+
     }
+
 
     public String getDescription() {
         return description;
@@ -31,6 +45,8 @@ public class PetProfile {
     public String getSpinner2() {
         return spinner2;
     }
+
+
 }
 
 

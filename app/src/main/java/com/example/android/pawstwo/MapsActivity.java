@@ -1,7 +1,6 @@
 package com.example.android.pawstwo;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
@@ -151,8 +150,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                         Toast.makeText ( MapsActivity.this,"Thank you for your Submission", Toast.LENGTH_SHORT ).show ();
 
-                        Intent i = new Intent ( MapsActivity.this, HomeActivity.class );
-                        startActivity ( i );
+
 
                         mMap.setOnMarkerDragListener ( new GoogleMap.OnMarkerDragListener () {
                             @Override
@@ -177,8 +175,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                                         Toast.makeText ( MapsActivity.this,"Thank you for your Submission", Toast.LENGTH_SHORT ).show ();
 
-                                        Intent k = new Intent ( MapsActivity.this, HomeActivity.class );
-                                        startActivity ( k );
+
 
                                     }
                                 } );

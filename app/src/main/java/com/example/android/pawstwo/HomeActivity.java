@@ -15,15 +15,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -31,6 +42,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private Button button;
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
     private FirebaseStorage firebaseStorage;
     private ProgressDialog progressDialogtwo;
     private ClipData.Item openProfile;
@@ -41,6 +53,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private TextView profileName;
     private ListView listView;
     private ImageView profilePic;
+    private ArrayList <String> list=new ArrayList<> (  );
+    private ArrayAdapter<String> adapter;
+    private Spinner petType;
+    private Spinner petFamily;
+    private TextView petDescription;
+    private PetProfile petProfile;
+    private String Image;
+
+
+
 
    // private MenuItem menuItem2;
     //private MenuItem menuItem;
@@ -82,6 +104,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+
         android.support.v7.widget.Toolbar toolbar = findViewById ( R.id.toolbar );
         setSupportActionBar ( toolbar );
 
@@ -94,12 +117,66 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle ( this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close );
         drawer.addDrawerListener ( toggle );
         toggle.syncState ();
 
 
+        firebaseDatabase=FirebaseDatabase.getInstance ();
+        databaseReference=firebaseDatabase.getReference ("Pets");
 
+        list = new ArrayList<> (  );
+        adapter=new ArrayAdapter<String> (this,R.layout. pet_info,R.id.petInfo,list  );
+        petProfile=new PetProfile();
+
+
+
+
+        listView= findViewById ( R.id. list );
+
+        databaseReference.addValueEventListener ( new ValueEventListener () {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds: dataSnapshot.getChildren ()){
+
+                    petProfile=ds.getValue (PetProfile.class);
+                    firebaseStorage=FirebaseStorage.getInstance ();
+                    StorageReference storageReference= firebaseStorage.getReference ();
+
+                    list.add(petProfile.getDescription ().toString ()+"\n"+petProfile.getSpinner2 ().toString ()+"\n"+ petProfile.getSpinner ().toString ());
+
+
+
+
+
+
+                }
+                listView.setAdapter ( adapter );
+
+
+
+
+
+
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        } );
+
+        listView.setOnItemClickListener ( new AdapterView.OnItemClickListener () {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                Toast.makeText ( HomeActivity.this, "Warsdff", Toast.LENGTH_SHORT).show ();
+
+            }
+        } );
 
 
 
@@ -234,3 +311,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 }
+
+
+//------------update check 16/12
