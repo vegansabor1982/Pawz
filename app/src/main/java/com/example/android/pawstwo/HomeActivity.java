@@ -49,6 +49,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private Menu drawer_menu;
     Toolbar toolbar;
     private ImageView smallProfilePic;
+    private  ImageView petListPic;
     private TextView profileEmail;
     private TextView profileName;
     private ListView listView;
@@ -59,7 +60,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private Spinner petFamily;
     private TextView petDescription;
     private PetProfile petProfile;
+
     private String Image;
+
 
 
 
@@ -133,7 +136,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+
         listView= findViewById ( R.id. list );
+        petListPic= findViewById ( R.id.petImageList  );
 
         databaseReference.addValueEventListener ( new ValueEventListener () {
             @Override
@@ -141,10 +146,31 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 for (DataSnapshot ds: dataSnapshot.getChildren ()){
 
                     petProfile=ds.getValue (PetProfile.class);
+
                     firebaseStorage=FirebaseStorage.getInstance ();
-                    StorageReference storageReference= firebaseStorage.getReference ();
+                    //StorageReference storageReference= firebaseStorage.getReference ();
 
                     list.add(petProfile.getDescription ().toString ()+"\n"+petProfile.getSpinner2 ().toString ()+"\n"+ petProfile.getSpinner ().toString ());
+
+
+
+
+                    StorageReference storageReference = firebaseStorage.getReference ();
+                    firebaseAuth=FirebaseAuth.getInstance ();
+                    firebaseDatabase=FirebaseDatabase.getInstance ();
+
+
+                  /*  storageReference.child ( petImageUpload.imageView.toString () ).child ( "Pet Images/"+UUID.randomUUID ()  ).getDownloadUrl ().addOnSuccessListener ( new OnSuccessListener<Uri> () {
+                        @Override
+                        public void onSuccess(Uri uri) {
+
+                           Picasso.get ().load ( uri ).fit().centerCrop().into (petListPic );
+
+
+
+
+                        }
+                    } );*/
 
 
 
@@ -161,13 +187,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+
             }
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         } );
+
 
         listView.setOnItemClickListener ( new AdapterView.OnItemClickListener () {
             @Override
