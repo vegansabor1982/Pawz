@@ -1,0 +1,226 @@
+package com.example.android.pawstwo;
+
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.webkit.MimeTypeMap;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+
+public class TestUploadActivity extends AppCompatActivity {
+
+    private static final int PICK_IMAGE_REQUEST = 1;
+
+    private Spinner spinner1;
+    private Spinner spinner2;
+    private EditText mDescription;
+    private ImageView mPetPic;
+    private Button mUpload;
+    private ProgressBar mProgressBar;
+    private Uri mImageUri;
+
+    private StorageReference mStorageRef;
+    private DatabaseReference mDatabaseRef;
+    private FirebaseAuth mFirebaseAuth;
+
+    String Type_Test;
+    String Family_Test;
+    String Description_Test;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate ( savedInstanceState );
+        setContentView ( R.layout.activity_test_upload );
+
+        spinner1 = findViewById ( R.id.spinner_type_test );
+        spinner2 = findViewById ( R.id.spinner_family_test );
+        mDescription = findViewById ( R.id.tv_description_test );
+        mPetPic = findViewById ( R.id.iv_petpic_test );
+        mUpload = findViewById ( R.id.btn_upload_test );
+        mProgressBar= findViewById ( R.id.progress_bar_test );
+
+        mStorageRef = FirebaseStorage.getInstance ().getReference ( "Uploads" );
+        mDatabaseRef = FirebaseDatabase.getInstance ().getReference ( "Uploads" );
+
+
+        mUpload.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+
+                uploadFile ();
+               startActivity ( new Intent ( TestUploadActivity.this, TestHomeActivity.class ) );
+
+
+            }
+        } );
+
+        mPetPic.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+
+                openFileChooser ();
+
+            }
+        } );
+
+
+//----------------------------------------------------------------------------------------------------------------------------------------------
+
+        ArrayList<String> categories = new ArrayList<> ();
+        categories.add ( 0, "Select Category" );
+        categories.add ( 1, "Found" );
+        categories.add ( 2, "Lost" );
+        categories.add ( 3, "Gift" );
+        categories.add ( 4, "Adopt" );
+
+
+        ArrayAdapter<String> dataAdapter;
+        dataAdapter = new ArrayAdapter ( this, android.R.layout.simple_spinner_item, categories );
+        dataAdapter.setDropDownViewResource ( android.R.layout.simple_spinner_dropdown_item );
+
+        spinner1.setAdapter ( dataAdapter );
+
+        ArrayList<String> animals = new ArrayList<> ();
+
+        animals.add ( 0, "Select Family" );
+        animals.add ( 1, "Dogs" );
+        animals.add ( 2, "Cats" );
+        animals.add ( 3, "Other" );
+
+
+        ArrayAdapter<String> dataAdapter2;
+        dataAdapter2 = new ArrayAdapter ( this, android.R.layout.simple_spinner_item, animals );
+        dataAdapter2.setDropDownViewResource ( android.R.layout.simple_spinner_dropdown_item );
+
+        spinner2.setAdapter ( dataAdapter2 );
+//   ----------------------------------------------------------------------------------------------------------------------------------------------
+
+    }
+
+    private void openFileChooser() {
+
+        Intent intent = new Intent ();
+        intent.setType ( "image/*" );
+        intent.setAction ( Intent.ACTION_GET_CONTENT );
+        startActivityForResult ( intent, PICK_IMAGE_REQUEST );
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult ( requestCode, resultCode, data );
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData () != null) {
+            mImageUri = data.getData ();
+
+            Picasso.get ().load ( mImageUri ).fit ().centerCrop ().into ( mPetPic );
+        }
+    }
+
+   /* private Boolean validate() {
+
+        Boolean result = false;
+
+        Type_Test = spinner1.getSelectedItem ().toString ();
+        Family_Test = spinner2.getSelectedItem ().toString ();
+        Description_Test = mDescription.getText ().toString ();
+        if (Type_Test.isEmpty () || Family_Test.isEmpty () || mDescription == null) {
+
+            Toast.makeText ( this, "Details Missing", Toast.LENGTH_SHORT ).show ();
+        } else {
+            result = true;
+        }
+        return result;
+    }*/
+
+    private String getFileExtension(Uri uri) {
+
+
+    ContentResolver cR = getContentResolver ();
+    MimeTypeMap mime = MimeTypeMap.getSingleton ();
+    return mime.getExtensionFromMimeType ( cR.getType (uri) );
+    }
+
+
+    private void uploadFile(){
+
+        if (mImageUri!= null){
+
+            StorageReference fileReference = mStorageRef.child ( System.currentTimeMillis ()+"."+getFileExtension ( mImageUri ) );
+
+
+            fileReference.putFile ( mImageUri ).addOnSuccessListener ( new OnSuccessListener<UploadTask.TaskSnapshot> () {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Handler handler = new Handler ();
+                    handler.postDelayed ( new Runnable () {
+                        @Override
+                        public void run() {
+                            mProgressBar.setProgress ( 0 );
+                        }
+
+                    } ,500);
+
+                    Toast.makeText ( TestUploadActivity.this, "Upload Successfull",Toast.LENGTH_SHORT).show ();
+
+
+
+
+
+
+                    UploadTest uploadTest = new UploadTest ( spinner1.getSelectedItem ().toString ().trim (),spinner2.getSelectedItem ().toString ().trim (),mDescription.getText ().toString ().trim (),taskSnapshot.getUploadSessionUri ().toString ());
+                    String uploadId = mDatabaseRef.push ().getKey ();
+                    mDatabaseRef.child(uploadId).setValue ( uploadTest );
+                }
+
+            } )
+                    .addOnFailureListener ( new OnFailureListener () {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                            Toast.makeText ( TestUploadActivity.this, e.getMessage (), Toast.LENGTH_SHORT ).show ();
+
+                        }
+                    } )
+                    .addOnProgressListener ( new OnProgressListener<UploadTask.TaskSnapshot> () {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0*taskSnapshot.getBytesTransferred ()/taskSnapshot.getTotalByteCount ());
+                            mProgressBar.setProgress ( (int)progress );
+
+                        }
+                    } );
+
+
+        }else{
+            Toast.makeText ( this, "Details Missing", Toast.LENGTH_SHORT ).show ();
+        }
+
+
+    }
+}
