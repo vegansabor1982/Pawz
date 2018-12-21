@@ -233,7 +233,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.nav_new_entry:
 
-                startActivity ( new Intent ( HomeActivity.this, NewEntryActivity.class ) );
+                startActivity ( new Intent ( HomeActivity.this, TestUploadActivity.class ) );
                 break;
         }
         return true;

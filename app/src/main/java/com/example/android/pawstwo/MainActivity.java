@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (user != null) {
             finish ();
-           startActivity ( new Intent ( MainActivity.this, HomeActivity.class ) );
+           startActivity ( new Intent ( MainActivity.this, TestHomeActivity.class ) );
         }
         
 
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
        // authCredential.getSignInMethod ();
        // finish ();
         fbLogin =findViewById ( R.id.fb_login_button );
-        Intent fb = new Intent ( MainActivity.this, HomeActivity.class);
+        Intent fb = new Intent ( MainActivity.this, TestHomeActivity.class);
         startActivity ( fb );
 
 
@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (emailflag){
             finish ();
-            startActivity ( new Intent ( MainActivity.this, HomeActivity.class ) );
+            startActivity ( new Intent ( MainActivity.this, TestHomeActivity.class ) );
         }else {
             Toast.makeText ( this, "Verify your Email", Toast.LENGTH_LONG ).show ();
             firebaseAuth.signOut ();
