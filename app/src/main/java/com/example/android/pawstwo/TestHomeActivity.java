@@ -23,7 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class TestHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,PetAdapterTest.OnItemClickListener {
 
 
     private DrawerLayout mdrawerTest;
@@ -31,6 +31,7 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
     private PetAdapterTest mPetAdapterTest;
     private DatabaseReference mDatabaseRef;
     private List <UploadTest> mUploads;
+
 
     Toolbar mtoolbarTest;
 
@@ -61,6 +62,7 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
 
         mUploads = new ArrayList<> (  );
 
+
         mDatabaseRef=FirebaseDatabase.getInstance ().getReference ("Uploads");
 
         mDatabaseRef.addValueEventListener ( new ValueEventListener () {
@@ -75,6 +77,8 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
 
                 mPetAdapterTest = new PetAdapterTest (TestHomeActivity.this,mUploads  );
                 mRecyclerView.setAdapter ( mPetAdapterTest );
+
+                mPetAdapterTest.setOnItemClickListener ( TestHomeActivity.this );
             }
 
             @Override
@@ -87,6 +91,23 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
         } );
 
 
+
+    }
+
+    @Override
+    public void onItemClick(int position) {
+
+        Toast.makeText (TestHomeActivity.this, "test",Toast.LENGTH_SHORT).show ();
+
+    }
+
+    @Override
+    public void onSeeSubmission(int position) {
+
+    }
+
+    @Override
+    public void onDeleteClick(int position) {
 
     }
 

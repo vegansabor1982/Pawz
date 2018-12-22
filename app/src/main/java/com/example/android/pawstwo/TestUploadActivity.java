@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
@@ -64,6 +65,8 @@ public class TestUploadActivity extends AppCompatActivity {
         mPetPic = findViewById ( R.id.iv_petpic_test );
         mUpload = findViewById ( R.id.btn_upload_test );
         mProgressBar= findViewById ( R.id.progress_bar_test );
+
+
 
         mStorageRef = FirebaseStorage.getInstance ().getReference ( "Uploads" );
         mDatabaseRef = FirebaseDatabase.getInstance ().getReference ( "Uploads" );
@@ -189,11 +192,14 @@ public class TestUploadActivity extends AppCompatActivity {
                     Toast.makeText ( TestUploadActivity.this, "Upload Successfull",Toast.LENGTH_SHORT).show ();
 
 
+                    Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                    while (!urlTask.isSuccessful());
+                    Uri downloadUrl = urlTask.getResult();
+                   // Log.d(TAG, "onSuccess: firebase download url: " + downloadUrl.toString());
 
 
+                    UploadTest uploadTest = new UploadTest ( spinner1.getSelectedItem ().toString ().trim (),spinner2.getSelectedItem ().toString ().trim (),mDescription.getText ().toString ().trim (),downloadUrl.toString ());
 
-
-                    UploadTest uploadTest = new UploadTest ( spinner1.getSelectedItem ().toString ().trim (),spinner2.getSelectedItem ().toString ().trim (),mDescription.getText ().toString ().trim (),taskSnapshot.getUploadSessionUri ().toString ());
                     String uploadId = mDatabaseRef.push ().getKey ();
                     mDatabaseRef.child(uploadId).setValue ( uploadTest );
                 }
