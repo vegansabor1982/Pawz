@@ -44,6 +44,7 @@ public class TestUploadActivity extends AppCompatActivity {
     private Button mUpload;
     private ProgressBar mProgressBar;
     private Uri mImageUri;
+    private Button mMaps;
 
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
@@ -65,6 +66,7 @@ public class TestUploadActivity extends AppCompatActivity {
         mPetPic = findViewById ( R.id.iv_petpic_test );
         mUpload = findViewById ( R.id.btn_upload_test );
         mProgressBar= findViewById ( R.id.progress_bar_test );
+        mMaps=findViewById ( R.id.btn_maps );
 
 
 
@@ -89,6 +91,12 @@ public class TestUploadActivity extends AppCompatActivity {
 
                 openFileChooser ();
 
+            }
+        } );
+        mMaps.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                startActivity ( new Intent ( TestUploadActivity.this, MapsActivity.class ) );
             }
         } );
 
