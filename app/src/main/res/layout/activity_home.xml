@@ -30,8 +30,8 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:text="Latest additions"
-            android:textSize="20sp"
-            android:textAlignment="center"/>
+            android:textAlignment="center"
+            android:textSize="20sp" />
 
 
         <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -46,11 +46,7 @@
             tools:context="com.example.android.pawstwo.HomeActivity">
 
 
-
         </android.support.v7.widget.RecyclerView>
-
-
-
 
 
     </LinearLayout>
@@ -62,13 +58,10 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/drawer_menu" >
-
+        app:menu="@menu/drawer_menu">
 
 
     </android.support.design.widget.NavigationView>
-
-
 
 
 </android.support.v4.widget.DrawerLayout>
