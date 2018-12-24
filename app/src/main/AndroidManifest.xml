@@ -32,7 +32,6 @@
         <activity
             android:name=".HomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".TestHomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -93,6 +92,7 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".TestUploadActivity" />
+        <activity android:name=".SpecificPetProfileActivity"></activity>
     </application>
 
 </manifest>

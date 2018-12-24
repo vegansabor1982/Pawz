@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SpecificPetProfileActivity"
+    tools:layout_editor_absoluteY="25dp">
+
+    <TextView
+        android:id="@+id/tv_specific_pet_uploadedbyuser"
+        android:layout_width="141dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:text="Uploaded by User"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_specific_pet_pic" />
+
+    <TextView
+        android:id="@+id/tv_specific_pet_type"
+        android:layout_width="141dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="16dp"
+        android:text="Type"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_specific_pet_family"
+        android:layout_width="141dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="8dp"
+        android:text="Family"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_specific_pet_type" />
+
+    <TextView
+        android:id="@+id/tv_specific_pet_description"
+        android:layout_width="141dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="8dp"
+        android:text="Description"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_specific_pet_family" />
+
+    <Button
+        android:id="@+id/btn_send_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="send this user a message"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mapView" />
+
+    <ImageView
+        android:id="@+id/iv_specific_pet_pic"
+        android:layout_width="204dp"
+        android:layout_height="198dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_specific_pet_description"
+        app:srcCompat="?android:attr/actionModeSelectAllDrawable" />
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="225dp"
+        android:layout_height="138dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_specific_pet_uploadedbyuser" />
+</android.support.constraint.ConstraintLayout>

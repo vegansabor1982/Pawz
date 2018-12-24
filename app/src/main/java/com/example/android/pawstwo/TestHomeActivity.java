@@ -33,6 +33,7 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
     private PetAdapterTest mPetAdapterTest;
     private DatabaseReference mDatabaseRef;
     private List <UploadTest> mUploads;
+    private RecyclerView.LayoutManager mLayoutManager;
 
 
     int number = 0;
@@ -70,9 +71,16 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
         mRecyclerView = findViewById ( R.id.list );
         mRecyclerView.setHasFixedSize ( true );
 
-        mRecyclerView.setLayoutManager ( new LinearLayoutManager ( this ) );
+        //mRecyclerView.setLayoutManager ( new LinearLayoutManager ( this ) );
+        mLayoutManager=new LinearLayoutManager ( this );
+        (( LinearLayoutManager ) mLayoutManager).setReverseLayout ( true );
+        (( LinearLayoutManager ) mLayoutManager).setStackFromEnd ( true );
+        mRecyclerView.setLayoutManager ( mLayoutManager );
+
+
 
         mUploads = new ArrayList<> (  );
+
 
 
         mDatabaseRef=FirebaseDatabase.getInstance ().getReference ("Uploads");
@@ -123,6 +131,8 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     public void onSeeSubmission(int position) {
+
+        startActivity ( new Intent ( TestHomeActivity.this, SpecificPetProfileActivity.class) );
 
     }
 
