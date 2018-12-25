@@ -1,5 +1,6 @@
 package com.example.android.pawstwo;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,7 +12,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -34,6 +39,8 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
     private DatabaseReference mDatabaseRef;
     private List <UploadTest> mUploads;
     private RecyclerView.LayoutManager mLayoutManager;
+    private ProgressDialog progressDialogtwo;
+    private FirebaseAuth firebaseAuth;
 
 
     int number = 0;
@@ -45,6 +52,8 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
     protected void onCreate (Bundle savedInstanceState){
         super.onCreate ( savedInstanceState );
         setContentView ( R.layout.activity_home );
+        progressDialogtwo = new ProgressDialog ( this );
+        firebaseAuth=FirebaseAuth.getInstance ();
 
 
 
@@ -155,6 +164,50 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
                 break;
         }
         return true;
+    }
+
+    private void Logout() {
+        progressDialogtwo.setMessage ( "Signing out..." );
+        progressDialogtwo.show ();
+        firebaseAuth= FirebaseAuth.getInstance ();
+        firebaseAuth.signOut ();
+        finish ();
+        Intent i = new Intent ( TestHomeActivity.this, MainActivity.class  );
+        startActivity ( i );
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+
+
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+
+        switch(item.getItemId()){
+            case R.id.logoutMenu:{
+                Logout ();
+            }
+
+
+
+            break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        return inflater.inflate(R.layout.activity_profile, container, false );
+
+
     }
 
 
