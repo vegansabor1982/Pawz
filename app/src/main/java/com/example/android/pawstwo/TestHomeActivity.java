@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -134,6 +135,7 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
     @Override
     public void onItemClick(int position) {
 
+
         Toast.makeText (TestHomeActivity.this, "test",Toast.LENGTH_SHORT).show ();
 
     }
@@ -141,7 +143,15 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
     @Override
     public void onSeeSubmission(int position) {
 
-        startActivity ( new Intent ( TestHomeActivity.this, SpecificPetProfileActivity.class) );
+
+
+
+
+        Intent p=  ( new Intent ( TestHomeActivity.this, SpecificPetProfileActivity.class) );
+
+        p.putExtra ( "image_url", String.valueOf ( mUploads.get ( position ) ) );
+        p.putExtra ( "pet_description", String.valueOf ( mUploads.get ( position ) ));
+        startActivity ( p );
 
     }
 

@@ -61,6 +61,7 @@ public class PetAdapterTest extends RecyclerView.Adapter<PetAdapterTest.PetHolde
         public TextView textViewFamily;
         public TextView textViewDescription;
         public ImageView imageView;
+        OnItemClickListener itemClickListener;
 
         public PetHolder(@NonNull View itemView) {
             super ( itemView );
@@ -89,6 +90,7 @@ public class PetAdapterTest extends RecyclerView.Adapter<PetAdapterTest.PetHolde
                     mListener.onItemClick ( position );
                 }
             }
+
 
         }
 
