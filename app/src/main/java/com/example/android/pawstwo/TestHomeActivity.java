@@ -42,6 +42,10 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
     private RecyclerView.LayoutManager mLayoutManager;
     private ProgressDialog progressDialogtwo;
     private FirebaseAuth firebaseAuth;
+    public static final String EXTRA_URL ="imageUrl";
+    public static final String PET_TYPE ="pet_type";
+    public static final String PET_FAMILY ="pet_family";
+    public static final String PET_DESCRIPTION ="pet_description";
 
 
     int number = 0;
@@ -93,7 +97,7 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
 
 
 
-        mDatabaseRef=FirebaseDatabase.getInstance ().getReference ("Uploads");
+        mDatabaseRef=FirebaseDatabase.getInstance ().getReference().child("Uploads");
 
         mDatabaseRef.addValueEventListener ( new ValueEventListener () {
             @Override
@@ -111,6 +115,8 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
 
                 mPetAdapterTest = new PetAdapterTest (TestHomeActivity.this,mUploads  );
                 mRecyclerView.setAdapter ( mPetAdapterTest );
+
+                mPetAdapterTest.setOnItemClickListener ( TestHomeActivity.this );
 
 
                 mPetAdapterTest.setOnItemClickListener ( TestHomeActivity.this );
@@ -136,29 +142,20 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
     public void onItemClick(int position) {
 
 
-        Toast.makeText (TestHomeActivity.this, "test",Toast.LENGTH_SHORT).show ();
+       Intent d = new Intent ( this, SpecificPetProfileActivity.class );
+
+       UploadTest clickedItem = mUploads.get ( position );
+
+       d.putExtra ( EXTRA_URL, clickedItem.getmImageUrl () );
+       d.putExtra ( PET_TYPE,clickedItem.getmType ());
+       d.putExtra ( PET_FAMILY,clickedItem.getmFamily () );
+       d.putExtra ( PET_DESCRIPTION,clickedItem.getmDescription () );
+
+       startActivity ( d );
 
     }
 
-    @Override
-    public void onSeeSubmission(int position) {
 
-
-
-
-
-        Intent p=  ( new Intent ( TestHomeActivity.this, SpecificPetProfileActivity.class) );
-
-        p.putExtra ( "image_url", String.valueOf ( mUploads.get ( position ) ) );
-        p.putExtra ( "pet_description", String.valueOf ( mUploads.get ( position ) ));
-        startActivity ( p );
-
-    }
-
-    @Override
-    public void onDeleteClick(int position) {
-
-    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

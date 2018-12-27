@@ -46,6 +46,7 @@ public class TestUploadActivity extends AppCompatActivity {
     private Uri mImageUri;
     private Button mMaps;
 
+
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
     private FirebaseAuth mFirebaseAuth;
@@ -68,10 +69,12 @@ public class TestUploadActivity extends AppCompatActivity {
         mProgressBar= findViewById ( R.id.progress_bar_test );
         mMaps=findViewById ( R.id.btn_maps );
 
+        mFirebaseAuth=FirebaseAuth.getInstance ();
+
 
 
         mStorageRef = FirebaseStorage.getInstance ().getReference ( "Uploads" );
-        mDatabaseRef = FirebaseDatabase.getInstance ().getReference ( "Uploads" );
+        mDatabaseRef = FirebaseDatabase.getInstance ().getReference ( ).child("Uploads" );
 
 
         mUpload.setOnClickListener ( new View.OnClickListener () {

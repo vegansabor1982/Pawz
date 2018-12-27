@@ -7,12 +7,13 @@ public class UploadTest {
     private String mDescription;
     private String mImageUrl;
 
+
     public UploadTest (){
 
 
     }
 
-    public UploadTest (String type, String family, String description, String imageurl){
+    public UploadTest( String type, String family, String description, String imageurl ){
 
         if (description.trim ().equals ( "" )){
             description="No Description";
@@ -22,6 +23,8 @@ public class UploadTest {
         mFamily= family;
         mDescription=description;
         mImageUrl=imageurl;
+
+
     }
 
     public String getmType() {
@@ -55,5 +58,7 @@ public class UploadTest {
     public void setmImageUrl(String mImageUrl) {
         this.mImageUrl = mImageUrl;
     }
+
+
 }
 

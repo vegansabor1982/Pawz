@@ -143,10 +143,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                       // String Latitude=Double.toString ( latitude );
                       // String Longtitude=Double.toString ( longtitude );
 
+                        firebaseAuth=FirebaseAuth.getInstance ();
 
-                        DatabaseReference petProfile = FirebaseDatabase.getInstance ().getReference("Pet Position" );
+
+                        DatabaseReference petProfile = FirebaseDatabase.getInstance ().getReference("Pet Position" ).child ( firebaseAuth.getUid () );
                         FirebaseMarker marker1 = new FirebaseMarker (  );
                         petProfile.push ().setValue ( marker.getPosition () );
+
+
+
+
 
                         Toast.makeText ( MapsActivity.this,"Thank you for your Submission", Toast.LENGTH_SHORT ).show ();
 
