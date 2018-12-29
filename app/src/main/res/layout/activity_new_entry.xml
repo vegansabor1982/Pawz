@@ -33,7 +33,7 @@
     <EditText
         android:id="@+id/tv_description"
         android:layout_width="match_parent"
-        android:layout_height="125dp"
+        android:layout_height="98dp"
         android:layout_marginLeft="17dp"
         android:layout_marginTop="8dp"
         android:layout_marginRight="17dp"
@@ -53,9 +53,10 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_description"
-        app:layout_constraintVertical_bias="0.01"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@android:drawable/ic_menu_camera" />
 
     <Button
@@ -68,7 +69,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/petImage" />
+        app:layout_constraintTop_toBottomOf="@+id/petImage"
+        app:layout_constraintVertical_bias="0.397" />
 
     <Button
         android:id="@+id/btnSave"
@@ -82,7 +84,10 @@
         app:layout_constraintBottom_toTopOf="@+id/btn_maps"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/petImage" />
+        app:layout_constraintTop_toBottomOf="@+id/petImage"
+        app:layout_constraintVertical_bias="0.0" />
+
+
 
 
 </android.support.constraint.ConstraintLayout>

@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -67,6 +68,8 @@ public class NewEntryActivity extends AppCompatActivity {
     private static int PICK_IMAGE=123;
     Uri imagePath2;
     private StorageReference storageReference;
+    private TextView mLatitude;
+    private TextView mLongtitude;
 
 
     @Override
@@ -103,6 +106,11 @@ public class NewEntryActivity extends AppCompatActivity {
 
             }
         } );
+
+
+
+
+
 
 
         setupUIViews ();

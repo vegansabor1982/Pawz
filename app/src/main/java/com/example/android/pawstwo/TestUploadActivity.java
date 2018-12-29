@@ -17,14 +17,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.snapshot.DoubleNode;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -45,11 +50,16 @@ public class TestUploadActivity extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private Uri mImageUri;
     private Button mMaps;
+    private TextView mLat;
+    private TextView mLongt;
+
 
 
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
     private FirebaseAuth mFirebaseAuth;
+
+
 
     String Type_Test;
     String Family_Test;
@@ -61,12 +71,47 @@ public class TestUploadActivity extends AppCompatActivity {
         super.onCreate ( savedInstanceState );
         setContentView ( R.layout.activity_test_upload );
 
+
+
+        mLat= findViewById ( R.id.tv_latitude );
+        mLongt=findViewById ( R.id.tv_longtitude );
+
+
+        Bundle bundle = getIntent ().getExtras ();
+        double coords= bundle.getDouble ( "LATITUDE" );
+        double coords2=bundle.getDouble ( "LONGTITUDE" );
+
+        mLat.setText ( "Latitude :" +String.valueOf ( coords )  );
+        mLongt.setText ( "Longtitude :"+String.valueOf ( coords2 ) );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         spinner1 = findViewById ( R.id.spinner_type_test );
         spinner2 = findViewById ( R.id.spinner_family_test );
         mDescription = findViewById ( R.id.tv_description_test );
         mPetPic = findViewById ( R.id.iv_petpic_test );
         mUpload = findViewById ( R.id.btn_upload_test );
-        mProgressBar= findViewById ( R.id.progress_bar_test );
+
         mMaps=findViewById ( R.id.btn_maps );
 
         mFirebaseAuth=FirebaseAuth.getInstance ();
@@ -104,6 +149,8 @@ public class TestUploadActivity extends AppCompatActivity {
         } );
 
 
+
+
 //----------------------------------------------------------------------------------------------------------------------------------------------
 
         ArrayList<String> categories = new ArrayList<> ();
@@ -134,6 +181,14 @@ public class TestUploadActivity extends AppCompatActivity {
 
         spinner2.setAdapter ( dataAdapter2 );
 //   ----------------------------------------------------------------------------------------------------------------------------------------------
+
+    }
+
+    @Override
+    public void onBackPressed() {
+
+       Intent u =new Intent ( this, TestHomeActivity.class );
+       startActivity ( u );
 
     }
 
@@ -191,14 +246,14 @@ public class TestUploadActivity extends AppCompatActivity {
             fileReference.putFile ( mImageUri ).addOnSuccessListener ( new OnSuccessListener<UploadTask.TaskSnapshot> () {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Handler handler = new Handler ();
+                   /* Handler handler = new Handler ();
                     handler.postDelayed ( new Runnable () {
                         @Override
                         public void run() {
                             mProgressBar.setProgress ( 0 );
                         }
 
-                    } ,500);
+                    } ,500);*/
 
                     Toast.makeText ( TestUploadActivity.this, "Upload Successfull",Toast.LENGTH_SHORT).show ();
 
@@ -209,7 +264,7 @@ public class TestUploadActivity extends AppCompatActivity {
                    // Log.d(TAG, "onSuccess: firebase download url: " + downloadUrl.toString());
 
 
-                    UploadTest uploadTest = new UploadTest ( spinner1.getSelectedItem ().toString ().trim (),spinner2.getSelectedItem ().toString ().trim (),mDescription.getText ().toString ().trim (),downloadUrl.toString ());
+                    UploadTest uploadTest = new UploadTest ( spinner1.getSelectedItem ().toString ().trim (),spinner2.getSelectedItem ().toString ().trim (),mDescription.getText ().toString ().trim (),downloadUrl.toString (),mLat.getText ().toString (), mLongt.getText ().toString ());
 
                     String uploadId = mDatabaseRef.push ().getKey ();
                     mDatabaseRef.child(uploadId).setValue ( uploadTest );
@@ -223,15 +278,8 @@ public class TestUploadActivity extends AppCompatActivity {
                             Toast.makeText ( TestUploadActivity.this, e.getMessage (), Toast.LENGTH_SHORT ).show ();
 
                         }
-                    } )
-                    .addOnProgressListener ( new OnProgressListener<UploadTask.TaskSnapshot> () {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0*taskSnapshot.getBytesTransferred ()/taskSnapshot.getTotalByteCount ());
-                            mProgressBar.setProgress ( (int)progress );
-
-                        }
                     } );
+
 
 
         }else{

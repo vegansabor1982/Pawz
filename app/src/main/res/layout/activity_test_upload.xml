@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".TestUploadActivity">
 
+
+
     <Spinner
         android:id="@+id/spinner_type_test"
         android:layout_width="368dp"
@@ -27,20 +29,20 @@
     <EditText
         android:id="@+id/tv_description_test"
         android:layout_width="360dp"
-        android:layout_height="104dp"
+        android:layout_height="47dp"
         android:layout_marginStart="8dp"
-        android:hint="Description"
-        android:textAlignment="center"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
+        android:hint="Description"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner_family_test" />
 
     <ImageView
         android:id="@+id/iv_petpic_test"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
+        android:layout_width="154dp"
+        android:layout_height="155dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,32 +56,52 @@
         android:id="@+id/btn_upload_test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="48dp"
         android:text="Upload"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_petpic_test" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_longtitude" />
 
-    <ProgressBar
-        android:id="@+id/progress_bar_test"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="0dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_petpic_test" />
+
 
     <Button
         android:id="@+id/btn_maps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:text="maps"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_upload_test" />
+        app:layout_constraintTop_toBottomOf="@+id/iv_petpic_test"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/tv_latitude"
+        android:layout_width="wrap_content"
+        android:layout_height="14dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="Latitude"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_maps" />
+    <TextView
+        android:id="@+id/tv_longtitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Longtitude"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_latitude" />
+
+
 </android.support.constraint.ConstraintLayout>
+

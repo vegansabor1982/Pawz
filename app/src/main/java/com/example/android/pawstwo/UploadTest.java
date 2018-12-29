@@ -6,6 +6,9 @@ public class UploadTest {
     private String mFamily;
     private String mDescription;
     private String mImageUrl;
+    private String mLat;
+    private String mLongt;
+
 
 
     public UploadTest (){
@@ -13,7 +16,7 @@ public class UploadTest {
 
     }
 
-    public UploadTest( String type, String family, String description, String imageurl ){
+    public UploadTest( String type, String family, String description, String imageurl, String latitude, String longtitude ){
 
         if (description.trim ().equals ( "" )){
             description="No Description";
@@ -23,6 +26,8 @@ public class UploadTest {
         mFamily= family;
         mDescription=description;
         mImageUrl=imageurl;
+        mLat=latitude;
+        mLongt=longtitude;
 
 
     }
@@ -59,6 +64,20 @@ public class UploadTest {
         this.mImageUrl = mImageUrl;
     }
 
+    public String getmLat() {
+        return mLat;
+    }
 
+    public void setmLat( String mLat ) {
+        this.mLat = mLat;
+    }
+
+    public String getmLongt() {
+        return mLongt;
+    }
+
+    public void setmLongt( String mLongt ) {
+        this.mLongt = mLongt;
+    }
 }
 

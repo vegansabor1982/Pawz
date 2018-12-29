@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -152,6 +153,17 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
        d.putExtra ( PET_DESCRIPTION,clickedItem.getmDescription () );
 
        startActivity ( d );
+
+    }
+    @Override
+    public void onBackPressed() {
+        if (mdrawerTest.isDrawerOpen ( GravityCompat.START )) {
+
+            mdrawerTest.closeDrawer ( GravityCompat.START );
+        } else {
+            super.onBackPressed ();
+        }
+
 
     }
 
