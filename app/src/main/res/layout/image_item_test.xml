@@ -44,6 +44,20 @@
             android:layout_width="match_parent"
             android:layout_height="200dp" />
 
+        <TextView
+            android:id="@+id/tv_latitude_return"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lat"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/tv_longtitude_return"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Long"
+            android:textAlignment="center" />
+
 
     </LinearLayout>
 

@@ -177,6 +177,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
+
+
                       // String Latitude=Double.toString ( latitude );
                       // String Longtitude=Double.toString ( longtitude );
 

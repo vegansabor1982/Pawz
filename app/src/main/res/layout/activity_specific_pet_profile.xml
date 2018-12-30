@@ -19,6 +19,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_specific_pet_pic" />
 
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map_specific"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="335dp"
+        android:layout_height="205dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintHorizontal_bias="0.515"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toBottomOf="@+id/tv_specific_pet_uploadedbyuser"
+        tools:context=".MapsActivity" />
+
+
     <TextView
         android:id="@+id/tv_specific_pet_type"
         android:layout_width="141dp"
@@ -56,11 +78,12 @@
         android:id="@+id/btn_send_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="44dp"
         android:text="send this user a message"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapView" />
+        app:layout_constraintTop_toBottomOf="@+id/map_specific" />
 
     <ImageView
         android:id="@+id/iv_specific_pet_pic"
@@ -72,13 +95,4 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_specific_pet_description"
         app:srcCompat="?android:attr/actionModeSelectAllDrawable" />
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="225dp"
-        android:layout_height="138dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_specific_pet_uploadedbyuser" />
 </android.support.constraint.ConstraintLayout>

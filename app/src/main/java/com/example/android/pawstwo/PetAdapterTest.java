@@ -60,6 +60,8 @@ public class PetAdapterTest extends RecyclerView.Adapter<PetAdapterTest.PetHolde
         petHolder.textViewType.setText ( uploadCurrent.getmType () );
         petHolder.textViewFamily.setText ( uploadCurrent.getmFamily () );
         petHolder.textViewDescription.setText ( uploadCurrent.getmDescription () );
+        petHolder.mLatReturn.setText ( uploadCurrent.getmLat ());
+        petHolder.mLongReturn.setText ( uploadCurrent.getmLongt () );
 
         Picasso.get ().load ( uploadCurrent.getmImageUrl () ).fit ().centerCrop ().into ( petHolder.imageView );
 
@@ -79,6 +81,8 @@ public class PetAdapterTest extends RecyclerView.Adapter<PetAdapterTest.PetHolde
         public TextView textViewFamily;
         public TextView textViewDescription;
         public ImageView imageView;
+        public TextView mLatReturn;
+        public TextView mLongReturn;
         OnItemClickListener itemClickListener;
 
 
@@ -89,6 +93,8 @@ public class PetAdapterTest extends RecyclerView.Adapter<PetAdapterTest.PetHolde
             textViewFamily = itemView.findViewById ( R.id.text_view_family_test );
             textViewDescription = itemView.findViewById ( R.id.text_view_description_test );
             imageView = itemView.findViewById ( R.id.image_view_upload_test );
+            mLatReturn=itemView.findViewById ( R.id.tv_latitude_return );
+            mLongReturn=itemView.findViewById ( R.id.tv_longtitude_return);
 
 
             itemView.setOnClickListener ( new View.OnClickListener () {
