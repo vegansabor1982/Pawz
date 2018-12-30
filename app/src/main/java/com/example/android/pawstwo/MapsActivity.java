@@ -151,12 +151,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public void onClick(View view) {
 
-                        Intent f =new Intent ( MapsActivity.this, TestUploadActivity.class );
+                       Intent f =new Intent ( MapsActivity.this, TestUploadActivity.class );
 
-                        f.putExtra ( "LATITUDE",marker.getPosition ().latitude);
+                       f.putExtra ( "LATITUDE",marker.getPosition ().latitude);
                         f.putExtra ( "LONGTITUDE",marker.getPosition ().longitude);
 
-                        startActivity ( f );
+                       startActivity ( f );
+
+
+
 
 
 

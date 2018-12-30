@@ -59,6 +59,8 @@ public class SpecificPetProfileActivity extends AppCompatActivity {
 
     private GoogleMap mMapTwo;
 
+    private LatLng mCoords;
+
 
 
     private Glide mGlide;
@@ -94,6 +96,8 @@ public class SpecificPetProfileActivity extends AppCompatActivity {
         mSpecType.setText(petType);
         mSpecFamily.setText ( petFamily );
         mSpecDescription.setText ( petDescription );
+
+
 
 
 
