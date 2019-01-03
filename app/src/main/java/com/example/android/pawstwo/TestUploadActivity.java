@@ -282,7 +282,7 @@ public class TestUploadActivity extends AppCompatActivity {
                     DatabaseReference myRefTwo = mDatabaseRef.getRef ().child ( "Users" ).child ( mFirebaseAuth.getUid () );
 
 
-                    UploadTest uploadTest = new UploadTest ( spinner1.getSelectedItem ().toString ().trim (),spinner2.getSelectedItem ().toString ().trim (),mDescription.getText ().toString ().trim (),downloadUrl.toString (),mLat.getText ().toString (), mLongt.getText ().toString (),mFirebaseAuth.getUid ());
+                    UploadTest uploadTest = new UploadTest ( spinner1.getSelectedItem ().toString ().trim (),spinner2.getSelectedItem ().toString ().trim (),mDescription.getText ().toString ().trim (),downloadUrl.toString (),mLat.getText ().toString (), mLongt.getText ().toString (),mFirebaseAuth.getCurrentUser ().getUid ());
 
                     String uploadId = mDatabaseRef.push ().getKey ();
                     mDatabaseRef.child(uploadId).setValue ( uploadTest );
