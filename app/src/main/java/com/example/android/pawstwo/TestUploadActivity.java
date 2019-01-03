@@ -27,8 +27,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.snapshot.DoubleNode;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -52,18 +55,22 @@ public class TestUploadActivity extends AppCompatActivity {
     private Button mMaps;
     private TextView mLat;
     private TextView mLongt;
+    private TextView profileName;
 
 
 
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
     private FirebaseAuth mFirebaseAuth;
+    private FirebaseDatabase mFirebaseDatabase;
 
 
 
     String Type_Test;
     String Family_Test;
     String Description_Test;
+    String userNameTwo;
+    String emailTwo;
 
 
     @Override
@@ -86,6 +93,8 @@ public class TestUploadActivity extends AppCompatActivity {
 
 
 
+        mFirebaseAuth=FirebaseAuth.getInstance ();
+        mFirebaseDatabase=FirebaseDatabase.getInstance ();
 
 
 
@@ -106,7 +115,16 @@ public class TestUploadActivity extends AppCompatActivity {
 
 
 
-        spinner1 = findViewById ( R.id.spinner_type_test );
+
+
+
+
+
+
+
+
+
+                spinner1 = findViewById ( R.id.spinner_type_test );
         spinner2 = findViewById ( R.id.spinner_family_test );
         mDescription = findViewById ( R.id.tv_description_test );
         mPetPic = findViewById ( R.id.iv_petpic_test );
@@ -127,7 +145,7 @@ public class TestUploadActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 uploadFile ();
-               startActivity ( new Intent ( TestUploadActivity.this, TestHomeActivity.class ) );
+                startActivity ( new Intent ( TestUploadActivity.this, TestHomeActivity.class ) );
 
 
             }
@@ -187,8 +205,8 @@ public class TestUploadActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-       Intent u =new Intent ( this, TestHomeActivity.class );
-       startActivity ( u );
+        Intent u =new Intent ( this, TestHomeActivity.class );
+        startActivity ( u );
 
     }
 
@@ -212,14 +230,11 @@ public class TestUploadActivity extends AppCompatActivity {
     }
 
    /* private Boolean validate() {
-
         Boolean result = false;
-
         Type_Test = spinner1.getSelectedItem ().toString ();
         Family_Test = spinner2.getSelectedItem ().toString ();
         Description_Test = mDescription.getText ().toString ();
         if (Type_Test.isEmpty () || Family_Test.isEmpty () || mDescription == null) {
-
             Toast.makeText ( this, "Details Missing", Toast.LENGTH_SHORT ).show ();
         } else {
             result = true;
@@ -230,9 +245,9 @@ public class TestUploadActivity extends AppCompatActivity {
     private String getFileExtension(Uri uri) {
 
 
-    ContentResolver cR = getContentResolver ();
-    MimeTypeMap mime = MimeTypeMap.getSingleton ();
-    return mime.getExtensionFromMimeType ( cR.getType (uri) );
+        ContentResolver cR = getContentResolver ();
+        MimeTypeMap mime = MimeTypeMap.getSingleton ();
+        return mime.getExtensionFromMimeType ( cR.getType (uri) );
     }
 
 
@@ -252,7 +267,6 @@ public class TestUploadActivity extends AppCompatActivity {
                         public void run() {
                             mProgressBar.setProgress ( 0 );
                         }
-
                     } ,500);*/
 
                     Toast.makeText ( TestUploadActivity.this, "Upload Successfull",Toast.LENGTH_SHORT).show ();
@@ -261,13 +275,23 @@ public class TestUploadActivity extends AppCompatActivity {
                     Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                     while (!urlTask.isSuccessful());
                     Uri downloadUrl = urlTask.getResult();
-                   // Log.d(TAG, "onSuccess: firebase download url: " + downloadUrl.toString());
+                    // Log.d(TAG, "onSuccess: firebase download url: " + downloadUrl.toString());
+
+                    mFirebaseAuth=FirebaseAuth.getInstance ();
+
+                    DatabaseReference myRefTwo = mDatabaseRef.getRef ().child ( "Users" ).child ( mFirebaseAuth.getUid () );
 
 
-                    UploadTest uploadTest = new UploadTest ( spinner1.getSelectedItem ().toString ().trim (),spinner2.getSelectedItem ().toString ().trim (),mDescription.getText ().toString ().trim (),downloadUrl.toString (),mLat.getText ().toString (), mLongt.getText ().toString ());
+                    UploadTest uploadTest = new UploadTest ( spinner1.getSelectedItem ().toString ().trim (),spinner2.getSelectedItem ().toString ().trim (),mDescription.getText ().toString ().trim (),downloadUrl.toString (),mLat.getText ().toString (), mLongt.getText ().toString (),mFirebaseAuth.getUid ());
 
                     String uploadId = mDatabaseRef.push ().getKey ();
                     mDatabaseRef.child(uploadId).setValue ( uploadTest );
+
+
+
+
+
+
                 }
 
             } )
