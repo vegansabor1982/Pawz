@@ -57,6 +57,12 @@
             android:layout_height="wrap_content"
             android:text="Long"
             android:textAlignment="center" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_uploader"
+            android:textAlignment="center"
+            android:text="Uploaded by"/>
 
 
     </LinearLayout>

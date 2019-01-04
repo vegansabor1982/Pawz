@@ -27,6 +27,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -55,7 +56,7 @@ public class TestUploadActivity extends AppCompatActivity {
     private Button mMaps;
     private TextView mLat;
     private TextView mLongt;
-    private TextView profileName;
+    private TextView profileNameTwo;
 
 
 
@@ -77,6 +78,28 @@ public class TestUploadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate ( savedInstanceState );
         setContentView ( R.layout.activity_test_upload );
+
+
+        profileNameTwo=findViewById ( R.id.tv_username_upload );
+
+        mFirebaseAuth=FirebaseAuth.getInstance ();
+        mFirebaseDatabase=FirebaseDatabase.getInstance ();
+
+        DatabaseReference dtaRef=mFirebaseDatabase.getReference ().child( "Users").child (mFirebaseAuth.getUid ());
+
+        dtaRef.addValueEventListener ( new ValueEventListener () {
+            @Override
+            public void onDataChange( @NonNull DataSnapshot dataSnapshot ) {
+                UserProfile userProfile =dataSnapshot.getValue (UserProfile.class);
+                profileNameTwo.setText (userProfile.getUserName ()  );
+
+            }
+
+            @Override
+            public void onCancelled( @NonNull DatabaseError databaseError ) {
+
+            }
+        } );
 
 
 
@@ -282,7 +305,7 @@ public class TestUploadActivity extends AppCompatActivity {
                     DatabaseReference myRefTwo = mDatabaseRef.getRef ().child ( "Users" ).child ( mFirebaseAuth.getUid () );
 
 
-                    UploadTest uploadTest = new UploadTest ( spinner1.getSelectedItem ().toString ().trim (),spinner2.getSelectedItem ().toString ().trim (),mDescription.getText ().toString ().trim (),downloadUrl.toString (),mLat.getText ().toString (), mLongt.getText ().toString (),mFirebaseAuth.getCurrentUser ().getUid ());
+                    UploadTest uploadTest = new UploadTest ( spinner1.getSelectedItem ().toString ().trim (),spinner2.getSelectedItem ().toString ().trim (),mDescription.getText ().toString ().trim (),downloadUrl.toString (),mLat.getText ().toString (), mLongt.getText ().toString (),mFirebaseAuth.getCurrentUser ().getUid (),profileNameTwo.getText ().toString ());
 
                     String uploadId = mDatabaseRef.push ().getKey ();
                     mDatabaseRef.child(uploadId).setValue ( uploadTest );
@@ -292,17 +315,12 @@ public class TestUploadActivity extends AppCompatActivity {
 
 
 
+
+
+
                 }
 
-            } )
-                    .addOnFailureListener ( new OnFailureListener () {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-
-                            Toast.makeText ( TestUploadActivity.this, e.getMessage (), Toast.LENGTH_SHORT ).show ();
-
-                        }
-                    } );
+            } );
 
 
 

@@ -39,6 +39,7 @@ import static com.example.android.pawstwo.TestHomeActivity.PET_FAMILY;
 import static com.example.android.pawstwo.TestHomeActivity.PET_LATITUDE;
 import static com.example.android.pawstwo.TestHomeActivity.PET_LONGTITUDE;
 import static com.example.android.pawstwo.TestHomeActivity.PET_TYPE;
+import static com.example.android.pawstwo.TestHomeActivity.UPLOADER_NAME;
 
 public class SpecificPetProfileActivity extends AppCompatActivity {
 
@@ -89,6 +90,7 @@ public class SpecificPetProfileActivity extends AppCompatActivity {
         String petType=getIntent ().getStringExtra ( PET_TYPE );
         String petFamily =getIntent ().getStringExtra ( PET_FAMILY );
         String petDescription=getIntent ().getStringExtra ( PET_DESCRIPTION );
+        String uploaderName=getIntent ().getStringExtra ( UPLOADER_NAME );
 
 
 
@@ -96,6 +98,7 @@ public class SpecificPetProfileActivity extends AppCompatActivity {
         mSpecType.setText(petType);
         mSpecFamily.setText ( petFamily );
         mSpecDescription.setText ( petDescription );
+        mUploadedByUser.setText ( "Uploaded by: "+ uploaderName );
 
 
 
@@ -106,6 +109,9 @@ public class SpecificPetProfileActivity extends AppCompatActivity {
 
 
         DatabaseReference mRef = mDatabase.getReference ().child("Users").child ( mAuth.getUid () );
+
+
+
 
 
 

@@ -49,6 +49,7 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
     public static final String PET_DESCRIPTION ="pet_description";
     public static final String PET_LATITUDE ="pet_latitude";
     public static final String PET_LONGTITUDE ="pet_longtitude";
+    public static final String UPLOADER_NAME ="uploader_name";
 
 
     int number = 0;
@@ -155,6 +156,8 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
        d.putExtra ( PET_DESCRIPTION,clickedItem.getmDescription () );
        d.putExtra ( PET_LATITUDE,clickedItem.getmLat () );
        d.putExtra ( PET_LONGTITUDE,clickedItem.getmLongt () );
+       d.putExtra ( UPLOADER_NAME,clickedItem.getmUploaderName () );
+
 
        startActivity ( d );
 
