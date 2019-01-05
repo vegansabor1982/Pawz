@@ -26,6 +26,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -79,7 +80,7 @@ public class SpecificPetProfileActivity extends AppCompatActivity {
         mSpecDescription = findViewById ( R.id.tv_specific_pet_description );
         mUploadedByUser=findViewById ( R.id.tv_specific_pet_uploadedbyuser );
         mSpecPetPic=findViewById ( R.id.iv_specific_pet_pic );
-        mSendUserMessage= findViewById ( R.id.btn_send_message );
+
 
 
 
@@ -109,6 +110,26 @@ public class SpecificPetProfileActivity extends AppCompatActivity {
 
 
         DatabaseReference mRef = mDatabase.getReference ().child("Users").child ( mAuth.getUid () );
+
+
+        mSendUserMessage=findViewById ( R.id.btn_send_message );
+
+
+
+        mSendUserMessage.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick( View view ) {
+
+
+
+
+                startActivity ( new Intent ( SpecificPetProfileActivity.this, MessageActivity.class ) );
+            }
+        } );
+
+
+
+
 
 
 

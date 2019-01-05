@@ -29,6 +29,7 @@ allprojects {
                 options.compilerArgs<<"-Xlint:deprecation"
             }
         }
+        maven { url 'https://jitpack.io' }
 
     }
 }
