@@ -91,7 +91,7 @@ public class SpecificPetProfileActivity extends AppCompatActivity {
         String petType=getIntent ().getStringExtra ( PET_TYPE );
         String petFamily =getIntent ().getStringExtra ( PET_FAMILY );
         String petDescription=getIntent ().getStringExtra ( PET_DESCRIPTION );
-        String uploaderName=getIntent ().getStringExtra ( UPLOADER_NAME );
+        final String uploaderName=getIntent ().getStringExtra ( UPLOADER_NAME );
 
 
 
@@ -123,7 +123,10 @@ public class SpecificPetProfileActivity extends AppCompatActivity {
 
 
 
-                startActivity ( new Intent ( SpecificPetProfileActivity.this, MessageActivity.class ) );
+                Intent u = new Intent ( SpecificPetProfileActivity.this, MessageActivity.class );
+
+                u.putExtra ( "username",UPLOADER_NAME );
+                startActivity ( u );
             }
         } );
 

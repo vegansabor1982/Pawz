@@ -97,7 +97,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".TessssssssssssssssstActivity"></activity>
+        <activity android:name=".TessssssssssssssssstActivity" />
+        <activity android:name=".MessageActivityTwo"></activity>
     </application>
 
 </manifest>

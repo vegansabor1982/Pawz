@@ -56,7 +56,7 @@ public class MessageActivity extends AppCompatActivity {
             @Override
             public void onClick( View view ) {
                 EditText input = findViewById ( R.id.input );
-                FirebaseDatabase.getInstance ().getReference (  ).child ( "chats" ).push ().setValue ( new ChatMessage ( input.getText ().toString (),FirebaseAuth.getInstance ().getCurrentUser ().getEmail () ) );
+                FirebaseDatabase.getInstance ().getReference (  ).child ( "chats" ).push ().setValue ( new ChatMessage ( input.getText ().toString (),FirebaseAuth.getInstance ().getCurrentUser ().getEmail ()  ) );
 
                input.setText ( " " );
                BubbleTextView bubbleTextView= findViewById ( R.id.message_text );

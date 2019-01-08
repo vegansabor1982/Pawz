@@ -55,6 +55,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 
     implementation 'com.github.lguipeng:BubbleView:1.0.1'
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
 
 
 
