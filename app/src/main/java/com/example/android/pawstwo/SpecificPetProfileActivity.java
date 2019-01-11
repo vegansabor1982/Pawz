@@ -15,7 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.android.pawstwo.ChatRoomV2.NyMessageActivity;
+
+import com.example.android.pawstwo.NY.ChatRoomActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -124,7 +125,7 @@ public class SpecificPetProfileActivity extends AppCompatActivity {
 
 
 
-                Intent u = new Intent ( SpecificPetProfileActivity.this, NyMessageActivity.class );
+                Intent u = new Intent ( SpecificPetProfileActivity.this, ChatRoomActivity.class );
                 startActivity ( u );
 
 

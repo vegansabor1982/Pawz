@@ -41,7 +41,7 @@
         app:arrowHeight="10dp"
         app:arrowPosition="14dp"
         app:arrowLocation="left"
-        app:bubbleColor="#333639"
+        app:bubbleColor="#ff5900"
         app:arrowCenter="true"
         />
 

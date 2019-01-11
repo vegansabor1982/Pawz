@@ -97,9 +97,9 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".TessssssssssssssssstActivity" />
-        <activity android:name=".MessageActivityTwo" />
-        <activity android:name=".ChatRoomV2.NyMessageActivity"></activity>
+        <activity android:name=".ChatRoomV2.NyMessageActivity" />
+        <activity android:name=".NY.NyChatMessageActivity" />
+        <activity android:name=".NY.ChatRoomActivity"></activity>
     </application>
 
 </manifest>
