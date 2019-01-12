@@ -36,7 +36,7 @@ public class SignUpActivity extends AppCompatActivity {
     private Button regButton;
     private FirebaseAuth firebaseAuth;
     private ImageView userProfilePic;
-    String name,email, password;
+    String name,email, password,imageurl;
     private FirebaseStorage firebaseStorage;
     private static int PICK_IMAGE=123;
     Uri imagePath;
@@ -198,7 +198,11 @@ public class SignUpActivity extends AppCompatActivity {
     private void sendUserData(){
 
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance ();
-        DatabaseReference myRef = firebaseDatabase.getReference().child ("Users").child ( firebaseAuth.getUid () );
+        final DatabaseReference myRef = firebaseDatabase.getReference().child ("Users").child ( firebaseAuth.getUid () );
+
+
+
+
 
         StorageReference imageReference = storageReference.child ( firebaseAuth.getUid () ).child ( "Images").child ( "Profile Pic" );
         UploadTask uploadTask = imageReference.putFile ( imagePath );
@@ -212,12 +216,20 @@ public class SignUpActivity extends AppCompatActivity {
         uploadTask.addOnSuccessListener ( new OnSuccessListener<UploadTask.TaskSnapshot> () {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                while (!urlTask.isSuccessful());
+                Uri downloadUrl = urlTask.getResult();
+
                 Toast.makeText ( SignUpActivity.this, "Upload Successful", Toast.LENGTH_LONG ).show ();
+
+                UserProfile userProfile = new UserProfile ( name, email,downloadUrl.toString () );
+                myRef.setValue (userProfile  );
 
             }
         } );
-        UserProfile userProfile = new UserProfile ( name, email );
-        myRef.setValue (userProfile  );
+
+
     }
 
 

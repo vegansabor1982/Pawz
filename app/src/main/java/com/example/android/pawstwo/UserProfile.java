@@ -4,6 +4,7 @@ public class UserProfile {
 
     public String userName;
     public String userEmail;
+    public String imageUrl;
 
 
     public UserProfile(){
@@ -11,9 +12,19 @@ public class UserProfile {
 
     }
 
-    public UserProfile(String userName, String userEmail) {
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl( String imageUrl ) {
+        this.imageUrl = imageUrl;
+    }
+
+    public UserProfile( String userName, String userEmail, String imageUrl) {
         this.userName = userName;
         this.userEmail = userEmail;
+        this.imageUrl=imageUrl;
+
 
     }
 

@@ -1,6 +1,7 @@
 package com.example.android.pawstwo.NY;
 
 import android.content.Intent;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,7 +21,8 @@ public class ChatRoomActivity extends AppCompatActivity {
     private Toolbar mToolbar;
 
     private ViewPager mViewPager;
-    private SectionsPagerAdapter mSelecttionsPageAdapter;
+    private SectionsPagerAdapter mSectionsPageAdapter;
+    private TabLayout mTabLayout;
 
 
     @Override
@@ -32,8 +34,13 @@ public class ChatRoomActivity extends AppCompatActivity {
         setSupportActionBar (mToolbar  );
         getSupportActionBar ().setTitle ( "Chat" );
         mViewPager=findViewById ( R.id.ny_tabPager );
+        mSectionsPageAdapter=new SectionsPagerAdapter ( getSupportFragmentManager () );
+        mViewPager.setAdapter ( mSectionsPageAdapter );
 
         mAuth=FirebaseAuth.getInstance ();
+
+        mTabLayout = findViewById ( R.id.ny_main_tabs );
+        mTabLayout.setupWithViewPager ( mViewPager );
     }
 
     @Override
@@ -72,6 +79,12 @@ public class ChatRoomActivity extends AppCompatActivity {
         switch(item.getItemId()){
             case R.id.ny_main_logOut_btn:{
                 Logout ();
+            }
+            case R.id.ny_all_users_btn:{
+
+                Intent p = new Intent ( ChatRoomActivity.this, NyAllUsersActivity.class );
+                startActivity ( p );
+
             }
 
 

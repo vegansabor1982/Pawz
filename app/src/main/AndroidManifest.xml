@@ -99,7 +99,9 @@
 
         <activity android:name=".ChatRoomV2.NyMessageActivity" />
         <activity android:name=".NY.NyChatMessageActivity" />
-        <activity android:name=".NY.ChatRoomActivity"></activity>
+        <activity android:name=".NY.ChatRoomActivity" />
+        <activity android:name=".NY.NyAllUsersActivity"
+           android:parentActivityName=".NY.ChatRoomActivity" ></activity>
     </application>
 
 </manifest>
