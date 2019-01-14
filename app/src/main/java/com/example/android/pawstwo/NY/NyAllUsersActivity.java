@@ -1,5 +1,6 @@
 package com.example.android.pawstwo.NY;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -20,12 +21,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class NyAllUsersActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private RecyclerView mUsersList;
     private DatabaseReference mUsersDatabase;
+    private FirebaseAuth mAuth;
 
 
     @Override
@@ -38,7 +43,9 @@ public class NyAllUsersActivity extends AppCompatActivity {
         getSupportActionBar ().setTitle ( "All Users" );
         getSupportActionBar ().setDisplayHomeAsUpEnabled ( true );
 
-        mUsersDatabase = FirebaseDatabase.getInstance ().getReference ().child ( "Users" );
+        mAuth=FirebaseAuth.getInstance ();
+
+        mUsersDatabase = FirebaseDatabase.getInstance ().getReference ().child( "Users").child (mAuth.getUid ());
 
 
         mUsersList = findViewById ( R.id.ny_users_list );
@@ -52,6 +59,9 @@ public class NyAllUsersActivity extends AppCompatActivity {
 
         @Override protected void onStart() {
         super.onStart();
+
+        mAuth=FirebaseAuth.getInstance ();
+
 
 
             Query query = FirebaseDatabase.getInstance()
@@ -67,9 +77,23 @@ public class NyAllUsersActivity extends AppCompatActivity {
 
 
                 @Override
-                protected void onBindViewHolder( @NonNull UsersViewHolder holder, int position, @NonNull NyUsers model ) {
+                protected void onBindViewHolder( @NonNull UsersViewHolder usersViewHolder, int position, @NonNull NyUsers users ) {
 
-                    holder.setName ( model.getUserName () );
+                    usersViewHolder.setName ( users.getUserName () );
+                    usersViewHolder.setUserImage(users.getImage (),getApplicationContext ());
+
+                    final String userId= getRef ( position ).getKey ();
+
+                    usersViewHolder.mView.setOnClickListener ( new View.OnClickListener () {
+                        @Override
+                        public void onClick( View view ) {
+
+                            Intent l = new Intent ( NyAllUsersActivity.this, NySpecificUserProfile.class );
+                            l.putExtra ( "userId", userId );
+                            startActivity ( l );
+
+                        }
+                    } );
 
                 }
 
@@ -80,6 +104,8 @@ public class NyAllUsersActivity extends AppCompatActivity {
                     View view =LayoutInflater.from ( viewGroup.getContext () ).inflate ( R.layout.ny_users_single_layout,viewGroup, false );
 
                     return new UsersViewHolder ( view );
+
+
                 }
 
 
@@ -104,9 +130,27 @@ public class NyAllUsersActivity extends AppCompatActivity {
             mUserNameView.setText(name);
         }
 
+        public void setUserImage (String image, Context ctx){
+
+
+            CircleImageView userImageView= mView.findViewById ( R.id.ny_user_single_image );
+
+            Picasso.with ( ctx ).load (  image).placeholder ( R.drawable.com_facebook_profile_picture_blank_portrait ).into ( userImageView );
+
+
+
+
+
+
+
+
+        }
+
 
 
     }
+
+
 
 
 }

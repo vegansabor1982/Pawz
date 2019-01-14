@@ -64,7 +64,7 @@ public class PetAdapterTest extends RecyclerView.Adapter<PetAdapterTest.PetHolde
         petHolder.mLongReturn.setText ( uploadCurrent.getmLongt () );
         petHolder.mUploaderNew.setText ( uploadCurrent.getmUploaderName () );
 
-        Picasso.get ().load ( uploadCurrent.getmImageUrl () ).fit ().centerCrop ().into ( petHolder.imageView );
+        Picasso.with (mContext).load ( uploadCurrent.getmImageUrl () ).fit ().centerCrop ().into ( petHolder.imageView );
 
 
 

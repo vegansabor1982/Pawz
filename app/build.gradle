@@ -39,7 +39,7 @@ dependencies {
     //  implementation'com.google.firebaseui:firebase-ui:4.3.0'
     implementation 'com.android.support:exifinterface:28.0.0'
     // implementation 'com.squareup.picasso3:picasso:2.71828'
-    implementation group: 'com.squareup.picasso', name: 'picasso', version: '2.71828'
+    implementation group: 'com.squareup.picasso', name: 'picasso', version: '2.5.2'
     //Thanks for using https://jar-download.com
 
 
@@ -56,6 +56,8 @@ dependencies {
 
     implementation 'com.github.lguipeng:BubbleView:1.0.1'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
+    implementation 'com.iceteck.silicompressorr:silicompressor:2.2.1'
+    implementation 'id.zelory:compressor:2.1.0'
 
 
 

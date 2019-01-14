@@ -97,7 +97,7 @@ public class SpecificPetProfileActivity extends AppCompatActivity {
 
 
 
-        Picasso.get ().load ( imageUrl ).fit().centerCrop().into (mSpecPetPic  );
+        Picasso.with (getBaseContext ()).load ( imageUrl ).fit().centerCrop().into (mSpecPetPic  );
         mSpecType.setText(petType);
         mSpecFamily.setText ( petFamily );
         mSpecDescription.setText ( petDescription );

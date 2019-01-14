@@ -4,14 +4,22 @@ public class NyUsers {
 
 
     public String userName;
-    public String image;
+    public String imageUrl;
+    public String thumb_image;
+
 
     public NyUsers() {
     }
 
-    public NyUsers( String userName, String image ) {
+
+
+    public NyUsers( String userName, String image, String thumb_image ) {
         this.userName = userName;
-        this.image = image;
+        this.imageUrl = image;
+        this.thumb_image=thumb_image;
+
+
+
     }
 
     public String getUserName() {
@@ -23,10 +31,20 @@ public class NyUsers {
     }
 
     public String getImage() {
-        return image;
+        return imageUrl;
     }
 
     public void setImage( String image ) {
-        this.image = image;
+        this.imageUrl = image;
     }
+
+    public String getThumb_image() {
+        return thumb_image;
+    }
+
+    public void setThumb_image( String thumb_image ) {
+        this.thumb_image = thumb_image;
+    }
+
+
 }
