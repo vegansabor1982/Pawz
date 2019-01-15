@@ -21,11 +21,15 @@ import com.facebook.login.Login;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.w3c.dom.Text;
 
@@ -42,12 +46,15 @@ public class MainActivity extends AppCompatActivity {
     private TextView forgotPassword;
    // private CallbackManager fbLogin;
     private FacebookAuthCredential authCredential;
+    private DatabaseReference mUserDatabase;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate ( savedInstanceState );
         setContentView ( R.layout.activity_main );
+
+        mUserDatabase= FirebaseDatabase.getInstance ().getReference ().child ( "Users" );
 
         userName = findViewById ( R.id.et_Username );
         passWord = findViewById ( R.id.et_Password );
@@ -129,8 +136,24 @@ public class MainActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     progressDialog.dismiss();
-                   //Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                    checkEmailVerification ();
+
+                    String current_user_id=firebaseAuth.getCurrentUser ().getUid ();
+
+                    String deviceToken= FirebaseInstanceId.getInstance ().getToken (  );
+
+                    mUserDatabase.child ( current_user_id ).child ( "device token" ).setValue ( deviceToken ).addOnSuccessListener ( new OnSuccessListener<Void> () {
+                        @Override
+                        public void onSuccess( Void aVoid ) {
+                            //Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                            checkEmailVerification ();
+
+
+                        }
+                    } );
+
+
+
+
                 }else {
                     progressDialog.dismiss ();
                     Toast.makeText(MainActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
