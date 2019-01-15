@@ -244,6 +244,7 @@ public class NySpecificUserProfile extends AppCompatActivity {
 
                                     mProfileSendRequestBtn.setEnabled ( true );
 
+
                                     mCurrent_state="Not Friends";
                                     mProfileSendRequestBtn.setText ( "Send Friend Request" );
 

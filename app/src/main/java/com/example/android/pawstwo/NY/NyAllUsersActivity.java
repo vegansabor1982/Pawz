@@ -45,7 +45,12 @@ public class NyAllUsersActivity extends AppCompatActivity {
 
         mAuth=FirebaseAuth.getInstance ();
 
-        mUsersDatabase = FirebaseDatabase.getInstance ().getReference ().child( "Users").child (mAuth.getUid ());
+        if (mAuth.getCurrentUser ()!=null){
+
+            mUsersDatabase = FirebaseDatabase.getInstance ().getReference ().child( "Users").child ( mAuth.getCurrentUser ().getUid () );
+        }
+
+
 
 
         mUsersList = findViewById ( R.id.ny_users_list );
