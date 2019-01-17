@@ -21,6 +21,17 @@
         android:logo="@drawable/paw_logo_two"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme">
+
+
+        <service android:name=".NY.NyFirebaseMessagingService">
+
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+
+
+        </service>
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,7 +63,10 @@
         </activity>
         <activity android:name=".SignUpActivity" />
         <activity android:name=".PasswordActivity" />
-        <activity android:name=".ProfileActivity" />
+        <activity android:name=".ProfileActivity" >
+
+        </activity>
+
         <activity
             android:name=".NewEntryActivity"
             android:alwaysRetainTaskState="true" />
@@ -89,6 +103,8 @@
             android:label="@string/title_activity_maps" />
         <activity android:name=".TestUploadActivity" />
         <activity android:name=".SpecificPetProfileActivity" />
+
+
         <activity android:name=".MessageActivity" />
 
         <service android:name=".Service.MyFirebaseInstanceService">
@@ -103,7 +119,14 @@
         <activity
             android:name=".NY.NyAllUsersActivity"
             android:parentActivityName=".NY.ChatRoomActivity" />
-        <activity android:name=".NY.NySpecificUserProfile"></activity>
+        <activity android:name=".NY.NySpecificUserProfile">
+
+            <intent-filter>
+                <action android:name="com.example.android.pawstwo_TARGET_NOTIFICATION"></action>
+                <category android:name="android.intent.category.DEFAULT"></category>
+
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

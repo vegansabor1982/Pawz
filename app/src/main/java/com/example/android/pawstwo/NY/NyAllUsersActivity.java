@@ -53,6 +53,7 @@ public class NyAllUsersActivity extends AppCompatActivity {
 
 
 
+
         mUsersList = findViewById ( R.id.ny_users_list );
         mUsersList.setHasFixedSize ( true );
 

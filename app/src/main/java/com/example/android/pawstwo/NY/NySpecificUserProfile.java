@@ -51,7 +51,15 @@ public class NySpecificUserProfile extends AppCompatActivity {
         setContentView ( R.layout.activity_ny_specific_user_profile );
 
 
-       final String user_id= getIntent ().getStringExtra ("userId");
+       final String user_id;
+       String data =getIntent ().getStringExtra ("userId"  );
+        if (data == null) {
+           user_id=getIntent ().getStringExtra ( "from_user_id" );
+
+        }else{
+            user_id=getIntent ().getStringExtra ( "userId" );
+        }
+
        mAuth=FirebaseAuth.getInstance ();
 
        mUsersDatabase=FirebaseDatabase.getInstance ().getReference ().child ( "Users" ).child ( user_id );

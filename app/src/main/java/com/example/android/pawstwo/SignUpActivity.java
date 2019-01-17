@@ -41,6 +41,7 @@ public class SignUpActivity extends AppCompatActivity {
     private static int PICK_IMAGE=123;
     Uri imagePath;
     private StorageReference storageReference;
+    private DatabaseReference mDatabase;
 
 
     @Override
@@ -109,8 +110,12 @@ public class SignUpActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
 
+
+
+
+
                             if (task.isSuccessful ()) {
-                               sendEmailVerification ();
+                                sendEmailVerification ();
                             } else {
                                 Toast.makeText ( SignUpActivity.this, "Registration Failed", Toast.LENGTH_SHORT ).show ();
 
@@ -235,7 +240,4 @@ public class SignUpActivity extends AppCompatActivity {
 
 
 }
-
-
-
 
