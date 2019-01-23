@@ -49,5 +49,19 @@
         android:textColor="@android:color/white"
         android:textSize="16sp" />
 
+    <Button
+        android:id="@+id/change_profile_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/profile_decline_btn"
+
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="48dp"
+        android:backgroundTint="@color/colorAccent"
+
+        android:text="Change Image"
+        android:textColor="@android:color/white" />
+
 
 </RelativeLayout>

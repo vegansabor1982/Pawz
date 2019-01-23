@@ -43,15 +43,12 @@ public class NyAllUsersActivity extends AppCompatActivity {
         getSupportActionBar ().setTitle ( "All Users" );
         getSupportActionBar ().setDisplayHomeAsUpEnabled ( true );
 
-        mAuth=FirebaseAuth.getInstance ();
+        mAuth = FirebaseAuth.getInstance ();
 
-        if (mAuth.getCurrentUser ()!=null){
+        if (mAuth.getCurrentUser () != null) {
 
-            mUsersDatabase = FirebaseDatabase.getInstance ().getReference ().child( "Users").child ( mAuth.getCurrentUser ().getUid () );
+            mUsersDatabase = FirebaseDatabase.getInstance ().getReference ().child ( "Users" ).child ( mAuth.getCurrentUser ().getUid () );
         }
-
-
-
 
 
         mUsersList = findViewById ( R.id.ny_users_list );
@@ -63,100 +60,92 @@ public class NyAllUsersActivity extends AppCompatActivity {
     }
 
 
-        @Override protected void onStart() {
-        super.onStart();
+    @Override
+    protected void onStart() {
+        super.onStart ();
 
-        mAuth=FirebaseAuth.getInstance ();
-
-
-
-            Query query = FirebaseDatabase.getInstance()
-                    .getReference()
-                    .child("Users");
+        mAuth = FirebaseAuth.getInstance ();
 
 
-
-            FirebaseRecyclerOptions< NyUsers> options= new FirebaseRecyclerOptions.Builder<NyUsers> ().setQuery ( query, NyUsers.class ).build ();
-            FirebaseRecyclerAdapter<NyUsers, UsersViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<NyUsers, UsersViewHolder>(options) {
-
-
+        Query query = FirebaseDatabase.getInstance ()
+                .getReference ()
+                .child ( "Users" );
 
 
-                @Override
-                protected void onBindViewHolder( @NonNull UsersViewHolder usersViewHolder, int position, @NonNull NyUsers users ) {
-
-                    usersViewHolder.setName ( users.getUserName () );
-                    usersViewHolder.setUserImage(users.getImage (),getApplicationContext ());
-
-                    final String userId= getRef ( position ).getKey ();
-
-                    usersViewHolder.mView.setOnClickListener ( new View.OnClickListener () {
-                        @Override
-                        public void onClick( View view ) {
-
-                            Intent l = new Intent ( NyAllUsersActivity.this, NySpecificUserProfile.class );
-                            l.putExtra ( "userId", userId );
-                            startActivity ( l );
-
-                        }
-                    } );
-
-                }
-
-                @NonNull
-                @Override
-                public UsersViewHolder onCreateViewHolder( @NonNull ViewGroup viewGroup, int i ) {
-
-                    View view =LayoutInflater.from ( viewGroup.getContext () ).inflate ( R.layout.ny_users_single_layout,viewGroup, false );
-
-                    return new UsersViewHolder ( view );
+        FirebaseRecyclerOptions<NyUsers> options = new FirebaseRecyclerOptions.Builder<NyUsers> ().setQuery ( query, NyUsers.class ).build ();
+        FirebaseRecyclerAdapter<NyUsers, UsersViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<NyUsers, UsersViewHolder> ( options ) {
 
 
-                }
+            @Override
+            protected void onBindViewHolder( @NonNull UsersViewHolder usersViewHolder, int position, @NonNull NyUsers users ) {
+
+                usersViewHolder.setName ( users.getUserName () );
+                usersViewHolder.setUserImage ( users.getImage (), getApplicationContext () );
+
+                final String userId = getRef ( position ).getKey ();
+
+                usersViewHolder.mView.setOnClickListener ( new View.OnClickListener () {
+                    @Override
+                    public void onClick( View view ) {
+
+                        Intent l = new Intent ( NyAllUsersActivity.this, NySpecificUserProfile.class );
+
+                        l.putExtra ( "userId", userId );
+
+                        startActivity ( l );
 
 
+                    }
+                } );
+
+            }
+
+            @NonNull
+            @Override
+            public UsersViewHolder onCreateViewHolder( @NonNull ViewGroup viewGroup, int i ) {
+
+                View view = LayoutInflater.from ( viewGroup.getContext () ).inflate ( R.layout.ny_users_single_layout, viewGroup, false );
+
+                return new UsersViewHolder ( view );
 
 
-            };
+            }
 
-            mUsersList.setAdapter(firebaseRecyclerAdapter);
-            firebaseRecyclerAdapter.startListening ();
+
+        };
+
+        mUsersList.setAdapter ( firebaseRecyclerAdapter );
+        firebaseRecyclerAdapter.startListening ();
     }
-    public static class UsersViewHolder extends RecyclerView.ViewHolder{
+
+    public static class UsersViewHolder extends RecyclerView.ViewHolder {
 
         View mView;
-        public UsersViewHolder(View itemView) {
 
-        super(itemView);
-        mView = itemView;
+        public UsersViewHolder( View itemView ) {
 
-    }
-        public void setName(String name){
-            TextView mUserNameView = mView.findViewById(R.id.ny_user_single_name);
-            mUserNameView.setText(name);
+            super ( itemView );
+            mView = itemView;
+
         }
 
-        public void setUserImage (String image, Context ctx){
+        public void setName( String name ) {
+            TextView mUserNameView = mView.findViewById ( R.id.ny_user_single_name );
+            mUserNameView.setText ( name );
+        }
+
+        public void setUserImage( String image, Context ctx ) {
 
 
-            CircleImageView userImageView= mView.findViewById ( R.id.ny_user_single_image );
+            CircleImageView userImageView = mView.findViewById ( R.id.ny_user_single_image );
 
-            Picasso.with ( ctx ).load (  image).placeholder ( R.drawable.com_facebook_profile_picture_blank_portrait ).into ( userImageView );
-
-
-
-
-
-
+            Picasso.with ( ctx ).load ( image ).placeholder ( R.drawable.com_facebook_profile_picture_blank_portrait ).into ( userImageView );
 
 
         }
 
 
-
     }
-
-
 
 
 }

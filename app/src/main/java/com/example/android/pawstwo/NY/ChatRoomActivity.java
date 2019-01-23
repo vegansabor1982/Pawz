@@ -10,29 +10,47 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.android.pawstwo.MainActivity;
+import com.example.android.pawstwo.ProfileActivity;
 import com.example.android.pawstwo.R;
 import com.example.android.pawstwo.TestHomeActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 
 public class ChatRoomActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private Toolbar mToolbar;
 
+
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPageAdapter;
     private TabLayout mTabLayout;
+    private DatabaseReference mUserRef;
 
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate ( savedInstanceState );
         setContentView ( R.layout.activity_chat_room );
-
+        mAuth=FirebaseAuth.getInstance ();
         mToolbar= (Toolbar) findViewById ( R.id.ny_main_page_toolbar );
         setSupportActionBar (mToolbar  );
         getSupportActionBar ().setTitle ( "Chat" );
+
+
+        if (mAuth.getCurrentUser() != null) {
+
+
+            mUserRef = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+
+        }
+
+
+
+
         mViewPager=findViewById ( R.id.ny_tabPager );
         mSectionsPageAdapter=new SectionsPagerAdapter ( getSupportFragmentManager () );
         mViewPager.setAdapter ( mSectionsPageAdapter );
@@ -41,6 +59,8 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         mTabLayout = findViewById ( R.id.ny_main_tabs );
         mTabLayout.setupWithViewPager ( mViewPager );
+
+
     }
 
     @Override
@@ -49,11 +69,18 @@ public class ChatRoomActivity extends AppCompatActivity {
         FirebaseUser currentuser= mAuth.getCurrentUser ();
 
         if (currentuser==null){
-            Intent mainActivity = new Intent ( ChatRoomActivity.this, MainActivity.class );
-            startActivity ( mainActivity );
-            finish ();
+            sendToStart();
         }
 
+    }
+
+
+
+    private void sendToStart() {
+
+        Intent startIntent = new Intent ( ChatRoomActivity.this, MainActivity.class );
+        startActivity ( startIntent );
+        finish ();
     }
 
     @Override
@@ -86,6 +113,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                 startActivity ( p );
 
             }
+
 
 
 

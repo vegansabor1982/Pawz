@@ -272,7 +272,7 @@ public class NySpecificUserProfile extends AppCompatActivity {
 
                 if(mCurrent_state.equals("req_received")){
 
-                    final String currentDate = DateFormat.getDateTimeInstance().format(new Date());
+                    final String currentDate = DateFormat.getDateInstance ().format(new Date());
 
                     Map friendsMap = new HashMap();
                     friendsMap.put("Friends/" + mCurrentUser.getUid() + "/" + user_id + "/date", currentDate);
