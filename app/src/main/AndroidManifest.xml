@@ -59,9 +59,7 @@
         </activity>
         <activity android:name=".SignUpActivity" />
         <activity android:name=".PasswordActivity" />
-        <activity android:name=".ProfileActivity">
-
-        </activity>
+        <activity android:name=".ProfileActivity"></activity>
         <activity
             android:name=".NewEntryActivity"
             android:alwaysRetainTaskState="true" />
@@ -109,7 +107,6 @@
             </intent-filter>
         </service>
 
-
         <activity android:name=".NY.ChatRoomActivity" />
         <activity
             android:name=".NY.NyAllUsersActivity"
@@ -121,7 +118,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".NY.PrivateChatActivity"
+            android:parentActivityName=".NY.ChatRoomActivity"></activity>
     </application>
 
 </manifest>

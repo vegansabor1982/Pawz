@@ -1,8 +1,10 @@
 package com.example.android.pawstwo.NY;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
+import com.example.android.pawstwo.ProfileActivity;
 import com.example.android.pawstwo.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -77,14 +80,14 @@ public class NyAllUsersActivity extends AppCompatActivity {
 
 
             @Override
-            protected void onBindViewHolder( @NonNull UsersViewHolder usersViewHolder, int position, @NonNull NyUsers users ) {
+            protected void onBindViewHolder( @NonNull UsersViewHolder usersViewHolder, int position, @NonNull final NyUsers users ) {
 
                 usersViewHolder.setName ( users.getUserName () );
                 usersViewHolder.setUserImage ( users.getImage (), getApplicationContext () );
 
                 final String userId = getRef ( position ).getKey ();
 
-                usersViewHolder.mView.setOnClickListener ( new View.OnClickListener () {
+              /*  usersViewHolder.mView.setOnClickListener ( new View.OnClickListener () {
                     @Override
                     public void onClick( View view ) {
 
@@ -93,6 +96,48 @@ public class NyAllUsersActivity extends AppCompatActivity {
                         l.putExtra ( "userId", userId );
 
                         startActivity ( l );
+
+
+                    }
+                } );*/
+
+                usersViewHolder.mView.setOnClickListener ( new View.OnClickListener () {
+                    @Override
+                    public void onClick( View view ) {
+
+                        CharSequence options[] = new CharSequence[]{"Open Profile", "Send Message"};
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder ( NyAllUsersActivity.this );
+
+                        builder.setTitle ( "Select Option" );
+
+                        builder.setItems ( options, new DialogInterface.OnClickListener () {
+                            @Override
+                            public void onClick( DialogInterface dialogInterface, int i ) {
+
+                                if (i == 0) {
+
+                                    Intent q = new Intent ( NyAllUsersActivity.this, NySpecificUserProfile.class );
+                                    q.putExtra ( "userId", userId );
+                                    startActivity ( q );
+
+                                }
+
+                                if (i == 1) {
+
+                                    Intent c = new Intent ( NyAllUsersActivity.this, PrivateChatActivity.class );
+                                    c.putExtra ( "userId", userId );
+                                    c.putExtra ( "userName", users.getUserName () );
+                                    startActivity ( c );
+
+
+                                }
+
+
+                            }
+
+                        } );
+                        builder.show ();
 
 
                     }
