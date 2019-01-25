@@ -132,8 +132,8 @@ public class PrivateChatActivity extends AppCompatActivity {
         mAdapter = new MessageAdapter ( messagesList );
 
         mMessagesList = findViewById ( R.id.messages_list );
-        mRefreshLayout = findViewById ( R.id.message_swipe_layout );
-
+     //   mRefreshLayout = findViewById ( R.id.message_swipe_layout );
+//-----------------maybe here context has problem------------->>
         mLinearLayout = new LinearLayoutManager ( this );
         mMessagesList.setHasFixedSize ( true );
         mMessagesList.setLayoutManager ( mLinearLayout );
@@ -147,6 +147,7 @@ public class PrivateChatActivity extends AppCompatActivity {
         mRootRef.child ( "Chat" ).child ( mCurrentUserId ).child ( mChatUser ).child ( "seen" ).setValue ( true );
 
         loadMessages ();
+        loadMessagesTwo ();
 
 
         mTitleView.setText ( userName );
@@ -230,16 +231,18 @@ public class PrivateChatActivity extends AppCompatActivity {
             }
         } );
 
-        mRefreshLayout.setOnRefreshListener ( new SwipeRefreshLayout.OnRefreshListener () {
+      /*  mRefreshLayout.setOnRefreshListener ( new SwipeRefreshLayout.OnRefreshListener () {
             @Override
             public void onRefresh() {
                 mCurrentPage++;
 
+                messagesList.clear ();
+
                 itemPos = 0;
 
-                loadMoreMessages ();
+
             }
-        } );
+        } );*/
 
 
     }
@@ -247,7 +250,7 @@ public class PrivateChatActivity extends AppCompatActivity {
 
     private void loadMoreMessages() {
 
-        DatabaseReference messageRef = mRootRef.child ( "messages" ).child ( mCurrentUserId ).child ( mChatUser );
+        DatabaseReference messageRef = mRootRef.child ( "messages" ).child ( mChatUser ).child ( mCurrentUserId );
 
         Query messageQuery = messageRef.orderByKey ().endAt ( mLastKey ).limitToLast ( 10 );
 
@@ -279,11 +282,11 @@ public class PrivateChatActivity extends AppCompatActivity {
                 Log.d ( "TOTALKEYS", "Last Key : " + mLastKey + " | Prev Key : " + mPrevKey + " | Message Key : " + messageKey );
 
 
-                //  messagesList.add ( message );
+                messagesList.add ( message );
                 mAdapter.notifyDataSetChanged ();
 
-                // mMessagesList.scrollToPosition ( messagesList.size ()-1 );
-                mRefreshLayout.setRefreshing ( false );
+                mMessagesList.scrollToPosition ( messagesList.size () - 1 );
+               // mRefreshLayout.setRefreshing ( false );
                 mLinearLayout.scrollToPositionWithOffset ( 10, 0 );
 
             }
@@ -314,6 +317,63 @@ public class PrivateChatActivity extends AppCompatActivity {
 
     private void loadMessages() {
 //--------------------------------------------------------------------------TRY to change these two>>-----------------
+        DatabaseReference messageRef = mRootRef.child ( "messages" ).child ( mChatUser ).child ( mCurrentUserId );
+
+        Query messageQuery = messageRef.limitToLast ( mCurrentPage * TOTAL_ITEMS_TO_LOAD );
+
+
+        messageQuery.addChildEventListener ( new ChildEventListener () {
+            @Override
+            public void onChildAdded( DataSnapshot dataSnapshot, String s ) {
+
+                Messages message = dataSnapshot.getValue ( Messages.class );
+
+                itemPos++;
+
+                if (itemPos == 1) {
+
+                    String messageKey = dataSnapshot.getKey ();
+
+                    mLastKey = messageKey;
+                    mPrevKey = messageKey;
+
+                }
+
+                messagesList.add ( message );
+                mAdapter.notifyDataSetChanged ();
+
+                mMessagesList.scrollToPosition ( messagesList.size () - 1 );
+
+             //   mRefreshLayout.setRefreshing ( false );
+
+            }
+
+            @Override
+            public void onChildChanged( @NonNull DataSnapshot dataSnapshot, @Nullable String s ) {
+
+            }
+
+            @Override
+            public void onChildRemoved( @NonNull DataSnapshot dataSnapshot ) {
+
+            }
+
+            @Override
+            public void onChildMoved( @NonNull DataSnapshot dataSnapshot, @Nullable String s ) {
+
+            }
+
+            @Override
+            public void onCancelled( @NonNull DatabaseError databaseError ) {
+
+            }
+        } );
+
+
+    }
+
+    private void loadMessagesTwo() {
+//--------------------------------------------------------------------------TRY to change these two>>-----------------
         DatabaseReference messageRef = mRootRef.child ( "messages" ).child ( mCurrentUserId ).child ( mChatUser );
 
         Query messageQuery = messageRef.limitToLast ( mCurrentPage * TOTAL_ITEMS_TO_LOAD );
@@ -341,7 +401,7 @@ public class PrivateChatActivity extends AppCompatActivity {
 
                 mMessagesList.scrollToPosition ( messagesList.size () - 1 );
 
-                mRefreshLayout.setRefreshing ( false );
+             //   mRefreshLayout.setRefreshing ( false );
 
             }
 
@@ -364,19 +424,19 @@ public class PrivateChatActivity extends AppCompatActivity {
             public void onCancelled( @NonNull DatabaseError databaseError ) {
 
             }
-
-
         } );
 
 
     }
-    private void sendMessage () {
+
+
+    private void sendMessage() {
 
         String message = mChatMessageView.getText ().toString ();
 
         if (!TextUtils.isEmpty ( message )) {
 
-            String curennt_user_ref = "messages/" + mCurrentUserId + "/" + mChatUser;
+            String current_user_ref = "messages/" + mCurrentUserId + "/" + mChatUser;
             String chat_user_ref = "messages/" + mChatUser + "/ " + mCurrentUserId;
 
             DatabaseReference user_message_push = mRootRef.child ( "messages" ).child ( mCurrentUserId ).child ( mChatUser ).push ();
@@ -393,7 +453,7 @@ public class PrivateChatActivity extends AppCompatActivity {
 
             Map messageUserMap = new HashMap ();
 
-            messageUserMap.put ( curennt_user_ref + "/" + push_id, messageMap );
+            messageUserMap.put ( current_user_ref + "/" + push_id, messageMap );
             messageUserMap.put ( chat_user_ref + "/" + push_id, messageMap );
 
             mChatMessageView.setText ( "" );

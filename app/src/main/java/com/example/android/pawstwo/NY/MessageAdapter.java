@@ -65,6 +65,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             messageText = itemView.findViewById ( R.id.message_text_layout );
             timeText = itemView.findViewById ( R.id.time_text_layout );
             profileImage = itemView.findViewById ( R.id.message_profile_layout );
+            displayName=itemView.findViewById ( R.id. name_text_layout);
             messageImage = itemView.findViewById ( R.id.message_image_layout );
         }
 
@@ -76,9 +77,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     @Override
     public void onBindViewHolder( @NonNull final MessageAdapter.MessageVieHolder messageVieHolder, int i ) {
 
-        //mAuth=FirebaseAuth.getInstance ();
+        mAuth=FirebaseAuth.getInstance ();
 
-        //String current_user_id = mAuth.getCurrentUser ().getUid ();
+        String current_user_id = mAuth.getCurrentUser ().getUid ();
 
         final Messages c = mMessageList.get ( i );
 
@@ -95,9 +96,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                 String name = dataSnapshot.child ( "userName" ).getValue ().toString ();
                 String image = dataSnapshot.child ( "imageUrl" ).getValue ().toString ();
 
-                mAuth=FirebaseAuth.getInstance ();
-//------------------------------FIX THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!--------------------------
-              //  messageVieHolder.displayName.setText ( name );
+
+               messageVieHolder.displayName.setText ( name );
 
 
                 Picasso.with ( messageVieHolder.profileImage.getContext () ).load ( image )
