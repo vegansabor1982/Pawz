@@ -1,5 +1,6 @@
 package com.example.android.pawstwo.NY;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,11 +14,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 
+import com.bumptech.glide.Glide;
 import com.example.android.pawstwo.ProfileActivity;
 import com.example.android.pawstwo.R;
+import com.firebase.ui.auth.data.model.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,7 +41,11 @@ public class NyAllUsersActivity extends AppCompatActivity {
     private DatabaseReference mUsersDatabase;
     private FirebaseAuth mAuth;
 
+    private ImageButton mSearchBtn;
+    private EditText mSearchText;
 
+
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate ( savedInstanceState );
@@ -45,6 +55,8 @@ public class NyAllUsersActivity extends AppCompatActivity {
         setSupportActionBar ( mToolbar );
         getSupportActionBar ().setTitle ( "All Users" );
         getSupportActionBar ().setDisplayHomeAsUpEnabled ( true );
+
+
 
         mAuth = FirebaseAuth.getInstance ();
 
@@ -60,7 +72,14 @@ public class NyAllUsersActivity extends AppCompatActivity {
         mUsersList.setLayoutManager ( new LinearLayoutManager ( this ) );
 
 
+
+
+
+
     }
+
+
+
 
 
     @Override
@@ -188,6 +207,7 @@ public class NyAllUsersActivity extends AppCompatActivity {
 
 
         }
+
 
 
     }

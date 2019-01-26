@@ -121,6 +121,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         } else {
 
+
+
             messageVieHolder.messageText.setVisibility ( View.INVISIBLE );
             Picasso.with ( messageVieHolder.profileImage.getContext () ).load ( c.getMessage () )
                     .placeholder ( R.drawable.com_facebook_profile_picture_blank_portrait ).into ( messageVieHolder.messageImage );

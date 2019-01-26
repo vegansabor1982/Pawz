@@ -96,7 +96,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         mAuth= FirebaseAuth.getInstance ();
         mAuth.signOut ();
         finish ();
-        Intent i = new Intent ( ChatRoomActivity.this, MainActivity.class  );
+        Intent i = new Intent ( ChatRoomActivity.this,MainActivity.class  );
         startActivity ( i );
     }
     @Override

@@ -2,6 +2,7 @@ package com.example.android.pawstwo.NY;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,6 +22,8 @@ import android.widget.TextView;
 
 
 import com.example.android.pawstwo.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -32,12 +35,14 @@ import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -132,7 +137,7 @@ public class PrivateChatActivity extends AppCompatActivity {
         mAdapter = new MessageAdapter ( messagesList );
 
         mMessagesList = findViewById ( R.id.messages_list );
-     //   mRefreshLayout = findViewById ( R.id.message_swipe_layout );
+        //   mRefreshLayout = findViewById ( R.id.message_swipe_layout );
 //-----------------maybe here context has problem------------->>
         mLinearLayout = new LinearLayoutManager ( this );
         mMessagesList.setHasFixedSize ( true );
@@ -167,6 +172,8 @@ public class PrivateChatActivity extends AppCompatActivity {
 
             }
         } );
+
+        //----
 
         mRootRef.child ( "Chat" ).child ( mCurrentUserId ).addValueEventListener ( new ValueEventListener () {
             @Override
@@ -247,6 +254,30 @@ public class PrivateChatActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onActivityResult( int requestCode, int resultCode, Intent data ) {
+        super.onActivityResult ( requestCode, resultCode, data );
+
+        if (requestCode == GALLERY_PICK && resultCode == RESULT_OK) {
+
+            Uri imageUri = data.getData ();
+
+            final String current_user_ref = "messages/" + mCurrentUserId + "/" + mChatUser;
+            final String chat_user_ref = "messages/" + mChatUser + "/" + mCurrentUserId;
+
+            DatabaseReference user_message_push = mRootRef.child ( "messages" )
+                    .child ( mCurrentUserId ).child ( mChatUser ).push ();
+
+            final String push_id = user_message_push.getKey ();
+
+
+
+
+
+
+        }
+    }
+
 
     private void loadMoreMessages() {
 
@@ -286,7 +317,7 @@ public class PrivateChatActivity extends AppCompatActivity {
                 mAdapter.notifyDataSetChanged ();
 
                 mMessagesList.scrollToPosition ( messagesList.size () - 1 );
-               // mRefreshLayout.setRefreshing ( false );
+                // mRefreshLayout.setRefreshing ( false );
                 mLinearLayout.scrollToPositionWithOffset ( 10, 0 );
 
             }
@@ -344,7 +375,7 @@ public class PrivateChatActivity extends AppCompatActivity {
 
                 mMessagesList.scrollToPosition ( messagesList.size () - 1 );
 
-             //   mRefreshLayout.setRefreshing ( false );
+                //   mRefreshLayout.setRefreshing ( false );
 
             }
 
@@ -401,7 +432,7 @@ public class PrivateChatActivity extends AppCompatActivity {
 
                 mMessagesList.scrollToPosition ( messagesList.size () - 1 );
 
-             //   mRefreshLayout.setRefreshing ( false );
+                //   mRefreshLayout.setRefreshing ( false );
 
             }
 
@@ -475,4 +506,6 @@ public class PrivateChatActivity extends AppCompatActivity {
 
         }
     }
+
 }
+
