@@ -8,7 +8,10 @@ class SectionsPagerAdapter extends FragmentPagerAdapter {
 
 
     public SectionsPagerAdapter( FragmentManager fm ) {
+
+
         super ( fm );
+
     }
 
     @Override
@@ -47,7 +50,7 @@ class SectionsPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return "CHATS";
             case 2:
-                return "FRIENDS";
+                return "SEARCH USERS";
 
             default:
                 return null;

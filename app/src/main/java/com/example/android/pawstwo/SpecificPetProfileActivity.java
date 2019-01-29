@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import com.example.android.pawstwo.NY.ChatRoomActivity;
+import com.example.android.pawstwo.NY.SearchUsersActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -36,6 +37,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import static com.example.android.pawstwo.TestHomeActivity.EXTRA_URL;
 import static com.example.android.pawstwo.TestHomeActivity.PET_DESCRIPTION;
 import static com.example.android.pawstwo.TestHomeActivity.PET_FAMILY;
@@ -51,7 +54,7 @@ public class SpecificPetProfileActivity extends AppCompatActivity {
     private TextView mSpecFamily;
     private TextView mSpecDescription;
     private TextView mUploadedByUser;
-    private ImageView mSpecPetPic;
+    private CircleImageView mSpecPetPic;
     private Button mSendUserMessage;
     private FirebaseDatabase mDatabase;
     private FirebaseAuth mAuth;
@@ -125,7 +128,7 @@ public class SpecificPetProfileActivity extends AppCompatActivity {
 
 
 
-                Intent u = new Intent ( SpecificPetProfileActivity.this, ChatRoomActivity.class );
+                Intent u = new Intent ( SpecificPetProfileActivity.this, SearchUsersActivity.class );
                 startActivity ( u );
 
 

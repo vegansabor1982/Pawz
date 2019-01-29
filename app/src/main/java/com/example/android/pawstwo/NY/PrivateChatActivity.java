@@ -361,14 +361,14 @@ public class PrivateChatActivity extends AppCompatActivity {
 
                 itemPos++;
 
-                if (itemPos == 1) {
+              /*  if (itemPos == 1) {
 
                     String messageKey = dataSnapshot.getKey ();
 
                     mLastKey = messageKey;
                     mPrevKey = messageKey;
 
-                }
+                }*/
 
                 messagesList.add ( message );
                 mAdapter.notifyDataSetChanged ();
@@ -418,14 +418,14 @@ public class PrivateChatActivity extends AppCompatActivity {
 
                 itemPos++;
 
-                if (itemPos == 1) {
+              /*  if (itemPos == 1) {
 
                     String messageKey = dataSnapshot.getKey ();
 
                     mLastKey = messageKey;
                     mPrevKey = messageKey;
 
-                }
+                }*/
 
                 messagesList.add ( message );
                 mAdapter.notifyDataSetChanged ();

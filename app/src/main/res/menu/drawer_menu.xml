@@ -13,5 +13,10 @@
         android:id="@+id/nav_new_entry"
         android:icon="@drawable/ic_new_entry"
         android:title="New Entry"/>
+
+    <item
+        android:id="@+id/nav_saved_chats"
+        android:icon="@drawable/chatico"
+        android:title="Chats" />
 </group>
 </menu>

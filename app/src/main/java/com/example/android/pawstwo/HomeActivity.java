@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.example.android.pawstwo.NY.SavedChatsActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -234,6 +235,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_new_entry:
 
                 startActivity ( new Intent ( HomeActivity.this, TestUploadActivity.class ) );
+                break;
+
+            case R.id.saved_chats_lists:
+
+                startActivity (new Intent ( HomeActivity.this, SavedChatsActivity.class ));
                 break;
         }
         return true;

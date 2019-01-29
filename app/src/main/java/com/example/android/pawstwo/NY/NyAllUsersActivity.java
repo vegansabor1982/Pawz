@@ -38,11 +38,11 @@ public class NyAllUsersActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private RecyclerView mUsersList;
+
     private DatabaseReference mUsersDatabase;
     private FirebaseAuth mAuth;
 
-    private ImageButton mSearchBtn;
-    private EditText mSearchText;
+
 
 
     @SuppressLint("WrongViewCast")
@@ -51,9 +51,15 @@ public class NyAllUsersActivity extends AppCompatActivity {
         super.onCreate ( savedInstanceState );
         setContentView ( R.layout.activity_ny_all_users );
 
+
+        mAuth=FirebaseAuth.getInstance ();
+
+
         mToolbar = findViewById ( R.id.ny_all_users_appBar );
         setSupportActionBar ( mToolbar );
         getSupportActionBar ().setTitle ( "All Users" );
+
+
         getSupportActionBar ().setDisplayHomeAsUpEnabled ( true );
 
 
@@ -76,8 +82,9 @@ public class NyAllUsersActivity extends AppCompatActivity {
 
 
 
-    }
 
+
+    }
 
 
 
@@ -210,7 +217,10 @@ public class NyAllUsersActivity extends AppCompatActivity {
 
 
 
+
+
     }
+
 
 
 }
