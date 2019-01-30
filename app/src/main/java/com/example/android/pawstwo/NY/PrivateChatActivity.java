@@ -19,12 +19,22 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import com.example.android.pawstwo.Notifications.API;
+import com.example.android.pawstwo.Notifications.Client;
+import com.example.android.pawstwo.Notifications.Data;
+import com.example.android.pawstwo.Notifications.MyResponse;
+import com.example.android.pawstwo.Notifications.Sender;
+import com.example.android.pawstwo.Notifications.Token;
 import com.example.android.pawstwo.R;
+import com.firebase.ui.auth.data.model.User;
+import com.google.android.gms.common.data.DataBufferSafeParcelable;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,6 +43,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -45,6 +56,9 @@ import java.util.Map;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PrivateChatActivity extends AppCompatActivity {
 
@@ -89,6 +103,12 @@ public class PrivateChatActivity extends AppCompatActivity {
 
     private static final int GALLERY_PICK = 1;
 
+    private FirebaseUser fuser;
+
+    API apiService;
+
+    boolean notify = false;
+
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -124,6 +144,9 @@ public class PrivateChatActivity extends AppCompatActivity {
         View action_bar_view = inflater.inflate ( R.layout.ny_chat_custom_bar, null );
 
         actionBar.setCustomView ( action_bar_view );
+
+
+        apiService = Client.getClient ( "https://fcm.googleapis.com/" ).create ( API.class );
 
         //--------------Custom action bar items--------------
 
@@ -219,6 +242,8 @@ public class PrivateChatActivity extends AppCompatActivity {
             @Override
             public void onClick( View view ) {
 
+                notify = true;
+
 
                 sendMessage ();
 
@@ -269,10 +294,6 @@ public class PrivateChatActivity extends AppCompatActivity {
                     .child ( mCurrentUserId ).child ( mChatUser ).push ();
 
             final String push_id = user_message_push.getKey ();
-
-
-
-
 
 
         }
@@ -505,6 +526,99 @@ public class PrivateChatActivity extends AppCompatActivity {
 
 
         }
+
+
+
+
+
+
+
+
+    }
+
+   /* final String msg = message;
+
+    mRootRef = FirebaseDatabase.getInstance ().getReference ( "Users" ).child ( mAuth.getCurrentUser ().getUid () );
+
+        mRootRef.addValueEventListener ( new ValueEventListener () {
+        @Override
+        public void onDataChange( @NonNull DataSnapshot dataSnapshot ) {
+            NyUsers user = dataSnapshot.getValue ( NyUsers.class );
+
+            if (notify) {
+                sendNotification ( mChatUser, user.getUserName (), msg );
+
+            }
+
+            //  sendNotification(mChatUser, user.getUserName (),msg);
+
+            notify = false;
+        }
+
+        @Override
+        public void onCancelled( @NonNull DatabaseError databaseError ) {
+
+        }
+    } );
+
+    updateToken ( FirebaseInstanceId.getInstance ().getToken () );*/
+
+    private void sendNotification( String receiver, final String username, final String message ) {
+
+        DatabaseReference tokens = FirebaseDatabase.getInstance ().getReference ( "Tokens" );
+
+        Query query = tokens.orderByKey ().equalTo ( receiver );
+
+        query.addValueEventListener ( new ValueEventListener () {
+            @Override
+            public void onDataChange( @NonNull DataSnapshot dataSnapshot ) {
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren ()) {
+
+                    Token token = snapshot.getValue ( Token.class );
+                    Data data = new Data ( fuser.getUid (), R.drawable.com_facebook_profile_picture_blank_portrait, username + ": " + message, "New Message", mCurrentUserId );
+
+                    Sender sender = new Sender ( data, token.getToken () );
+
+                    apiService.sendNotification ( sender ).enqueue ( new Callback<MyResponse> () {
+                        @Override
+                        public void onResponse( Call<MyResponse> call, Response<MyResponse> response ) {
+
+                            if (response.code () == 200) {
+
+
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure( Call<MyResponse> call, Throwable t ) {
+
+                        }
+                    } );
+                }
+
+            }
+
+            @Override
+            public void onCancelled( @NonNull DatabaseError databaseError ) {
+
+            }
+        } );
+    }
+
+    private void updateToken( String token ) {
+
+        fuser = FirebaseAuth.getInstance ().getCurrentUser ();
+
+
+        DatabaseReference reference = FirebaseDatabase.getInstance ().getReference ( "Tokens" );
+
+        Token token1 = new Token ( token );
+
+        reference.child ( fuser.getUid () ).setValue ( token1 );
+
+
     }
 
 }
