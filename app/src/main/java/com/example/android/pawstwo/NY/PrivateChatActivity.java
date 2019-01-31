@@ -247,6 +247,8 @@ public class PrivateChatActivity extends AppCompatActivity {
 
                 sendMessage ();
 
+
+
             }
         } );
 
@@ -486,12 +488,38 @@ public class PrivateChatActivity extends AppCompatActivity {
 
         String message = mChatMessageView.getText ().toString ();
 
+        final String msg = message;
+
         if (!TextUtils.isEmpty ( message )) {
 
             String current_user_ref = "messages/" + mCurrentUserId + "/" + mChatUser;
             String chat_user_ref = "messages/" + mChatUser + "/ " + mCurrentUserId;
 
             DatabaseReference user_message_push = mRootRef.child ( "messages" ).child ( mCurrentUserId ).child ( mChatUser ).push ();
+
+            mRootRef.addValueEventListener ( new ValueEventListener () {
+                @Override
+                public void onDataChange( @NonNull DataSnapshot dataSnapshot ) {
+                    NyUsers user = dataSnapshot.getValue ( NyUsers.class );
+
+                    if (notify) {
+                        sendNotification ( mChatUser, user.getUserName (), msg );
+
+                    }
+
+                    //  sendNotification(mChatUser, user.getUserName (),msg);
+
+                    notify = false;
+                }
+
+                @Override
+                public void onCancelled( @NonNull DatabaseError databaseError ) {
+
+                }
+            } );
+
+            updateToken ( FirebaseInstanceId.getInstance ().getToken () );
+
 
             String push_id = user_message_push.getKey ();
 
@@ -525,43 +553,16 @@ public class PrivateChatActivity extends AppCompatActivity {
             } );
 
 
+
+         //   mRootRef = FirebaseDatabase.getInstance ().getReference ( "Users" ).child ( mAuth.getCurrentUser ().getUid () );
+
+
+
         }
-
-
-
-
-
-
 
 
     }
 
-   /* final String msg = message;
-
-    mRootRef = FirebaseDatabase.getInstance ().getReference ( "Users" ).child ( mAuth.getCurrentUser ().getUid () );
-
-        mRootRef.addValueEventListener ( new ValueEventListener () {
-        @Override
-        public void onDataChange( @NonNull DataSnapshot dataSnapshot ) {
-            NyUsers user = dataSnapshot.getValue ( NyUsers.class );
-
-            if (notify) {
-                sendNotification ( mChatUser, user.getUserName (), msg );
-
-            }
-
-            //  sendNotification(mChatUser, user.getUserName (),msg);
-
-            notify = false;
-        }
-
-        @Override
-        public void onCancelled( @NonNull DatabaseError databaseError ) {
-
-        }
-    } );
-
-    updateToken ( FirebaseInstanceId.getInstance ().getToken () );*/
 
     private void sendNotification( String receiver, final String username, final String message ) {
 
