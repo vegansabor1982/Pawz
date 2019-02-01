@@ -248,7 +248,6 @@ public class PrivateChatActivity extends AppCompatActivity {
                 sendMessage ();
 
 
-
             }
         } );
 
@@ -553,9 +552,7 @@ public class PrivateChatActivity extends AppCompatActivity {
             } );
 
 
-
-         //   mRootRef = FirebaseDatabase.getInstance ().getReference ( "Users" ).child ( mAuth.getCurrentUser ().getUid () );
-
+            //   mRootRef = FirebaseDatabase.getInstance ().getReference ( "Users" ).child ( mAuth.getCurrentUser ().getUid () );
 
 
         }
@@ -586,6 +583,11 @@ public class PrivateChatActivity extends AppCompatActivity {
                         public void onResponse( Call<MyResponse> call, Response<MyResponse> response ) {
 
                             if (response.code () == 200) {
+
+                                if (response.body ().success!=1){
+
+                                    Toast.makeText ( PrivateChatActivity.this, "Failed", Toast.LENGTH_SHORT ).show ();
+                                }
 
 
                             }

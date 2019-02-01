@@ -56,6 +56,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
 
         int j = Integer.parseInt ( user.replaceAll ("[\\D]",  "" ) );
 
+
         Intent intent = new Intent ( this,PrivateChatActivity.class );
 
 
