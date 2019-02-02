@@ -111,8 +111,8 @@ public class TestUploadActivity extends AppCompatActivity {
         double coords= bundle.getDouble ( "LATITUDE" );
         double coords2=bundle.getDouble ( "LONGTITUDE" );
 
-        mLat.setText ( "Latitude :" +String.valueOf ( coords )  );
-        mLongt.setText ( "Longtitude :"+String.valueOf ( coords2 ) );
+        mLat.setText ( String.valueOf ( coords )  );
+        mLongt.setText ( String.valueOf ( coords2 ) );
 
 
 
