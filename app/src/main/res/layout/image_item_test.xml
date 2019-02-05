@@ -1,83 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     card_view:cardBackgroundColor="@android:color/transparent"
-    card_view:cardElevation="0dp"
-    card_view:barrierDirection="start">
+    android:background="@color/colorCard"
 
-    <LinearLayout
+    card_view:barrierDirection="start"
+    card_view:cardCornerRadius="12dp"
+    card_view:cardElevation="12dp">
+
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@android:color/holo_orange_light" />
+
 
         <TextView
             android:id="@+id/text_view_type_test"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+
+
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="44dp"
+            android:layout_marginEnd="8dp"
             android:text="type"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/text_view_family_test"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
             android:text="family"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/text_view_type_test" />
 
         <TextView
             android:id="@+id/text_view_description_test"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
             android:text="description"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/text_view_family_test" />
 
         <ImageView
             android:id="@+id/image_view_upload_test"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="200dp"
+            android:layout_margin="8dp"
+            android:layout_marginTop="8dp"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/text_view_description_test"
+            card_view:layout_constraintVertical_bias="0.092" />
 
         <TextView
             android:id="@+id/tv_latitude_return"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="Lat"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintHorizontal_bias="1.0"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/image_view_upload_test" />
 
         <TextView
             android:id="@+id/tv_longtitude_return"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginTop="8dp"
             android:text="Long"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/tv_latitude_return" />
+
         <TextView
+            android:id="@+id/tv_uploader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_uploader"
+            android:layout_marginTop="8dp"
+            android:text="Uploaded by"
             android:textAlignment="center"
-            android:text="Uploaded by"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@android:color/holo_orange_light" />
+            android:layout_marginBottom="8dp"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintHorizontal_bias="0.0"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toBottomOf="@+id/tv_longtitude_return" />
 
 
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
 
 </android.support.v7.widget.CardView>

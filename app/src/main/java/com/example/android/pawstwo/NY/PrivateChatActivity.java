@@ -381,18 +381,21 @@ public class PrivateChatActivity extends AppCompatActivity {
 
                 Messages message = dataSnapshot.getValue ( Messages.class );
 
+                long time = dataSnapshot.getValue (Messages.class).getTime ();
+
                 itemPos++;
 
-              /*  if (itemPos == 1) {
+                if (itemPos == 1) {
 
                     String messageKey = dataSnapshot.getKey ();
 
                     mLastKey = messageKey;
                     mPrevKey = messageKey;
 
-                }*/
+                }
 
                 messagesList.add ( message );
+
                 mAdapter.notifyDataSetChanged ();
 
                 mMessagesList.scrollToPosition ( messagesList.size () - 1 );
@@ -488,6 +491,8 @@ public class PrivateChatActivity extends AppCompatActivity {
         String message = mChatMessageView.getText ().toString ();
 
         final String msg = message;
+
+
 
         if (!TextUtils.isEmpty ( message )) {
 
