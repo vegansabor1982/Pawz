@@ -2,6 +2,7 @@ package com.example.android.pawstwo.NY;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -115,6 +116,8 @@ public class PrivateChatActivity extends AppCompatActivity {
         super.onCreate ( savedInstanceState );
         setContentView ( R.layout.activity_private_chat );
 
+
+
         mChatToolbar = findViewById ( R.id.chat_app_bar );
 
 
@@ -174,8 +177,7 @@ public class PrivateChatActivity extends AppCompatActivity {
         mImageStorage = FirebaseStorage.getInstance ().getReference ();
         mRootRef.child ( "Chat" ).child ( mCurrentUserId ).child ( mChatUser ).child ( "seen" ).setValue ( true );
 
-        loadMessages ();
-        loadMessagesTwo ();
+
 
 
         mTitleView.setText ( userName );
@@ -277,7 +279,22 @@ public class PrivateChatActivity extends AppCompatActivity {
             }
         } );*/
 
+        loadMessages ();
+        loadMessagesTwo ();
 
+
+    }
+
+    @Override
+    public void onBackPressed() {
+
+
+        super.onBackPressed ();
+    }
+
+    @Override
+    protected void onSaveInstanceState( Bundle outState ) {
+        super.onSaveInstanceState ( outState );
     }
 
     @Override
@@ -381,11 +398,11 @@ public class PrivateChatActivity extends AppCompatActivity {
 
                 Messages message = dataSnapshot.getValue ( Messages.class );
 
-                long time = dataSnapshot.getValue (Messages.class).getTime ();
+              //  long time = dataSnapshot.getValue (Messages.class).getTime ();
 
-                itemPos++;
+                 itemPos++;
 
-                if (itemPos == 1) {
+               if (itemPos == 1) {
 
                     String messageKey = dataSnapshot.getKey ();
 
@@ -441,16 +458,18 @@ public class PrivateChatActivity extends AppCompatActivity {
 
                 Messages message = dataSnapshot.getValue ( Messages.class );
 
-                itemPos++;
+               // long time = dataSnapshot.getValue (Messages.class).getTime ();
 
-              /*  if (itemPos == 1) {
+               itemPos++;
+
+               if (itemPos == 1) {
 
                     String messageKey = dataSnapshot.getKey ();
 
                     mLastKey = messageKey;
                     mPrevKey = messageKey;
 
-                }*/
+                }
 
                 messagesList.add ( message );
                 mAdapter.notifyDataSetChanged ();

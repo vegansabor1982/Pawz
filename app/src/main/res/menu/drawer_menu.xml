@@ -18,5 +18,10 @@
         android:id="@+id/nav_saved_chats"
         android:icon="@drawable/chatico"
         android:title="Chats" />
+
+    <item
+        android:id="@+id/nav_lost_only"
+        android:icon="@drawable/chatico"
+        android:title="Lost Only" />
 </group>
 </menu>

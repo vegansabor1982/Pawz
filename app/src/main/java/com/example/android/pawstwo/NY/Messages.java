@@ -15,6 +15,7 @@ public class Messages {
     }
 
     public Messages( String from ) {
+
         this.from = from;
     }
 

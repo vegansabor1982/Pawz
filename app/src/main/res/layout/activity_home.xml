@@ -34,6 +34,16 @@
             android:textAlignment="center"
             android:textSize="20sp" />
 
+        <Spinner
+            android:id="@+id/spinner_selection"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:textAlignment="center"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
         <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"

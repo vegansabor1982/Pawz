@@ -22,8 +22,6 @@
         android:logo="@drawable/paw_logo_two"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme">
-
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -91,7 +89,6 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".TestUploadActivity" />
-
         <activity android:name=".SpecificPetProfileActivity" />
         <activity android:name=".MessageActivity" />
         <activity
@@ -117,30 +114,28 @@
         </activity>
         <activity
             android:name=".NY.PrivateChatActivity"
-            android:parentActivityName=".NY.ChatRoomActivity" >
-
-
-        </activity>
+            android:parentActivityName=".NY.ChatRoomActivity" />
         <activity android:name=".NY.SearchUsersActivity" />
-        <activity android:name=".NY.SavedChatsActivity"></activity>
-        
-        <service android:name=".Notifications.MyFirebaseIdService"
+        <activity android:name=".NY.SavedChatsActivity" />
+
+        <service
+            android:name=".Notifications.MyFirebaseIdService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
-
         </service>
-
-        <service android:name=".Notifications.MyFirebaseMessaging"
+        <service
+            android:name=".Notifications.MyFirebaseMessaging"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-
         </service>
+
+        <activity android:name=".NY.LostOnlyActivity" />
     </application>
 
 </manifest>
