@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 
 import com.example.android.pawstwo.NY.ChatRoomActivity;
+
 import com.example.android.pawstwo.NY.SearchUsersActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -47,6 +48,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -72,6 +76,12 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
     private FirebaseAuth mAuth;
     private DatabaseReference mReference;
     private MapView mMapView;
+
+    public static final String PET_TYPE_TWO= "pet_type";
+
+    private List<UploadTest> mUploads;
+
+    private ImageView mFavourites;
 
     private static final int Request_User_Location_Code = 99;
 
@@ -106,11 +116,13 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
         mUploadedByUser = findViewById ( R.id.tv_specific_pet_uploadedbyuser );
         mSpecPetPic = findViewById ( R.id.iv_specific_pet_pic );
 
+        mFavourites=findViewById ( R.id.iv_favourite );
+
 
 
 
         Intent r = getIntent ();
-        String imageUrl = getIntent ().getStringExtra ( EXTRA_URL );
+        final String imageUrl = getIntent ().getStringExtra ( EXTRA_URL );
         String petType = getIntent ().getStringExtra ( PET_TYPE );
         String petFamily = getIntent ().getStringExtra ( PET_FAMILY );
         String petDescription = getIntent ().getStringExtra ( PET_DESCRIPTION );
@@ -142,6 +154,11 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
         mSpecFamily.setText ( petFamily );
         mSpecDescription.setText ( petDescription );
         mUploadedByUser.setText ( "Uploaded by: " + uploaderName );
+        mUploads = new ArrayList<> ();
+
+
+
+
 
 
         //-----------------------------------------------------test--------------------------------------------
@@ -312,6 +329,11 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
 
 
     }
+
+
+
+
+
 
 
 }

@@ -3,25 +3,20 @@ package com.example.android.pawstwo.NY;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
-import com.example.android.pawstwo.PetAdapterTest;
 import com.example.android.pawstwo.PetAdapterTestTwo;
 import com.example.android.pawstwo.R;
 import com.example.android.pawstwo.SpecificPetProfileActivity;
-import com.example.android.pawstwo.TestHomeActivity;
 import com.example.android.pawstwo.UploadTest;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
@@ -29,8 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class LostOnlyActivity extends AppCompatActivity  implements  PetAdapterTestTwo.OnItemClickListener{
-
+public class FoundOnlyActicity extends AppCompatActivity implements  PetAdapterTestTwo.OnItemClickListener{
 
 
     private RecyclerView mRecyclerView;
@@ -54,18 +48,17 @@ public class LostOnlyActivity extends AppCompatActivity  implements  PetAdapterT
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate ( savedInstanceState );
-        setContentView ( R.layout.activity_lost_only );
+        setContentView ( R.layout.activity_found_only_acticity );
 
 
-
-        mRecyclerView = findViewById ( R.id.list_lost_only );
+        mRecyclerView = findViewById ( R.id.list_found_only );
 
         mRecyclerView.setHasFixedSize ( true );
 
-        mLayoutManager = new GridLayoutManager(this, 2);
+        mLayoutManager = new GridLayoutManager (this, 2);
         (( GridLayoutManager ) mLayoutManager).setReverseLayout ( false );
-       // (( GridLayoutManager ) mLayoutManager).getReverseLayout ( true );
-         mRecyclerView.setLayoutManager ( mLayoutManager );
+        // (( GridLayoutManager ) mLayoutManager).getReverseLayout ( true );
+        mRecyclerView.setLayoutManager ( mLayoutManager );
 
 
 
@@ -75,7 +68,7 @@ public class LostOnlyActivity extends AppCompatActivity  implements  PetAdapterT
         mUploads = new ArrayList<> ();
 
 
-        Query query = mDatabaseRef.orderByChild ( "mType" ).equalTo ( "Lost" );
+        Query query = mDatabaseRef.orderByChild ( "mType" ).equalTo ( "Found" );
 
         query.addChildEventListener ( new ChildEventListener () {
             @Override
@@ -86,10 +79,10 @@ public class LostOnlyActivity extends AppCompatActivity  implements  PetAdapterT
 
                 mUploads.add ( uploadTest );
 
-                mPetAdapterTestTwo = new PetAdapterTestTwo ( LostOnlyActivity.this, mUploads );
+                mPetAdapterTestTwo = new PetAdapterTestTwo ( FoundOnlyActicity.this, mUploads );
                 mRecyclerView.setAdapter ( mPetAdapterTestTwo );
 
-                mPetAdapterTestTwo.setOnItemClickListener ( LostOnlyActivity.this );
+                mPetAdapterTestTwo.setOnItemClickListener ( FoundOnlyActicity.this );
 
 
             }
@@ -112,21 +105,15 @@ public class LostOnlyActivity extends AppCompatActivity  implements  PetAdapterT
             @Override
             public void onCancelled( @NonNull DatabaseError databaseError ) {
 
-                Toast.makeText ( LostOnlyActivity.this, databaseError.getMessage (), Toast.LENGTH_SHORT ).show ();
+                Toast.makeText ( FoundOnlyActicity.this, databaseError.getMessage (), Toast.LENGTH_SHORT ).show ();
 
             }
         } );
 
-
-
-
     }
 
     @Override
-
-
     public void onItemClick( int position ) {
-
 
         Intent d = new Intent ( this, SpecificPetProfileActivity.class );
 
@@ -144,7 +131,4 @@ public class LostOnlyActivity extends AppCompatActivity  implements  PetAdapterT
         startActivity ( d );
 
     }
-
-
-
 }

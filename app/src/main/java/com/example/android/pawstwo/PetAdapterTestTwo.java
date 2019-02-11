@@ -21,7 +21,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class PetAdapterTest extends RecyclerView.Adapter<PetAdapterTest.PetHolder> {
+public class PetAdapterTestTwo extends RecyclerView.Adapter<PetAdapterTestTwo.PetHolder> {
 
     private Context mContext;
     private List <UploadTest> mUploadTest;
@@ -35,12 +35,12 @@ public class PetAdapterTest extends RecyclerView.Adapter<PetAdapterTest.PetHolde
 
     }
 
-   public void setOnItemClickListener( OnItemClickListener listener ){
+    public void setOnItemClickListener( OnItemClickListener listener ){
 
         mListener=listener;
-   }
+    }
 
-    public PetAdapterTest (Context context,List<UploadTest> uploads){
+    public PetAdapterTestTwo (Context context,List<UploadTest> uploads){
 
         mContext=context;
         mUploadTest=uploads;
@@ -49,7 +49,7 @@ public class PetAdapterTest extends RecyclerView.Adapter<PetAdapterTest.PetHolde
     @NonNull
     @Override
     public PetHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from (mContext).inflate ( R.layout.image_item_test,parent, false );
+        View v = LayoutInflater.from (mContext).inflate ( R.layout.image_item_test_two,parent, false );
         return new PetHolder ( v );
     }
 
@@ -57,9 +57,11 @@ public class PetAdapterTest extends RecyclerView.Adapter<PetAdapterTest.PetHolde
     public void onBindViewHolder( PetHolder petHolder, int position) {
 
         UploadTest uploadCurrent = mUploadTest.get ( position );
-        petHolder.textViewType.setText ( uploadCurrent.getmType () );
+
         petHolder.textViewFamily.setText ( uploadCurrent.getmFamily () );
+        petHolder.textViewType.setText ( uploadCurrent.getmType () );
         petHolder.textViewDescription.setText ( uploadCurrent.getmDescription () );
+
         petHolder.mLatReturn.setText ( uploadCurrent.getmLat ());
         petHolder.mLongReturn.setText ( uploadCurrent.getmLongt () );
         petHolder.mUploaderNew.setText ( uploadCurrent.getmUploaderName () );
@@ -77,7 +79,7 @@ public class PetAdapterTest extends RecyclerView.Adapter<PetAdapterTest.PetHolde
 
     @Override
     public int getItemCount() {
-            return mUploadTest.size ();
+        return mUploadTest.size ();
     }
 
     public class PetHolder extends RecyclerView.ViewHolder  {
@@ -95,13 +97,16 @@ public class PetAdapterTest extends RecyclerView.Adapter<PetAdapterTest.PetHolde
         public PetHolder( @NonNull View itemView ) {
             super ( itemView );
 
-            textViewType = itemView.findViewById ( R.id.text_view_type_test );
-            textViewFamily = itemView.findViewById ( R.id.text_view_family_test );
-            textViewDescription = itemView.findViewById ( R.id.text_view_description_test );
-            imageView = itemView.findViewById ( R.id.image_view_upload_test );
-            mLatReturn=itemView.findViewById ( R.id.tv_latitude_return );
-            mLongReturn=itemView.findViewById ( R.id.tv_longtitude_return);
-            mUploaderNew=itemView.findViewById ( R.id.tv_uploader );
+
+            textViewFamily = itemView.findViewById ( R.id.text_view_family_test_two);
+
+            imageView = itemView.findViewById ( R.id.image_view_upload_test_two );
+            mLatReturn=itemView.findViewById ( R.id.tv_latitude_return_two );
+            mLongReturn=itemView.findViewById ( R.id.tv_longtitude_return_two);
+            mUploaderNew=itemView.findViewById ( R.id.tv_uploader_two );
+            textViewType=itemView.findViewById ( R.id.text_view_type_test_two );
+            textViewDescription=itemView.findViewById ( R.id.text_view_description_test_two );
+            textViewFamily=itemView.findViewById ( R.id.text_view_family_test_two );
 
 
             itemView.setOnClickListener ( new View.OnClickListener () {

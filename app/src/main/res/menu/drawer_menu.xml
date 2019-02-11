@@ -2,26 +2,36 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
-<group android:checkableBehavior="single">
+    <group android:checkableBehavior="single">
 
-    <item
-        android:id="@+id/nav_profile"
-        android:icon="@drawable/ic_profile"
-        android:title="Profile"/>
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/profile"
+            android:title="Profile" />
 
-    <item
-        android:id="@+id/nav_new_entry"
-        android:icon="@drawable/ic_new_entry"
-        android:title="New Entry"/>
+        <item
+            android:id="@+id/nav_new_entry"
+            android:icon="@drawable/ic_new_entry"
+            android:title="New Entry" />
 
-    <item
-        android:id="@+id/nav_saved_chats"
-        android:icon="@drawable/chatico"
-        android:title="Chats" />
+        <item
+            android:id="@+id/nav_saved_chats"
+            android:icon="@drawable/chat"
+            android:title="Chats" />
 
-    <item
-        android:id="@+id/nav_lost_only"
-        android:icon="@drawable/chatico"
-        android:title="Lost Only" />
-</group>
+        <item
+            android:id="@+id/nav_lost_only"
+            android:icon="@drawable/cry"
+            android:title="Lost Only" />
+
+        <item
+            android:id="@+id/nav_found_only"
+            android:icon="@drawable/happiness"
+            android:title="Found Only" />
+
+        <item
+            android:id="@+id/nav_favourites"
+            android:icon="@drawable/heart"
+            android:title="Favourites" />
+    </group>
 </menu>

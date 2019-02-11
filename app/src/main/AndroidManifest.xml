@@ -136,6 +136,8 @@
         </service>
 
         <activity android:name=".NY.LostOnlyActivity" />
+        <activity android:name=".NY.FoundOnlyActicity" />
+        <activity android:name=".NY.FavouritesActivity"></activity>
     </application>
 
 </manifest>

@@ -29,6 +29,7 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 
+import com.example.android.pawstwo.NY.FoundOnlyActicity;
 import com.example.android.pawstwo.NY.LostOnlyActivity;
 import com.example.android.pawstwo.NY.SavedChatsActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -290,6 +291,12 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
             case R.id.nav_lost_only:
 
                 startActivity ( new Intent ( TestHomeActivity.this, LostOnlyActivity.class ) );
+                break;
+
+            case R.id.nav_found_only:
+                startActivity ( new Intent ( TestHomeActivity.this, FoundOnlyActicity.class ) );
+
+                break;
         }
         return true;
     }
