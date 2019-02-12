@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.preference.PreferenceActivity;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,6 +16,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +37,7 @@ import com.example.android.pawstwo.NY.LostOnlyActivity;
 import com.example.android.pawstwo.NY.SavedChatsActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,6 +51,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.http.Header;
+
 public class TestHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, PetAdapterTest.OnItemClickListener {
 
 
@@ -57,7 +64,7 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
     private List<UploadTest> mUploads;
     private RecyclerView.LayoutManager mLayoutManager;
     private ProgressDialog progressDialogtwo;
-    private FirebaseAuth firebaseAuth;
+
     public static final String EXTRA_URL = "imageUrl";
     public static final String PET_TYPE = "pet_type";
     public static final String PET_FAMILY = "pet_family";
@@ -69,12 +76,33 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
 
     private Spinner mSpinner;
 
-    private FirebaseStorage firebaseStorage;
 
-    private FirebaseDatabase firebaseDatabase;
+
+
 
     private TextView mName;
     private TextView mEmail;
+//-----------------------------------------------------------------
+    private FirebaseUser mCurrentUser;
+
+
+    private DatabaseReference mUserDatabase;
+    private FirebaseAuth firebaseAuth;
+
+    private FirebaseDatabase firebaseDatabase;
+    private FirebaseStorage firebaseStorage;
+
+    private StorageReference mImageStorage;
+
+    private CircleImageView profilePic;
+    private TextView profileName;
+    private TextView profileEmail;
+
+    //------------------------------------------------
+
+
+
+
 
 
     int number = 0;
@@ -86,12 +114,77 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate ( savedInstanceState );
         setContentView ( R.layout.activity_home );
+
+
+
+        NavigationView navigationView = findViewById ( R.id.nav_view );
+
+        View header = navigationView.getHeaderView (0 );
+
+
+
+
+
+
+
+
+
+
         progressDialogtwo = new ProgressDialog ( this );
         firebaseAuth = FirebaseAuth.getInstance ();
 
-        mProfileImage = findViewById ( R.id.smallImage );
-        mName = findViewById ( R.id.tvNameHeader );
-        mEmail = findViewById ( R.id.tvEmailHeader );
+
+
+        profilePic= header. findViewById ( R.id.smallImage );
+        profileName= header.findViewById ( R.id. tvNameHeader );
+        profileEmail=header.findViewById ( R.id. tvEmailHeader );
+
+
+        firebaseAuth=FirebaseAuth.getInstance ();
+        firebaseDatabase=FirebaseDatabase.getInstance ();
+        firebaseStorage=FirebaseStorage.getInstance ();
+        mImageStorage = FirebaseStorage.getInstance().getReference();
+
+        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+        String current_uid = mCurrentUser.getUid();
+
+        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(current_uid);
+        mUserDatabase.keepSynced(true);
+
+        StorageReference storageReference = firebaseStorage.getReference ();
+        DatabaseReference databaseReference = firebaseDatabase.getReference().child( "Users").child (firebaseAuth.getUid ());
+
+
+        storageReference.child ( firebaseAuth.getUid () ).child ( "Images/Profile Pic" ).getDownloadUrl ().addOnSuccessListener ( new OnSuccessListener<Uri> () {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.with (getApplicationContext ()).load ( uri ).fit().centerCrop().into (profilePic  );
+
+
+
+
+            }
+        } );
+
+        databaseReference.addValueEventListener ( new ValueEventListener () {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                UserProfile userProfile =dataSnapshot.getValue (UserProfile.class);
+                profileName.setText (userProfile.getUserName ()  );
+                 profileEmail.setText ( userProfile.getUserEmail () );
+
+
+
+            }
+
+            @Override
+            public void onCancelled( @NonNull DatabaseError databaseError ) {
+
+            }
+
+
+        } );
+
 
         /*/------------------------------------------SPINNER----------------------------------
 
@@ -165,7 +258,7 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
 
 //-------------------------------------------------------------------------------------------------*/
 
-        NavigationView navigationView = findViewById ( R.id.nav_view );
+
 
         mdrawerTest = findViewById ( R.id.drawer_layout );
 
@@ -177,6 +270,7 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
 
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle ( this, mdrawerTest, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close );
+
         mdrawerTest.addDrawerListener ( toggle );
         toggle.syncState ();
 
@@ -230,6 +324,11 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
         } );
 
 
+
+
+    }
+
+    private void setContentView( int activity_home, int nav_header ) {
     }
 
 
@@ -252,13 +351,17 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
         d.putExtra ( UPLOADER_NAME, clickedItem.getmUploaderName () );
 
 
+
+
+
+
         startActivity ( d );
 
     }
 
     @Override
     public void onBackPressed() {
-        if (mdrawerTest.isDrawerOpen ( GravityCompat.START )) {
+        if (mdrawerTest.isDrawerOpen ( GravityCompat.START  )) {
 
             mdrawerTest.closeDrawer ( GravityCompat.START );
         } else {
@@ -266,39 +369,55 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
         }
 
 
+
+
     }
+
+
 
 
     @Override
     public boolean onNavigationItemSelected( @NonNull MenuItem menuItem ) {
         switch (menuItem.getItemId ()) {
+
             case R.id.nav_profile:
 
                 startActivity ( new Intent ( TestHomeActivity.this, ProfileActivity.class ) );
+                mdrawerTest.closeDrawers (  );
                 break;
 
             case R.id.nav_new_entry:
 
                 startActivity ( new Intent ( TestHomeActivity.this, TestUploadActivity.class ) );
+                mdrawerTest.closeDrawers (  );
                 break;
 
             case R.id.nav_saved_chats:
 
                 startActivity ( new Intent ( TestHomeActivity.this, SavedChatsActivity.class ) );
+                mdrawerTest.closeDrawers (  );
                 break;
 
 
             case R.id.nav_lost_only:
 
                 startActivity ( new Intent ( TestHomeActivity.this, LostOnlyActivity.class ) );
+                mdrawerTest.closeDrawers (  );
                 break;
 
             case R.id.nav_found_only:
                 startActivity ( new Intent ( TestHomeActivity.this, FoundOnlyActicity.class ) );
+                mdrawerTest.closeDrawers (  );
 
                 break;
+
+
+
         }
         return true;
+
+
+
     }
 
     private void Logout() {
@@ -339,11 +458,7 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
     }
 
 
-    public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
-        return inflater.inflate ( R.layout.activity_profile, container, false );
 
-
-    }
 
 
 }

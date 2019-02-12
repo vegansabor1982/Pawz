@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="176dp"
+
     android:background="@color/colorAccent"
     android:gravity="bottom"
     android:orientation="vertical"
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/smallImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:text="Name"
+
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
 
         />
@@ -30,6 +31,6 @@
         android:id="@+id/tvEmailHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="email" />
+        />
 
 </LinearLayout>
