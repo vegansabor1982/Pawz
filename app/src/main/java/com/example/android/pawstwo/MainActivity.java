@@ -94,8 +94,15 @@ public class MainActivity extends AppCompatActivity {
         signIn.setOnClickListener ( new View.OnClickListener () {
             @Override
             public void onClick(View view) {
-                validate ( userName.getText ().toString (), passWord.getText ().toString () );
-               // startActivity ( new Intent ( MainActivity.this, HomeActivity.class ) );
+
+                if (userName.getText ().toString ().length ()==0 || passWord.getText ().toString ().length ()==0){
+
+                    Toast.makeText ( MainActivity.this, "Details Missing", Toast.LENGTH_SHORT ).show ();
+                }else {
+                    validate ( userName.getText ().toString (), passWord.getText ().toString () );
+                    // startActivity ( new Intent ( MainActivity.this, HomeActivity.class ) );
+
+                }
 
             }
 

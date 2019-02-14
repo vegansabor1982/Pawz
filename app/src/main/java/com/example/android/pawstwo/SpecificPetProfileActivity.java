@@ -1,13 +1,16 @@
 package com.example.android.pawstwo;
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.button.MaterialButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +19,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,6 +29,7 @@ import com.bumptech.glide.Glide;
 
 import com.example.android.pawstwo.NY.ChatRoomActivity;
 
+import com.example.android.pawstwo.NY.FavouritesActivity;
 import com.example.android.pawstwo.NY.SearchUsersActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -40,6 +45,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -47,6 +54,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -77,11 +87,11 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
     private DatabaseReference mReference;
     private MapView mMapView;
 
-    public static final String PET_TYPE_TWO= "pet_type";
+    public static final String PET_TYPE_TWO = "pet_type";
 
     private List<UploadTest> mUploads;
 
-    private ImageView mFavourites;
+    private Button mFavourites;
 
     private static final int Request_User_Location_Code = 99;
 
@@ -103,6 +113,12 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
 
+    //=-----------------------new for favorites---------
+
+    private StorageReference mStorageRef;
+
+    private Uri mImageUri;
+
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -116,9 +132,7 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
         mUploadedByUser = findViewById ( R.id.tv_specific_pet_uploadedbyuser );
         mSpecPetPic = findViewById ( R.id.iv_specific_pet_pic );
 
-        mFavourites=findViewById ( R.id.iv_favourite );
-
-
+        mFavourites = findViewById ( R.id.btn_favourite );
 
 
         Intent r = getIntent ();
@@ -129,24 +143,9 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
         final String uploaderName = getIntent ().getStringExtra ( UPLOADER_NAME );
 
 
-
         SupportMapFragment supportMapFragment = ( SupportMapFragment ) getSupportFragmentManager ().findFragmentById ( R.id.map_specific );
 
         supportMapFragment.getMapAsync ( this );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         Picasso.with ( getBaseContext () ).load ( imageUrl ).fit ().centerCrop ().into ( mSpecPetPic );
@@ -155,10 +154,6 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
         mSpecDescription.setText ( petDescription );
         mUploadedByUser.setText ( "Uploaded by: " + uploaderName );
         mUploads = new ArrayList<> ();
-
-
-
-
 
 
         //-----------------------------------------------------test--------------------------------------------
@@ -192,16 +187,6 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
 */
 
 
-
-
-
-
-
-
-
-
-
-
         //----------------------------------------------test=---------------------------------------------
 
         mDatabase = FirebaseDatabase.getInstance ();
@@ -226,8 +211,26 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
             }
         } );
 
+        //======----------------Favouites------------------
+
+        mFavourites.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick( View view ) {
+
+            }
+        } );
+
 
     }
+
+    private String getFileExtension( Uri uri ) {
+
+
+        ContentResolver cR = getContentResolver ();
+        MimeTypeMap mime = MimeTypeMap.getSingleton ();
+        return mime.getExtensionFromMimeType ( cR.getType ( uri ) );
+    }
+
 
 
     @Override
@@ -273,7 +276,6 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
         mMapTwo = googleMap;
 
 
-
         String petLat = getIntent ().getStringExtra ( PET_LATITUDE );
         String petLong = getIntent ().getStringExtra ( PET_LONGTITUDE );
 
@@ -281,15 +283,13 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
         double longitude = Double.parseDouble ( petLong );
 
 
-        LatLng latlng = new LatLng ( latitude, longitude);
+        LatLng latlng = new LatLng ( latitude, longitude );
 
 
         mMapTwo.addMarker ( new MarkerOptions ().position ( latlng ).title ( "Pet Position" ) );
 
         mMapTwo.moveCamera ( CameraUpdateFactory.newLatLng ( latlng ) );
         mMapTwo.animateCamera ( CameraUpdateFactory.zoomTo ( 6 ) );
-
-
 
 
     }
@@ -329,11 +329,6 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
 
 
     }
-
-
-
-
-
 
 
 }
