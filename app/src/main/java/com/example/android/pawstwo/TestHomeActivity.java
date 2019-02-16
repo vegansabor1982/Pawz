@@ -82,7 +82,7 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
 
     private TextView mName;
     private TextView mEmail;
-//-----------------------------------------------------------------
+    //-----------------------------------------------------------------
     private FirebaseUser mCurrentUser;
 
 
@@ -171,7 +171,7 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserProfile userProfile =dataSnapshot.getValue (UserProfile.class);
                 profileName.setText (userProfile.getUserName ()  );
-                 profileEmail.setText ( userProfile.getUserEmail () );
+                profileEmail.setText ( userProfile.getUserEmail () );
 
 
 
@@ -187,75 +187,51 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
 
 
         /*/------------------------------------------SPINNER----------------------------------
-
         mSpinner = findViewById ( R.id.spinner_selection );
-
         final ArrayList<String> categories = new ArrayList<> ();
-
         categories.add ( 0, "All" );
         categories.add ( 1, "Lost" );
         categories.add ( 2, "Found" );
         categories.add ( 3, "Gift" );
         categories.add ( 4, "Adopt" );
-
-
         ArrayAdapter<String> dataAdapter;
         dataAdapter = new ArrayAdapter ( this, android.R.layout.simple_spinner_item, categories );
         dataAdapter.setDropDownViewResource ( android.R.layout.simple_spinner_dropdown_item );
-
         mSpinner.setAdapter ( dataAdapter );
-
         mRecyclerView = findViewById ( R.id.list );
-
         mRecyclerView.setHasFixedSize ( true );
-
         mRecyclerView.setAdapter ( new RecyclerView.Adapter () {
             @NonNull
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder( @NonNull ViewGroup viewGroup, int i ) {
                 return null;
             }
-
             @Override
             public void onBindViewHolder( @NonNull RecyclerView.ViewHolder viewHolder, int i ) {
-
             }
-
             @Override
             public int getItemCount() {
                 return 0;
             }
         } );
-
         mSpinner.setOnItemSelectedListener ( new AdapterView.OnItemSelectedListener () {
             @Override
             public void onItemSelected( AdapterView<?> adapterView, View view, int position, long itemID ) {
-
                 if (position>=0 && position<categories.size ()){
                     getSelectedCategoryData(position);
-
                 }else{
-
                     Toast.makeText ( TestHomeActivity.this, "Category doesn't exist", Toast.LENGTH_SHORT ).show ();
                 }
-
             }
-
             @Override
             public void onNothingSelected( AdapterView<?> adapterView ) {
-
             }
         } );
-
         //mRecyclerView.setLayoutManager ( new LinearLayoutManager ( this ) );
         mLayoutManager = new LinearLayoutManager ( this );
         (( LinearLayoutManager ) mLayoutManager).setReverseLayout ( true );
         (( LinearLayoutManager ) mLayoutManager).setStackFromEnd ( true );
         mRecyclerView.setLayoutManager ( mLayoutManager );
-
-
-
-
 //-------------------------------------------------------------------------------------------------*/
 
 

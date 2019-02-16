@@ -64,12 +64,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate( Bundle savedInstanceState )
     {
         super.onCreate ( savedInstanceState );
-        FacebookSdk.setApplicationId ( "759808641070648" );
+        FacebookSdk.setApplicationId ( "1187489271403397" );
 
-      // FacebookSdk.sdkInitialize ( getApplicationContext () );
+        // FacebookSdk.sdkInitialize ( getApplicationContext () );
 
 
-    //    AppEventsLogger.activateApp(this);
+        //    AppEventsLogger.activateApp(this);
         setContentView ( R.layout.activity_main );
 
 
@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d ( TAG, "signInWithCredential: failure", task.getException () );
                     Toast.makeText ( MainActivity.this,"Authentication Failed", Toast.LENGTH_SHORT  ).show ();
 
-                   updateUI ();
+                    updateUI ();
                 }
 
             }
@@ -299,6 +299,5 @@ public class MainActivity extends AppCompatActivity {
 }
 
 /*if (user==null){
-
         Toast.makeText(MainActivity.this, "Fields are blank", Toast.LENGTH_SHORT).show();
         }*/
