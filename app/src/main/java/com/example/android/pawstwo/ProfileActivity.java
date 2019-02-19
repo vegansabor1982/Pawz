@@ -1,7 +1,9 @@
 package com.example.android.pawstwo;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -38,6 +40,8 @@ import java.util.Map;
 
 import id.zelory.compressor.Compressor;
 
+import static com.example.android.pawstwo.MainActivity.PREFS_NAME;
+
 public class ProfileActivity extends AppCompatActivity {
 
     private ImageView profilePic;
@@ -72,60 +76,97 @@ public class ProfileActivity extends AppCompatActivity {
         mChangeImageBtn= findViewById ( R.id.change_profile_image );
 
 
-
-
-
-        firebaseAuth=FirebaseAuth.getInstance ();
-        firebaseDatabase=FirebaseDatabase.getInstance ();
-        firebaseStorage=FirebaseStorage.getInstance ();
-        mImageStorage = FirebaseStorage.getInstance().getReference();
-
-        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
-        String current_uid = mCurrentUser.getUid();
-
-        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(current_uid);
-        mUserDatabase.keepSynced(true);
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
 
 
 
 
-        DatabaseReference databaseReference = firebaseDatabase.getReference().child( "Users").child (firebaseAuth.getUid ());
+            Intent r = getIntent ();
 
+           /* String name = getIntent ().getStringExtra ( "user_name" );
+            String lastName = getIntent ().getStringExtra ( "last_name" );
+            String email = getIntent ().getStringExtra ( "email" );
+            String id = getIntent ().getStringExtra ( "id" );
 
-        StorageReference storageReference = firebaseStorage.getReference ();
+            profileName.setText ( name + " "+  lastName );
+            profileEmail.setText ( email );*/
 
+            SharedPreferences settings = getSharedPreferences ( PREFS_NAME, Context.MODE_PRIVATE );
 
-        storageReference.child ( firebaseAuth.getUid () ).child ( "Images/Profile Pic" ).getDownloadUrl ().addOnSuccessListener ( new OnSuccessListener<Uri> () {
-            @Override
-            public void onSuccess(Uri uri) {
-                Picasso.with (getBaseContext ()).load ( uri ).fit().centerCrop().into (profilePic  );
-
-
-
-
-            }
-        } );
-
-
-
-        databaseReference.addValueEventListener ( new ValueEventListener () {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserProfile userProfile =dataSnapshot.getValue (UserProfile.class);
-                profileName.setText (userProfile.getUserName ()  );
-                profileEmail.setText ( userProfile.getUserEmail () );
+            String firstName = settings.getString ( "first_name", "" );
+            String lastName = settings.getString ( "last_name", " " );
+            String email = settings.getString ( "email","" );
+            profileName.setText ( firstName+ " "+ lastName );
+            profileEmail.setText ( email );
 
 
 
-            }
 
-            @Override
-            public void onCancelled( @NonNull DatabaseError databaseError ) {
+        }
 
-            }
+        else{
+
+            firebaseAuth=FirebaseAuth.getInstance ();
+            firebaseDatabase=FirebaseDatabase.getInstance ();
+            firebaseStorage=FirebaseStorage.getInstance ();
+            mImageStorage = FirebaseStorage.getInstance().getReference();
+
+            mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+            String current_uid = mCurrentUser.getUid();
+
+            mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(current_uid);
+            mUserDatabase.keepSynced(true);
 
 
-        } );
+
+
+            DatabaseReference databaseReference = firebaseDatabase.getReference().child( "Users").child (firebaseAuth.getUid ());
+
+
+            StorageReference storageReference = firebaseStorage.getReference ();
+
+
+            storageReference.child ( firebaseAuth.getUid () ).child ( "Images/Profile Pic" ).getDownloadUrl ().addOnSuccessListener ( new OnSuccessListener<Uri> () {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Picasso.with (getBaseContext ()).load ( uri ).fit().centerCrop().into (profilePic  );
+
+
+
+
+                }
+            } );
+
+
+
+            databaseReference.addValueEventListener ( new ValueEventListener () {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    UserProfile userProfile =dataSnapshot.getValue (UserProfile.class);
+                    profileName.setText (userProfile.getUserName ()  );
+                    profileEmail.setText ( userProfile.getUserEmail () );
+
+
+
+                }
+
+                @Override
+                public void onCancelled( @NonNull DatabaseError databaseError ) {
+
+                }
+
+
+            } );
+
+
+
+
+
+        }
+
+
+
+
 
 
 

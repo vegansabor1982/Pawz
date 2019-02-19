@@ -1,13 +1,16 @@
 package com.example.android.pawstwo;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.preference.PreferenceActivity;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -35,9 +38,11 @@ import android.widget.Toolbar;
 import com.example.android.pawstwo.NY.FoundOnlyActicity;
 import com.example.android.pawstwo.NY.LostOnlyActivity;
 import com.example.android.pawstwo.NY.SavedChatsActivity;
+import com.facebook.share.Share;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,6 +58,8 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.http.Header;
+
+import static com.example.android.pawstwo.MainActivity.PREFS_NAME;
 
 public class TestHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, PetAdapterTest.OnItemClickListener {
 
@@ -110,6 +117,8 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
 
     Toolbar mtoolbarTest;
 
+
+
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate ( savedInstanceState );
@@ -145,45 +154,138 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
         firebaseStorage=FirebaseStorage.getInstance ();
         mImageStorage = FirebaseStorage.getInstance().getReference();
 
-        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
-        String current_uid = mCurrentUser.getUid();
-
-        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(current_uid);
-        mUserDatabase.keepSynced(true);
-
-        StorageReference storageReference = firebaseStorage.getReference ();
-        DatabaseReference databaseReference = firebaseDatabase.getReference().child( "Users").child (firebaseAuth.getUid ());
 
 
-        storageReference.child ( firebaseAuth.getUid () ).child ( "Images/Profile Pic" ).getDownloadUrl ().addOnSuccessListener ( new OnSuccessListener<Uri> () {
-            @Override
-            public void onSuccess(Uri uri) {
-                Picasso.with (getApplicationContext ()).load ( uri ).fit().centerCrop().into (profilePic  );
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+
+            mdrawerTest = findViewById ( R.id.drawer_layout );
+
+            navigationView.setNavigationItemSelectedListener ( this );
+
+
+            android.support.v7.widget.Toolbar toolbar = findViewById ( R.id.toolbar );
+            setSupportActionBar ( toolbar );
+
+
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle ( this, mdrawerTest, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close );
+
+            mdrawerTest.addDrawerListener ( toggle );
+            toggle.syncState ();
+
+            mRecyclerView = findViewById ( R.id.list );
+            mRecyclerView.setHasFixedSize ( true );
+
+            //mRecyclerView.setLayoutManager ( new LinearLayoutManager ( this ) );
+            mLayoutManager = new LinearLayoutManager ( this );
+            (( LinearLayoutManager ) mLayoutManager).setReverseLayout ( true );
+            (( LinearLayoutManager ) mLayoutManager).setStackFromEnd ( true );
+            mRecyclerView.setLayoutManager ( mLayoutManager );
+
+
+            mUploads = new ArrayList<> ();
+
+
+            mDatabaseRef = FirebaseDatabase.getInstance ().getReference ().child ( "Uploads" );
+
+            mDatabaseRef.addValueEventListener ( new ValueEventListener () {
+                @Override
+                public void onDataChange( @NonNull DataSnapshot dataSnapshot ) {
+                    mUploads.clear ();
+
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren ()) {
+                        UploadTest uploadTest = postSnapshot.getValue ( UploadTest.class );
+
+                        mUploads.add ( uploadTest );
+
+
+                    }
+
+
+                    mPetAdapterTest = new PetAdapterTest ( TestHomeActivity.this, mUploads );
+                    mRecyclerView.setAdapter ( mPetAdapterTest );
+
+                    mPetAdapterTest.setOnItemClickListener ( TestHomeActivity.this );
+
+
+                    mPetAdapterTest.setOnItemClickListener ( TestHomeActivity.this );
+
+
+                }
+
+                @Override
+                public void onCancelled( @NonNull DatabaseError databaseError ) {
+
+                    Toast.makeText ( TestHomeActivity.this, databaseError.getMessage (), Toast.LENGTH_SHORT ).show ();
+
+
+                }
+            } );
+
+
+
+            Intent r = getIntent ();
+
+           /* String firstName = getIntent ().getStringExtra ( "first_name" );
+            String lastName = getIntent ().getStringExtra ( "last_name" );
+            String email = getIntent ().getStringExtra ( "email" );
+            String id = getIntent ().getStringExtra ( "id" );
+
+            profileName.setText ( firstName + " "+  lastName );
+            profileEmail.setText ( email );*/
+
+
+            SharedPreferences settings = getSharedPreferences ( PREFS_NAME, Context.MODE_PRIVATE );
+
+            String firstName = settings.getString ( "first_name", "" );
+            String lastName = settings.getString ( "last_name", " " );
+            String email = settings.getString ( "email","" );
+            profileName.setText ( firstName+ " "+ lastName );
+            profileEmail.setText ( email );
+
+
+
+        }
+        else{
+
+            mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+            String current_uid = mCurrentUser.getUid();
+
+            mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(current_uid);
+            mUserDatabase.keepSynced(true);
+
+            StorageReference storageReference = firebaseStorage.getReference ();
+            DatabaseReference databaseReference = firebaseDatabase.getReference().child( "Users").child (firebaseAuth.getUid ());
+
+
+            storageReference.child ( firebaseAuth.getUid () ).child ( "Images/Profile Pic" ).getDownloadUrl ().addOnSuccessListener ( new OnSuccessListener<Uri> () {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Picasso.with (getApplicationContext ()).load ( uri ).fit().centerCrop().into (profilePic  );
 
 
 
 
-            }
-        } );
+                }
+            } );
 
-        databaseReference.addValueEventListener ( new ValueEventListener () {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserProfile userProfile =dataSnapshot.getValue (UserProfile.class);
-                profileName.setText (userProfile.getUserName ()  );
-                profileEmail.setText ( userProfile.getUserEmail () );
-
-
-
-            }
-
-            @Override
-            public void onCancelled( @NonNull DatabaseError databaseError ) {
-
-            }
+            databaseReference.addValueEventListener ( new ValueEventListener () {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    UserProfile userProfile =dataSnapshot.getValue (UserProfile.class);
+                    profileName.setText (userProfile.getUserName ()  );
+                    profileEmail.setText ( userProfile.getUserEmail () );
 
 
-        } );
+
+                }
+
+                @Override
+                public void onCancelled( @NonNull DatabaseError databaseError ) {
+
+                }
+
+
+            } );
 
 
         /*/------------------------------------------SPINNER----------------------------------
@@ -236,68 +338,76 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
 
 
 
-        mdrawerTest = findViewById ( R.id.drawer_layout );
+            mdrawerTest = findViewById ( R.id.drawer_layout );
 
-        navigationView.setNavigationItemSelectedListener ( this );
-
-
-        android.support.v7.widget.Toolbar toolbar = findViewById ( R.id.toolbar );
-        setSupportActionBar ( toolbar );
+            navigationView.setNavigationItemSelectedListener ( this );
 
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle ( this, mdrawerTest, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close );
-
-        mdrawerTest.addDrawerListener ( toggle );
-        toggle.syncState ();
-
-        mRecyclerView = findViewById ( R.id.list );
-        mRecyclerView.setHasFixedSize ( true );
-
-        //mRecyclerView.setLayoutManager ( new LinearLayoutManager ( this ) );
-        mLayoutManager = new LinearLayoutManager ( this );
-        (( LinearLayoutManager ) mLayoutManager).setReverseLayout ( true );
-        (( LinearLayoutManager ) mLayoutManager).setStackFromEnd ( true );
-        mRecyclerView.setLayoutManager ( mLayoutManager );
+            android.support.v7.widget.Toolbar toolbar = findViewById ( R.id.toolbar );
+            setSupportActionBar ( toolbar );
 
 
-        mUploads = new ArrayList<> ();
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle ( this, mdrawerTest, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close );
+
+            mdrawerTest.addDrawerListener ( toggle );
+            toggle.syncState ();
+
+            mRecyclerView = findViewById ( R.id.list );
+            mRecyclerView.setHasFixedSize ( true );
+
+            //mRecyclerView.setLayoutManager ( new LinearLayoutManager ( this ) );
+            mLayoutManager = new LinearLayoutManager ( this );
+            (( LinearLayoutManager ) mLayoutManager).setReverseLayout ( true );
+            (( LinearLayoutManager ) mLayoutManager).setStackFromEnd ( true );
+            mRecyclerView.setLayoutManager ( mLayoutManager );
 
 
-        mDatabaseRef = FirebaseDatabase.getInstance ().getReference ().child ( "Uploads" );
+            mUploads = new ArrayList<> ();
 
-        mDatabaseRef.addValueEventListener ( new ValueEventListener () {
-            @Override
-            public void onDataChange( @NonNull DataSnapshot dataSnapshot ) {
-                mUploads.clear ();
 
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren ()) {
-                    UploadTest uploadTest = postSnapshot.getValue ( UploadTest.class );
+            mDatabaseRef = FirebaseDatabase.getInstance ().getReference ().child ( "Uploads" );
 
-                    mUploads.add ( uploadTest );
+            mDatabaseRef.addValueEventListener ( new ValueEventListener () {
+                @Override
+                public void onDataChange( @NonNull DataSnapshot dataSnapshot ) {
+                    mUploads.clear ();
+
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren ()) {
+                        UploadTest uploadTest = postSnapshot.getValue ( UploadTest.class );
+
+                        mUploads.add ( uploadTest );
+
+
+                    }
+
+
+                    mPetAdapterTest = new PetAdapterTest ( TestHomeActivity.this, mUploads );
+                    mRecyclerView.setAdapter ( mPetAdapterTest );
+
+                    mPetAdapterTest.setOnItemClickListener ( TestHomeActivity.this );
+
+
+                    mPetAdapterTest.setOnItemClickListener ( TestHomeActivity.this );
 
 
                 }
 
+                @Override
+                public void onCancelled( @NonNull DatabaseError databaseError ) {
 
-                mPetAdapterTest = new PetAdapterTest ( TestHomeActivity.this, mUploads );
-                mRecyclerView.setAdapter ( mPetAdapterTest );
-
-                mPetAdapterTest.setOnItemClickListener ( TestHomeActivity.this );
-
-
-                mPetAdapterTest.setOnItemClickListener ( TestHomeActivity.this );
+                    Toast.makeText ( TestHomeActivity.this, databaseError.getMessage (), Toast.LENGTH_SHORT ).show ();
 
 
-            }
-
-            @Override
-            public void onCancelled( @NonNull DatabaseError databaseError ) {
-
-                Toast.makeText ( TestHomeActivity.this, databaseError.getMessage (), Toast.LENGTH_SHORT ).show ();
+                }
+            } );
 
 
-            }
-        } );
+
+        }
+
+
+
+
 
 
 
