@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,9 +37,12 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 
+import com.bumptech.glide.Glide;
+import com.example.android.pawstwo.NY.FavouritesActivity;
 import com.example.android.pawstwo.NY.FoundOnlyActicity;
 import com.example.android.pawstwo.NY.LostOnlyActivity;
 import com.example.android.pawstwo.NY.SavedChatsActivity;
+import com.facebook.FacebookSdk;
 import com.facebook.share.Share;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,6 +57,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -244,6 +252,27 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         }
         else{
 
@@ -420,6 +449,8 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
 
 
 
+
+
     @Override
     public void onItemClick( int position ) {
 
@@ -497,6 +528,12 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
 
                 break;
 
+            case R.id. nav_favourites:
+                startActivity ( new Intent ( TestHomeActivity.this, FavouritesActivity.class ) );
+                mdrawerTest.closeDrawers ();
+
+                break;
+
 
 
         }
@@ -542,6 +579,10 @@ public class TestHomeActivity extends AppCompatActivity implements NavigationVie
 
         return super.onOptionsItemSelected ( item );
     }
+
+
+
+
 
 
 

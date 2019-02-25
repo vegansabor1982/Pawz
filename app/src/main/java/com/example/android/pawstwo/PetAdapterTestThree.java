@@ -16,15 +16,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.android.pawstwo.NY.FavsTwo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class PetAdapterTest extends RecyclerView.Adapter<PetAdapterTest.PetHolder> {
+public class PetAdapterTestThree extends RecyclerView.Adapter<PetAdapterTestThree.PetHolder> {
 
     private Context mContext;
-    private List <UploadTest> mUploadTest;
+    private List <FavsTwo> mUploadTest;
     private OnItemClickListener mListener;
     private FirebaseAuth mAuth;
 
@@ -35,12 +36,12 @@ public class PetAdapterTest extends RecyclerView.Adapter<PetAdapterTest.PetHolde
 
     }
 
-   public void setOnItemClickListener( OnItemClickListener listener ){
+    public void setOnItemClickListener( OnItemClickListener listener ){
 
         mListener=listener;
-   }
+    }
 
-    public PetAdapterTest (Context context,List<UploadTest> uploads){
+    public PetAdapterTestThree (Context context,List<FavsTwo> uploads){
 
         mContext=context;
         mUploadTest=uploads;
@@ -49,22 +50,23 @@ public class PetAdapterTest extends RecyclerView.Adapter<PetAdapterTest.PetHolde
     @NonNull
     @Override
     public PetHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from (mContext).inflate ( R.layout.image_item_test,parent, false );
+        View v = LayoutInflater.from (mContext).inflate ( R.layout.image_item_test_three,parent, false );
         return new PetHolder ( v );
     }
 
     @Override
     public void onBindViewHolder( PetHolder petHolder, int position) {
 
-        UploadTest uploadCurrent = mUploadTest.get ( position );
+        FavsTwo uploadCurrent = mUploadTest.get ( position );
 
-
-        petHolder.textViewType.setText ( uploadCurrent.getmType () );
         petHolder.textViewFamily.setText ( uploadCurrent.getmFamily () );
+        petHolder.textViewType.setText ( uploadCurrent.getmType () );
         petHolder.textViewDescription.setText ( uploadCurrent.getmDescription () );
-        petHolder.mLatReturn.setText ( uploadCurrent.getmLat ());
-        petHolder.mLongReturn.setText ( uploadCurrent.getmLongt () );
-        petHolder.mUploaderNew.setText ( uploadCurrent.getmUploaderName () );
+        petHolder.mLatReturn.setText ( uploadCurrent.getmLat () );
+        petHolder.mLongReturn.setText ( uploadCurrent.getmLong () );
+
+        petHolder.mUploaderNew.setText ( uploadCurrent.getmUploader ());
+
 
         Picasso.with (mContext).load ( uploadCurrent.getmImageUrl () ).fit ().centerCrop ().into ( petHolder.imageView );
 
@@ -79,7 +81,7 @@ public class PetAdapterTest extends RecyclerView.Adapter<PetAdapterTest.PetHolde
 
     @Override
     public int getItemCount() {
-            return mUploadTest.size ();
+        return mUploadTest.size ();
     }
 
     public class PetHolder extends RecyclerView.ViewHolder  {
@@ -97,13 +99,16 @@ public class PetAdapterTest extends RecyclerView.Adapter<PetAdapterTest.PetHolde
         public PetHolder( @NonNull View itemView ) {
             super ( itemView );
 
-            textViewType = itemView.findViewById ( R.id.text_view_type_test );
-            textViewFamily = itemView.findViewById ( R.id.text_view_family_test );
-            textViewDescription = itemView.findViewById ( R.id.text_view_description_test );
-            imageView = itemView.findViewById ( R.id.image_view_upload_test );
-            mLatReturn=itemView.findViewById ( R.id.tv_latitude_return );
-            mLongReturn=itemView.findViewById ( R.id.tv_longtitude_return);
-            mUploaderNew=itemView.findViewById ( R.id.tv_uploader );
+
+            textViewFamily = itemView.findViewById ( R.id.text_view_family_test_two);
+
+            imageView = itemView.findViewById ( R.id.image_view_upload_test_three );
+            mLatReturn=itemView.findViewById ( R.id.tv_latitude_return_three );
+            mLongReturn=itemView.findViewById ( R.id.tv_longtitude_return_three);
+            mUploaderNew=itemView.findViewById ( R.id.tv_uploader_three );
+            textViewType=itemView.findViewById ( R.id.text_view_type_test_three );
+            textViewDescription=itemView.findViewById ( R.id.text_view_description_test_three );
+            textViewFamily=itemView.findViewById ( R.id.text_view_family_test_three );
 
 
             itemView.setOnClickListener ( new View.OnClickListener () {

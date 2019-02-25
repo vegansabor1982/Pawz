@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.FaceDetector;
+import android.se.omapi.Session;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -20,9 +21,12 @@ import android.content.Intent;
 import android.widget.Toast;
 
 
+import com.bumptech.glide.request.Request;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 
 import com.facebook.AccessToken;
@@ -110,11 +114,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess( LoginResult loginResult ) {
 
-                String userId= loginResult.getAccessToken ().getUserId ();
+                final String userId= loginResult.getAccessToken ().getUserId ();
 
                 GraphRequest graphRequest  = GraphRequest.newMeRequest ( loginResult.getAccessToken (), new GraphRequest.GraphJSONObjectCallback () {
                     @Override
                     public void onCompleted( JSONObject object, GraphResponse response ) {
+
+
 
                         displayUserInfo(object);
 
@@ -131,6 +137,11 @@ public class MainActivity extends AppCompatActivity {
 //---------------------------------------------------------------Add facebook image here-------------------------------------------------------
                 Bundle parameters = new Bundle (  );
                 parameters.putString ( "fields", "first_name, last_name, email, id" );
+
+
+
+
+
                 graphRequest.setParameters (parameters  );
                 graphRequest.executeAsync ();
 
@@ -353,11 +364,18 @@ public class MainActivity extends AppCompatActivity {
         last_name="";
         email="";
         id="";
+
+
+
         try {
             first_name=object.getString ( "first_name" );
             last_name=object.getString ( "last_name" );
             email=object.getString ( "email" );
             id=object.getString ( "id" );
+
+
+
+
 
         } catch (JSONException e) {
             e.printStackTrace ();
@@ -380,6 +398,8 @@ public class MainActivity extends AppCompatActivity {
         editor.putString ( "first_name", first_name );
         editor.putString ( "last_name", last_name );
         editor.putString ( "email", email );
+
+
         editor.commit ();
 
         Intent d = new Intent ( this, TestHomeActivity.class );
@@ -418,6 +438,9 @@ public class MainActivity extends AppCompatActivity {
 
         mCallbackManager.onActivityResult ( requestCode, resultCode, data );
     }
+
+
+
 
 
 

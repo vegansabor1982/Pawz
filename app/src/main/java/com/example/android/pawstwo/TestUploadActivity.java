@@ -299,6 +299,8 @@ public class TestUploadActivity extends AppCompatActivity {
                     Toast.makeText ( TestUploadActivity.this, "Upload Successfull",Toast.LENGTH_SHORT).show ();
 
 
+
+
                     Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                     while (!urlTask.isSuccessful());
                     Uri downloadUrl = urlTask.getResult();

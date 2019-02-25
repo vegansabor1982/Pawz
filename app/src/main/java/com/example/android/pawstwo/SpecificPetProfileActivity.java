@@ -3,12 +3,15 @@ package com.example.android.pawstwo;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Parcelable;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.button.MaterialButton;
@@ -17,6 +20,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
@@ -31,6 +35,8 @@ import com.bumptech.glide.Glide;
 import com.example.android.pawstwo.NY.ChatRoomActivity;
 
 import com.example.android.pawstwo.NY.FavouritesActivity;
+
+import com.example.android.pawstwo.NY.FavsTwo;
 import com.example.android.pawstwo.NY.SearchUsersActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -60,6 +66,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +87,10 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
         LocationListener, GoogleMap.OnMapLongClickListener {
 
 
+
+
+
+
     private TextView mSpecType;
     private TextView mSpecFamily;
     private TextView mSpecDescription;
@@ -87,12 +101,21 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
     private FirebaseAuth mAuth;
     private DatabaseReference mReference;
     private MapView mMapView;
+    private TextView mLat;
+    private TextView mLongt;
+
+    private static int PICK_IMAGE=123;
+
 
     public static final String PET_TYPE_TWO = "pet_type";
 
     private List<UploadTest> mUploads;
 
     private Button mFavourites;
+    private Uri mImageUri;
+    private StorageReference mStorageRef;
+
+    private FirebaseStorage firebaseStorage;
 
     private static final int Request_User_Location_Code = 99;
 
@@ -114,11 +137,22 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
 
+
+
+    private boolean mMyBoolean;
+
+
+
+
     //=-----------------------new for favorites---------
 
-    private StorageReference mStorageRef;
 
-    private Uri mImageUri;
+
+
+
+
+
+
 
 
     @Override
@@ -127,18 +161,28 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
         setContentView ( R.layout.activity_specific_pet_profile );
 
 
+
+
+
+
+
+
         mSpecType = findViewById ( R.id.tv_specific_pet_type );
         mSpecFamily = findViewById ( R.id.tv_specific_pet_family );
         mSpecDescription = findViewById ( R.id.tv_specific_pet_description );
         mUploadedByUser = findViewById ( R.id.tv_specific_pet_uploadedbyuser );
         mSpecPetPic = findViewById ( R.id.iv_specific_pet_pic );
 
+        mLat= findViewById ( R.id.tv_latitude );
+        mLongt=findViewById ( R.id.tv_longtitude );
+
+
         mFavourites = findViewById ( R.id.btn_favourite );
 
 
         Intent r = getIntent ();
         final String imageUrl = getIntent ().getStringExtra ( EXTRA_URL );
-        String petType = getIntent ().getStringExtra ( PET_TYPE );
+        final String petType = getIntent ().getStringExtra ( PET_TYPE );
         String petFamily = getIntent ().getStringExtra ( PET_FAMILY );
         String petDescription = getIntent ().getStringExtra ( PET_DESCRIPTION );
         final String uploaderName = getIntent ().getStringExtra ( UPLOADER_NAME );
@@ -197,10 +241,14 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
         DatabaseReference mRef = mDatabase.getReference ().child ( "Users" ).child ( mAuth.getUid () );
 
 
-        mSendUserMessage = findViewById ( R.id.btn_send_message );
+        mSendUserMessage =
+
+                findViewById ( R.id.btn_send_message );
 
 
-        mSendUserMessage.setOnClickListener ( new View.OnClickListener () {
+        mSendUserMessage.setOnClickListener ( new View.OnClickListener ()
+
+        {
             @Override
             public void onClick( View view ) {
 
@@ -212,11 +260,89 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
             }
         } );
 
-        //======----------------Favouites------------------
+        //======----------------Favourites------------------
+
+
+
+       final SharedPreferences prefs = getSharedPreferences ( "Button Mode Clicked", MODE_PRIVATE );
 
         mFavourites.setOnClickListener ( new View.OnClickListener () {
             @Override
             public void onClick( View view ) {
+
+
+                mFavourites.setBackground ( getResources ().getDrawable ( R.drawable.heartblack ) );
+
+                mStorageRef=FirebaseStorage.getInstance ().getReference ();
+
+
+                StorageReference fileReference = mStorageRef.child("Favourites");
+
+                mAuth=FirebaseAuth.getInstance ();
+
+                mStorageRef = FirebaseStorage.getInstance ().getReference ( "Favourites" );
+
+
+
+                mReference = FirebaseDatabase.getInstance ().getReference ( ).child("Favourites" ).child ( mAuth.getCurrentUser ().getUid () );
+
+                DatabaseReference myRefTwo = mReference.getRef ().child ( "Favourites" ).child ( mAuth.getUid () );
+
+
+                String petLat = getIntent ().getStringExtra ( PET_LATITUDE );
+                String petLong = getIntent ().getStringExtra ( PET_LONGTITUDE );
+
+                double latitude = Double.parseDouble ( petLat );
+                double longitude = Double.parseDouble ( petLong );
+
+
+                String petLatOne = getIntent ().getStringExtra ( PET_LATITUDE );
+                String petLongOne = getIntent ().getStringExtra ( PET_LONGTITUDE );
+
+
+
+
+
+                FavsTwo favsTwo = new FavsTwo ( mSpecType.getText ().toString (), mSpecFamily.getText ().toString (), mSpecDescription.getText ().toString (), mUploadedByUser.getText ().toString (), imageUrl.toString (),petLatOne,petLongOne);
+
+                String upload = mReference.push().getKey ();
+                mReference.child ( upload ).setValue ( favsTwo );
+
+                SharedPreferences prefs = getSharedPreferences ( "PREFS", MODE_PRIVATE );
+
+
+
+                mFavourites.setEnabled ( false );
+
+
+
+
+
+                Toast.makeText ( SpecificPetProfileActivity.this, "Saved to Favourites", Toast.LENGTH_SHORT ).show ();
+
+
+
+
+
+
+
+               /* fileReference.putFile ( mImageUri ).addOnSuccessListener ( new OnSuccessListener<UploadTask.TaskSnapshot> () {
+                    @Override
+                    public void onSuccess( UploadTask.TaskSnapshot taskSnapshot ) {
+
+
+
+
+                        Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                        while (!urlTask.isSuccessful());
+                        Uri downloadUrl = urlTask.getResult();
+
+
+                    }
+                } );*/
+
+
+
 
 
 
@@ -224,7 +350,15 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
         } );
 
 
+
+
+
+
+//---------------FAVOURITES END---------------------------------------------------------
     }
+
+
+
 
     private String getFileExtension( Uri uri ) {
 
@@ -233,7 +367,6 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
         MimeTypeMap mime = MimeTypeMap.getSingleton ();
         return mime.getExtensionFromMimeType ( cR.getType ( uri ) );
     }
-
 
 
     @Override
