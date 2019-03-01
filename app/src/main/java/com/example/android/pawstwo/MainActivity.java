@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.FaceDetector;
+import android.net.Uri;
 import android.se.omapi.Session;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -41,6 +42,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.share.Share;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -49,9 +51,13 @@ import com.google.firebase.auth.FacebookAuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -79,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
     private CallbackManager mCallbackManager;
     private FacebookAuthCredential authCredential;
     private DatabaseReference mUserDatabase;
+    private StorageReference mStorRef;
+    private DatabaseReference mDataRef;
 
     public static final String PREFS_NAME = "MyPrefsFile";
     private static final String USERID="userID";
@@ -112,13 +120,15 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setReadPermissions ( "email", "public_profile" );
         loginButton.registerCallback ( mCallbackManager, new FacebookCallback<LoginResult> () {
             @Override
-            public void onSuccess( LoginResult loginResult ) {
+            public void onSuccess( final LoginResult loginResult ) {
 
                 final String userId= loginResult.getAccessToken ().getUserId ();
 
                 GraphRequest graphRequest  = GraphRequest.newMeRequest ( loginResult.getAccessToken (), new GraphRequest.GraphJSONObjectCallback () {
                     @Override
                     public void onCompleted( JSONObject object, GraphResponse response ) {
+
+
 
 
 
@@ -438,6 +448,12 @@ public class MainActivity extends AppCompatActivity {
 
         mCallbackManager.onActivityResult ( requestCode, resultCode, data );
     }
+
+
+
+
+
+
 
 
 

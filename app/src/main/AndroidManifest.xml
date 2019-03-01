@@ -145,7 +145,8 @@
         <activity android:name=".NY.LostOnlyActivity" />
         <activity android:name=".NY.FoundOnlyActicity" />
         <activity android:name=".NY.FavouritesActivity" />
-        <activity android:name=".NY.TESTActivityOVErOBer"></activity>
+        <activity android:name=".NY.TESTActivityOVErOBer" />
+        <activity android:name=".ChatVersionTwo.PrivateChatVersionTwo"></activity>
     </application>
 
 </manifest>

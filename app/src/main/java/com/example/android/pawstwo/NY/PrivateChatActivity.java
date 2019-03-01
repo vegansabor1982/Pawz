@@ -117,7 +117,6 @@ public class PrivateChatActivity extends AppCompatActivity {
         setContentView ( R.layout.activity_private_chat );
 
 
-
         mChatToolbar = findViewById ( R.id.chat_app_bar );
 
 
@@ -139,7 +138,7 @@ public class PrivateChatActivity extends AppCompatActivity {
         mChatUser = getIntent ().getStringExtra ( "userId" );
         String userName = getIntent ().getStringExtra ( "userName" );
 
-        // getSupportActionBar ().setTitle ( userName );
+        //getSupportActionBar ().setTitle ( userName );
 
 
         LayoutInflater inflater = ( LayoutInflater ) this.getSystemService ( Context.LAYOUT_INFLATER_SERVICE );
@@ -163,7 +162,7 @@ public class PrivateChatActivity extends AppCompatActivity {
         mAdapter = new MessageAdapter ( messagesList );
 
         mMessagesList = findViewById ( R.id.messages_list );
-        //   mRefreshLayout = findViewById ( R.id.message_swipe_layout );
+        mRefreshLayout = ( SwipeRefreshLayout ) findViewById ( R.id.message_swipe_layout );
 //-----------------maybe here context has problem------------->>
         mLinearLayout = new LinearLayoutManager ( this );
         mMessagesList.setHasFixedSize ( true );
@@ -176,8 +175,6 @@ public class PrivateChatActivity extends AppCompatActivity {
 
         mImageStorage = FirebaseStorage.getInstance ().getReference ();
         mRootRef.child ( "Chat" ).child ( mCurrentUserId ).child ( mChatUser ).child ( "seen" ).setValue ( true );
-
-
 
 
         mTitleView.setText ( userName );
@@ -266,7 +263,7 @@ public class PrivateChatActivity extends AppCompatActivity {
             }
         } );
 
-      /*  mRefreshLayout.setOnRefreshListener ( new SwipeRefreshLayout.OnRefreshListener () {
+        mRefreshLayout.setOnRefreshListener ( new SwipeRefreshLayout.OnRefreshListener () {
             @Override
             public void onRefresh() {
                 mCurrentPage++;
@@ -275,9 +272,11 @@ public class PrivateChatActivity extends AppCompatActivity {
 
                 itemPos = 0;
 
+                loadMoreMessages ();
+
 
             }
-        } );*/
+        } );
 
         loadMessages ();
         loadMessagesTwo ();
@@ -356,7 +355,7 @@ public class PrivateChatActivity extends AppCompatActivity {
                 mAdapter.notifyDataSetChanged ();
 
                 mMessagesList.scrollToPosition ( messagesList.size () - 1 );
-                // mRefreshLayout.setRefreshing ( false );
+                mRefreshLayout.setRefreshing ( false );
                 mLinearLayout.scrollToPositionWithOffset ( 10, 0 );
 
             }
@@ -398,11 +397,11 @@ public class PrivateChatActivity extends AppCompatActivity {
 
                 Messages message = dataSnapshot.getValue ( Messages.class );
 
-              //  long time = dataSnapshot.getValue (Messages.class).getTime ();
+                //  long time = dataSnapshot.getValue (Messages.class).getTime ();
 
-                 itemPos++;
+                itemPos++;
 
-               if (itemPos == 1) {
+                if (itemPos == 1) {
 
                     String messageKey = dataSnapshot.getKey ();
 
@@ -417,7 +416,7 @@ public class PrivateChatActivity extends AppCompatActivity {
 
                 mMessagesList.scrollToPosition ( messagesList.size () - 1 );
 
-                //   mRefreshLayout.setRefreshing ( false );
+                mRefreshLayout.setRefreshing ( false );
 
             }
 
@@ -458,11 +457,11 @@ public class PrivateChatActivity extends AppCompatActivity {
 
                 Messages message = dataSnapshot.getValue ( Messages.class );
 
-               // long time = dataSnapshot.getValue (Messages.class).getTime ();
+                // long time = dataSnapshot.getValue (Messages.class).getTime ();
 
-               itemPos++;
+                itemPos++;
 
-               if (itemPos == 1) {
+                if (itemPos == 1) {
 
                     String messageKey = dataSnapshot.getKey ();
 
@@ -476,7 +475,7 @@ public class PrivateChatActivity extends AppCompatActivity {
 
                 mMessagesList.scrollToPosition ( messagesList.size () - 1 );
 
-                //   mRefreshLayout.setRefreshing ( false );
+                mRefreshLayout.setRefreshing ( false );
 
             }
 
@@ -509,8 +508,7 @@ public class PrivateChatActivity extends AppCompatActivity {
 
         String message = mChatMessageView.getText ().toString ();
 
-        final String msg = message;
-
+        // final String msg = message;
 
 
         if (!TextUtils.isEmpty ( message )) {
@@ -520,57 +518,40 @@ public class PrivateChatActivity extends AppCompatActivity {
 
             DatabaseReference user_message_push = mRootRef.child ( "messages" ).child ( mCurrentUserId ).child ( mChatUser ).push ();
 
-            mRootRef.addValueEventListener ( new ValueEventListener () {
-                @Override
-                public void onDataChange( @NonNull DataSnapshot dataSnapshot ) {
-                    NyUsers user = dataSnapshot.getValue ( NyUsers.class );
-
-                    if (notify) {
-                        sendNotification ( mChatUser, user.getUserName (), msg );
-
-                    }
-
-                    //  sendNotification(mChatUser, user.getUserName (),msg);
-
-                    notify = false;
-                }
-
-                @Override
-                public void onCancelled( @NonNull DatabaseError databaseError ) {
-
-                }
-            } );
-
-            updateToken ( FirebaseInstanceId.getInstance ().getToken () );
-
-
             String push_id = user_message_push.getKey ();
 
-
             Map messageMap = new HashMap ();
+
             messageMap.put ( "message", message );
             messageMap.put ( "seen", false );
             messageMap.put ( "type", "text" );
             messageMap.put ( "time", ServerValue.TIMESTAMP );
             messageMap.put ( "from", mCurrentUserId );
 
-            Map messageUserMap = new HashMap ();
 
+            Map messageUserMap = new HashMap ();
             messageUserMap.put ( current_user_ref + "/" + push_id, messageMap );
             messageUserMap.put ( chat_user_ref + "/" + push_id, messageMap );
 
-            mChatMessageView.setText ( "" );
+            mChatMessageView.setText ( " " );
 
+            mRootRef.child ( "Chat" ).child ( mCurrentUserId ).child ( mChatUser ).child ( "seen" ).setValue ( true );
+            mRootRef.child ( "Chat" ).child ( mCurrentUserId ).child ( mChatUser ).child ( "timestamp" ).setValue ( ServerValue.TIMESTAMP );
+
+            mRootRef.child ( "Chat" ).child ( mChatUser ).child ( mCurrentUserId ).child ( "seen" ).setValue ( false );
+            mRootRef.child ( "Chat" ).child ( mChatUser ).child ( mCurrentUserId ).child ( "timestamp" ).setValue ( ServerValue.TIMESTAMP );
 
             mRootRef.updateChildren ( messageUserMap, new DatabaseReference.CompletionListener () {
                 @Override
                 public void onComplete( @Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference ) {
 
+
                     if (databaseError != null) {
 
                         Log.d ( "CHAT_LOG", databaseError.getMessage ().toString () );
-                    }
 
+
+                    }
 
                 }
             } );
@@ -608,7 +589,7 @@ public class PrivateChatActivity extends AppCompatActivity {
 
                             if (response.code () == 200) {
 
-                                if (response.body ().success!=1){
+                                if (response.body ().success != 1) {
 
                                     Toast.makeText ( PrivateChatActivity.this, "Failed", Toast.LENGTH_SHORT ).show ();
                                 }

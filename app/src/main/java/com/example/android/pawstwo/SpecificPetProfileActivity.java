@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import com.example.android.pawstwo.ChatVersionTwo.PrivateChatVersionTwo;
 import com.example.android.pawstwo.NY.ChatRoomActivity;
 
 import com.example.android.pawstwo.NY.FavouritesActivity;
@@ -253,7 +254,7 @@ public class SpecificPetProfileActivity extends FragmentActivity implements OnMa
             public void onClick( View view ) {
 
 
-                Intent u = new Intent ( SpecificPetProfileActivity.this, SearchUsersActivity.class );
+                Intent u = new Intent ( SpecificPetProfileActivity.this, PrivateChatVersionTwo.class );
                 startActivity ( u );
 
 
