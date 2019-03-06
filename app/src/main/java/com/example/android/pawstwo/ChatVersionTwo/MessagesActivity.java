@@ -54,10 +54,17 @@ public class MessagesActivity extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate ( savedInstanceState );
         setContentView ( R.layout.activity_messages );
+
+
+
+
+
+
 
 
         Toolbar toolbar = findViewById ( R.id.toolbarthree );
@@ -89,6 +96,8 @@ public class MessagesActivity extends AppCompatActivity {
         intent=getIntent ();
 
         final String userid=intent.getStringExtra ("userId"  );
+
+
 
         fuser= FirebaseAuth.getInstance ().getCurrentUser ();
 

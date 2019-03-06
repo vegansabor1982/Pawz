@@ -1,7 +1,6 @@
 package com.example.android.pawstwo.ChatVersionTwo;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,9 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.android.pawstwo.NY.NyUsers;
-import com.example.android.pawstwo.NY.SearchUsersActivity;
 import com.example.android.pawstwo.R;
-import com.firebase.ui.auth.data.model.User;
 
 import java.util.List;
 
@@ -24,7 +21,7 @@ public class UserAdapter extends RecyclerView.Adapter <UserAdapter.ViewHolder>{
 
     private List<NyUsers> mUsers;
 
-    public UserAdapter (Context mContext, List<NyUsers> mUsers){
+    public UserAdapter( Context mContext, List<NyUsers> mUsers, boolean b ){
 
         this.mUsers=mUsers;
         this.mContext=mContext;
