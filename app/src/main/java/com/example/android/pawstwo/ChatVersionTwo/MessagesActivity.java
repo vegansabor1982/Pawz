@@ -165,6 +165,27 @@ public class MessagesActivity extends AppCompatActivity {
         reference.child ( "ChatsTwo" ).push ().setValue ( hashMap );
 
 
+
+        final DatabaseReference chatRef= FirebaseDatabase.getInstance ().getReference ("Chatlist").child(receiver).child ( fuser.getUid () );
+
+        chatRef.addListenerForSingleValueEvent ( new ValueEventListener () {
+            @Override
+            public void onDataChange( @NonNull DataSnapshot dataSnapshot ) {
+
+
+                if (!dataSnapshot.exists ()){
+
+                    chatRef.child ( "id" ).setValue ( fuser.getUid () );
+                }
+            }
+
+            @Override
+            public void onCancelled( @NonNull DatabaseError databaseError ) {
+
+            }
+        } );
+
+
     }
 
     private void readMessages ( final String myid, final String userid, final String imageurl){

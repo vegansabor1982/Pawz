@@ -27,47 +27,47 @@ import java.util.List;
 public class ChatsFragment extends Fragment {
 
     private RecyclerView recyclerView;
-
     private UserAdapter userAdapter;
-
-    private List<NyUsers> mUsers;
+    private List< NyUsers> mUsers;
 
     FirebaseUser fuser;
     DatabaseReference reference;
 
-    private List<ChatList> usersList;
+    private List<ChatList> userList;
+
+
+
 
 
     @Override
-    public View onCreateView( LayoutInflater inflater, ViewGroup container,
-                              Bundle savedInstanceState ) {
+    public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
+
+
         View view = inflater.inflate ( R.layout.fragment_chats, container, false );
 
-        recyclerView = view.findViewById ( R.id.recycler_view_chats );
+        recyclerView=view.findViewById ( R.id.recycler_view_chats );
         recyclerView.setHasFixedSize ( true );
         recyclerView.setLayoutManager ( new LinearLayoutManager ( getContext () ) );
 
-        fuser = FirebaseAuth.getInstance ().getCurrentUser ();
+        fuser=FirebaseAuth.getInstance ().getCurrentUser ();
+        userList=new ArrayList<> (  );
 
-        usersList = new ArrayList<> ();
 
+        reference=FirebaseDatabase.getInstance ().getReference ("Chatlist").child ( fuser.getUid () );
 
-        reference= FirebaseDatabase.getInstance ().getReference ("Chatlist").child ( fuser.getUid () );
         reference.addValueEventListener ( new ValueEventListener () {
             @Override
             public void onDataChange( @NonNull DataSnapshot dataSnapshot ) {
 
-                usersList.clear ();
+                userList.clear ();
                 for (DataSnapshot snapshot: dataSnapshot.getChildren ()){
 
                     ChatList chatList = snapshot.getValue (ChatList.class);
 
-                    usersList.add ( chatList );
+                    userList.add ( chatList );
                 }
 
                 chatList();
-
-
 
             }
 
@@ -83,35 +83,40 @@ public class ChatsFragment extends Fragment {
 
 
 
+
+
+
+
         return view;
     }
 
     private void chatList() {
 
 
-        mUsers = new ArrayList<> (  );
+        mUsers=new ArrayList<> (  );
 
         reference=FirebaseDatabase.getInstance ().getReference ("Users");
         reference.addValueEventListener ( new ValueEventListener () {
             @Override
             public void onDataChange( @NonNull DataSnapshot dataSnapshot ) {
-
                 mUsers.clear ();
 
-                for (DataSnapshot snapshot : dataSnapshot.getChildren ()){
+                for (DataSnapshot snapshot: dataSnapshot.getChildren ()){
+                    NyUsers nyUsers=snapshot.getValue (NyUsers.class);
+                    for (ChatList chatList: userList){
 
-                    NyUsers nyUsers =snapshot.getValue (NyUsers.class);
-                    for (ChatList chatList: usersList){
-
-                        if (nyUsers.getUserName ().equals (chatList.getId ()  )){
+                        //------------this is the problem-----------------
+                        if (nyUsers.getUserName ().equals ( chatList.getId () )){
+                            //here ---------------------------------------------
 
                             mUsers.add ( nyUsers );
                         }
+
                     }
+
+
                 }
-
-                userAdapter = new UserAdapter (getContext (), mUsers, true  );
-
+                userAdapter = new UserAdapter ( getContext (),mUsers, true  );
                 recyclerView.setAdapter ( userAdapter );
 
             }
