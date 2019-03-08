@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 import com.example.android.pawstwo.NY.NySpecificUserProfile;
 import com.example.android.pawstwo.NY.NyUsers;
+import com.example.android.pawstwo.NY.SavedChatsActivity;
 import com.example.android.pawstwo.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -50,6 +52,8 @@ public class UsersFragment extends Fragment {
     private FirebaseAuth mAuth;
     private DatabaseReference mUserDatabase;
 
+    private Button mGoToChats;
+
 
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
@@ -59,6 +63,17 @@ public class UsersFragment extends Fragment {
         mSearch=view.findViewById ( R.id.search_btn );
         mSearchText=view.findViewById ( R.id.search_field );
         recyclerView=view.findViewById ( R.id. users_recycler_view );
+        mGoToChats=view.findViewById ( R.id.btn_go_to_chats );
+
+        mGoToChats.setOnClickListener ( new View.OnClickListener () {
+            @Override
+            public void onClick( View view ) {
+                Intent o = new Intent ( UsersFragment.this.getActivity (),SavedChatsActivity.class );
+                startActivity ( o );
+            }
+        } );
+
+
 
 
 
@@ -240,6 +255,7 @@ public class UsersFragment extends Fragment {
 
     }
 
+
     public class UsersViewHolder extends RecyclerView.ViewHolder {
 
         View mView;
@@ -262,6 +278,8 @@ public class UsersFragment extends Fragment {
             // CircleImageView userImageView = mView.findViewById ( R.id.ny_user_single_image );
 
             Picasso.with ( ctx ).load ( userImage ).into ( user_image );
+
+
 
 
 
