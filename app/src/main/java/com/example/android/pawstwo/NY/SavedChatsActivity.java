@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.pawstwo.ChatVersionTwo.MessagesActivity;
 import com.example.android.pawstwo.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -62,11 +63,12 @@ public class SavedChatsActivity extends AppCompatActivity {
 
         mCurrent_user_id = mAuth.getCurrentUser().getUid();
 
-        mConvDatabase = FirebaseDatabase.getInstance().getReference().child("Chat").child(mCurrent_user_id);
+      //  mConvDatabase = FirebaseDatabase.getInstance().getReference().child("Chat").child(mCurrent_user_id);
 
-        mConvDatabase.keepSynced(true);
+
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
-        mMessageDatabase = FirebaseDatabase.getInstance().getReference().child("messages").child(mCurrent_user_id);
+        mMessageDatabase = FirebaseDatabase.getInstance().getReference().child("ChatsTwo");
+        mMessageDatabase.keepSynced(true);
         mUsersDatabase.keepSynced(true);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext ());
@@ -77,7 +79,7 @@ public class SavedChatsActivity extends AppCompatActivity {
         mConvList.setLayoutManager(linearLayoutManager);
 
 
-        // Inflate the layout for this fragment
+
 
     }
 
@@ -86,11 +88,11 @@ public class SavedChatsActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 
-        Query conversationQuery = mConvDatabase.orderByChild("timestamp");
+        Query conversationQuery = mMessageDatabase.child ( "message" ).orderByChild("timestamp");
 
         FirebaseRecyclerOptions<NyUsers> options = new FirebaseRecyclerOptions.Builder<NyUsers> ().setQuery ( conversationQuery, NyUsers.class ).build ();
 
-        FirebaseRecyclerAdapter<NyUsers, ConvViewHolder> firebaseConvAdapter = new FirebaseRecyclerAdapter<NyUsers, ConvViewHolder> ( options ) {
+        final FirebaseRecyclerAdapter<NyUsers, ConvViewHolder> firebaseConvAdapter = new FirebaseRecyclerAdapter<NyUsers, ConvViewHolder> ( options ) {
             @Override
             protected void onBindViewHolder( @NonNull final ConvViewHolder holder, int position, @NonNull final NyUsers model ) {
 
@@ -104,7 +106,7 @@ public class SavedChatsActivity extends AppCompatActivity {
                     public void onChildAdded( DataSnapshot dataSnapshot, String s) {
 
                         String data = dataSnapshot.child("message").getValue().toString();
-                      //  holder.setMessage(data, model.());
+                          holder.setMessage(data, true);
 
                     }
 
@@ -136,7 +138,7 @@ public class SavedChatsActivity extends AppCompatActivity {
 
                         final String userName = dataSnapshot.child("userName").getValue().toString();
 //                        String userThumb = dataSnapshot.child("thumb_image").getValue().toString();
-                        String userImage = dataSnapshot.child ( "imageUrl" ).getValue ().toString ();
+                       String userImage = dataSnapshot.child ( "imageUrl" ).getValue ().toString ();
 
 
 
@@ -148,7 +150,7 @@ public class SavedChatsActivity extends AppCompatActivity {
                             public void onClick(View view) {
 
 
-                                Intent chatIntent = new Intent(SavedChatsActivity.this , PrivateChatActivity.class);
+                                Intent chatIntent = new Intent(SavedChatsActivity.this , MessagesActivity.class);
                                 chatIntent.putExtra("userId", list_user_id);
                                 chatIntent.putExtra("userName", model.getUserName ());
                                 startActivity(chatIntent);
@@ -163,9 +165,14 @@ public class SavedChatsActivity extends AppCompatActivity {
                     public void onCancelled(DatabaseError databaseError) {
 
                     }
+
                 });
 
+
+
+
             }
+
 
             @NonNull
             @Override
@@ -178,9 +185,10 @@ public class SavedChatsActivity extends AppCompatActivity {
 
 
         };
-
         mConvList.setAdapter(firebaseConvAdapter);
         firebaseConvAdapter.startListening ();
+
+
 
     }
 

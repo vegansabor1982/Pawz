@@ -7,7 +7,6 @@
     tools:context=".ChatVersionTwo.ChatsFragment">
 
 
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_chats"
         android:layout_width="match_parent"
@@ -15,11 +14,6 @@
         android:layout_marginTop="50dp">
 
     </android.support.v7.widget.RecyclerView>
-
-
-
-
-
 
 
 </RelativeLayout>

@@ -18,6 +18,8 @@ import com.bumptech.glide.Glide;
 import com.example.android.pawstwo.NY.NyUsers;
 import com.example.android.pawstwo.R;
 import com.firebase.ui.auth.data.model.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +28,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +44,7 @@ public class MessagesActivity extends AppCompatActivity {
 
     FirebaseUser fuser;
 
-    DatabaseReference reference;
+    DatabaseReference reference, notificationRef;
     Intent intent;
     private ImageButton btn_send;
     private EditText text_send;
@@ -51,6 +54,8 @@ public class MessagesActivity extends AppCompatActivity {
     List<ChatModel>mChat;
 
     RecyclerView recyclerView;
+
+    private FirebaseAuth mAuth;
 
 
 
@@ -88,6 +93,8 @@ public class MessagesActivity extends AppCompatActivity {
         text_send=findViewById ( R.id.text_send );
         recyclerView=findViewById ( R.id.messages_recycler_view );
 
+        notificationRef=FirebaseDatabase.getInstance ().getReference ().child ( "Notifications" );
+
         recyclerView.setHasFixedSize ( true );
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager ( getApplicationContext () );
         linearLayoutManager.setStackFromEnd ( true );
@@ -115,7 +122,7 @@ public class MessagesActivity extends AppCompatActivity {
                     Toast.makeText ( MessagesActivity.this, "Message is Empty", Toast.LENGTH_SHORT ).show ();
                 }
 
-                text_send.setText ( " " );
+                text_send.getText ().clear ();
             }
         } );
 
@@ -165,6 +172,28 @@ public class MessagesActivity extends AppCompatActivity {
 
 
         reference.child ( "ChatsTwo" ).push ().setValue ( hashMap );
+
+        HashMap<String, String> chatnotification = new HashMap<> (  );
+
+        chatnotification.put ( "from", sender );
+        chatnotification.put ( "message", message );
+        notificationRef.child ( receiver ).push ().setValue ( chatnotification ).addOnCompleteListener ( new OnCompleteListener<Void> () {
+            @Override
+            public void onComplete( @NonNull Task<Void> task ) {
+
+                if (task.isSuccessful ()){
+
+
+                }
+
+            }
+        } );
+
+        mAuth=FirebaseAuth.getInstance ();
+
+        String currentUserId = mAuth.getCurrentUser ().getUid ();
+
+        String deviceToken = FirebaseInstanceId.getInstance ().getToken (  );
 
 
 

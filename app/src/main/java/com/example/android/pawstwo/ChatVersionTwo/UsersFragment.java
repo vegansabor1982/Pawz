@@ -68,7 +68,7 @@ public class UsersFragment extends Fragment {
         mGoToChats.setOnClickListener ( new View.OnClickListener () {
             @Override
             public void onClick( View view ) {
-                Intent o = new Intent ( UsersFragment.this.getActivity (),SavedChatsActivity.class );
+                Intent o = new Intent ( getContext (),SavedChatsActivity.class );
                 startActivity ( o );
             }
         } );

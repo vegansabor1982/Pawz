@@ -33,7 +33,7 @@ public class MyFirebaseInstanceService extends FirebaseMessagingService {
 
     private void showNotification( Map<String,String> data ) {
 
-        String title =data.get ( "title" ).toString ();
+       String title =data.get ( "title" ).toString ();
         String body = data.get ("body"  ).toString ();
 
 
@@ -53,8 +53,8 @@ public class MyFirebaseInstanceService extends FirebaseMessagingService {
         }
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder ( this, NOTIFICATION_CHANNEL_ID );
-        notificationBuilder.setAutoCancel ( true ).setDefaults ( Notification.DEFAULT_ALL ).setWhen ( System.currentTimeMillis () ).setSmallIcon ( R.drawable.ic_notification).setContentTitle ( title ).setContentText ( body )
-                .setContentInfo ( "Info" );
+        notificationBuilder.setAutoCancel ( true ).setDefaults ( Notification.DEFAULT_ALL ).setWhen ( System.currentTimeMillis () ).setSmallIcon ( R.drawable.ic_notification);
+
 
         notificationManager.notify ( new Random (  ).nextInt (),notificationBuilder.build () );
 
