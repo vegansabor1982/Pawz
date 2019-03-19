@@ -2,8 +2,7 @@ package com.example.android.pawstwo.Notifications;
 
 public class Data {
 
-
-    private  String user;
+    private String user;
     private int icon;
     private String body;
     private String title;

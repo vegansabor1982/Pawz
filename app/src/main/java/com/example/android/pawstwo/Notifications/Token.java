@@ -2,8 +2,6 @@ package com.example.android.pawstwo.Notifications;
 
 public class Token {
 
-
-
     private String token;
 
     public Token( String token ) {
@@ -12,7 +10,6 @@ public class Token {
 
     public Token() {
     }
-
 
     public String getToken() {
         return token;

@@ -2,10 +2,7 @@ package com.example.android.pawstwo.Notifications;
 
 public class Sender {
 
-
-
     public Data data;
-
     public String to;
 
     public Sender( Data data, String to ) {

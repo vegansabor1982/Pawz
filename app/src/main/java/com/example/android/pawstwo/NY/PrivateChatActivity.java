@@ -23,7 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.example.android.pawstwo.Notifications.API;
+import com.example.android.pawstwo.Notifications.APIService;
+import com.example.android.pawstwo.Notifications.APIService;
 import com.example.android.pawstwo.Notifications.Client;
 import com.example.android.pawstwo.Notifications.Data;
 import com.example.android.pawstwo.Notifications.MyResponse;
@@ -106,7 +107,7 @@ public class PrivateChatActivity extends AppCompatActivity {
 
     private FirebaseUser fuser;
 
-    API apiService;
+    APIService apiService;
 
     boolean notify = false;
 
@@ -148,7 +149,7 @@ public class PrivateChatActivity extends AppCompatActivity {
         actionBar.setCustomView ( action_bar_view );
 
 
-        apiService = Client.getClient ( "https://fcm.googleapis.com/" ).create ( API.class );
+        apiService = Client.getClient ( "https://fcm.googleapis.com/" ).create ( APIService.class );
 
         //--------------Custom action bar items--------------
 

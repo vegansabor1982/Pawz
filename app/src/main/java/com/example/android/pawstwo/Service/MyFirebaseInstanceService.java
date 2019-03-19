@@ -4,7 +4,9 @@ package com.example.android.pawstwo.Service;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
@@ -23,18 +25,33 @@ public class MyFirebaseInstanceService extends FirebaseMessagingService {
     public void onMessageReceived( RemoteMessage remoteMessage ) {
         super.onMessageReceived ( remoteMessage );
 
-        if(remoteMessage.getData ().isEmpty ())
+        String notification_title=remoteMessage.getNotification ().getTitle ();
+        String notification_message=remoteMessage.getNotification ().getBody ();
 
-        showNotification(remoteMessage.getNotification ().getTitle (),remoteMessage.getNotification ().getBody ());
-        else
-            showNotification(remoteMessage.getData ());
+        String click_action = remoteMessage.getNotification ().getClickAction ();
 
+        String from_user_id=remoteMessage.getData ().get ( "from_user_id" );
+
+        NotificationCompat.Builder mBuilder= new NotificationCompat.Builder ( this ).setSmallIcon ( R.drawable.paw_logo_two).setContentTitle ( notification_title).setContentText ( notification_message );
+
+        Intent resultIntent = new Intent ( click_action  );
+        resultIntent.putExtra ( "userId", from_user_id );
+
+        PendingIntent resultPendingIntent = PendingIntent.getActivity ( this, 0, resultIntent,PendingIntent.FLAG_UPDATE_CURRENT );
+
+        mBuilder.setContentIntent ( resultPendingIntent );
+
+        int mNotificationId= ( int ) System.currentTimeMillis ();
+
+        NotificationManager mNotifyMgr= ( NotificationManager ) getSystemService ( NOTIFICATION_SERVICE );
+
+        mNotifyMgr.notify ( mNotificationId, mBuilder.build () );
     }
 
-    private void showNotification( Map<String,String> data ) {
+    /*private void showNotification( Map<String,String> data ) {
 
-       String title =data.get ( "title" ).toString ();
-        String body = data.get ("body"  ).toString ();
+        //String title =data.get ( "title" ).toString ();
+       // String body = data.get ("body"  ).toString ();
 
 
         NotificationManager notificationManager = (NotificationManager)getSystemService ( Context.NOTIFICATION_SERVICE );
@@ -93,5 +110,5 @@ public class MyFirebaseInstanceService extends FirebaseMessagingService {
 
 
         Log.d("TOKENFIREBASE",s);
-    }
+    }*/
 }

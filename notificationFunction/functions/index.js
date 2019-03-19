@@ -4,7 +4,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
-exports.sendNotificationTwo = functions.database.ref('/Notifications/{from_user_id}/{notification_id}').onWrite((change, context) => {
+exports.sendNotificationTwo = functions.database.ref('/notifications/{user_id}/{notification_id}').onWrite((change, context) => {
 
 		const user_id = context.params.user_id;
 
@@ -16,12 +16,12 @@ exports.sendNotificationTwo = functions.database.ref('/Notifications/{from_user_
 		// return console.log('A Notification has been deleted from the database: ',notification_id);
 		//}
 
-		const fromUser = admin.database().ref(`/Notifications/${user_id}/${notification_id}`).once('value');
+		const fromUser = admin.database().ref(`/notifications/${user_id}/${notification_id}`).once('value');
 		return fromUser.then(fromUserResult => {
 
 			const from_user_id = fromUserResult.val().from;
 
-			console.log('You have new notification from  : ', from_user_id);
+			console.log('You have new notification from  : ', user_id);
 
 			const userQuery = admin.database().ref(`Users/${from_user_id}/userName`).once('value')
 				const deviceToken = admin.database().ref(`/Users/${user_id}/device token`).once('value');
@@ -34,7 +34,7 @@ exports.sendNotificationTwo = functions.database.ref('/Notifications/{from_user_
 				const payload = {
 					notification: {
 						title: "New Friend Request",
-						body: `${userName} has sent you a friend request`,
+						body: `${userName} has sent you a message`,
 						icon: "default",
 						click_action: "com.example.android.pawstwo_TARGET_NOTIFICATION"
 					},
